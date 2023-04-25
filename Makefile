@@ -6,7 +6,7 @@
 #    By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/04/25 16:28:58 by kcw              ###   ########.fr        #
+#    Updated: 2023/04/25 17:43:35 by kcw              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,25 @@ ARFLAGS=rcsv
 
 RM=rm -f
 
-SRC_FILES=test.c
+############################################################################
+PARSING_PATH=parsing_src/
+PARSING_FILES=
+PARSING_SRC=$(addprefix $(PARSING_PATH), $(PARSING_FILES))
+
+
+BUILTINS_PATH=builtins_src/
+BUILTINS_FILES=
+BUILTINS_SRC=$(addprefix $(BUILTINS_PATH), $(BUILTINS_FILES))
+
+REDIRECTIONS_PATH=redirections_src/
+REDIRECTIONS_FILES=
+REDIRECTIONS_SRC=$(addprefix $(REDIRECTIONS_PATH), $(REDIRECTIONS_FILES))
+
+############################################################################
+
+
+SRC_FILES=minishell.c \
+$(PARSING_SRC) \
 
 OBJECTS = $(SRC_FILES:.c=.o)
 FT = ft
@@ -34,6 +52,9 @@ $(NAME) : $(OBJECTS)
 	make -C $(LIBFT)
 	cp ./$(LIBFT)/$(LIBFT_NAME) ./
 	$(CC) $(CFLAGS) -L . -l $(FT) $(SRC_FILES) -o $(NAME)
+
+%.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
 	make clean -C $(LIBFT)
