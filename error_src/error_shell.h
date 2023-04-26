@@ -1,40 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   error_shell.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/26 11:35:49 by kcw              ###   ########.fr       */
+/*   Created: 2023/04/26 11:37:57 by kcw               #+#    #+#             */
+/*   Updated: 2023/04/26 11:39:05 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef ERROR_SHELL_H
+# define ERROR_SHELL_H
 
-void	check_leaks(void)
-{
-	system("leaks minishell");
-}
-
-int	main(int argc, char **argv)
-{
-	char	*get_line;
-
-	atexit(check_leaks);
-	if (argc != 1)
-		return (0);
-	(void)argv;
-	while (1)
-	{
-		ft_printf("minishell $ ");
-		get_line = get_next_line(0);
-		if (get_line == NULL)
-		{
-			ft_printf("exit\n");
-			return (0);
-		}
-		ft_printf("%s", get_line);
-		free(get_line);
-	}
-}
+#endif

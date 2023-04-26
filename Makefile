@@ -6,7 +6,7 @@
 #    By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/04/25 17:43:35 by kcw              ###   ########.fr        #
+#    Updated: 2023/04/26 11:37:41 by kcw              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,10 @@ REDIRECTIONS_PATH=redirections_src/
 REDIRECTIONS_FILES=
 REDIRECTIONS_SRC=$(addprefix $(REDIRECTIONS_PATH), $(REDIRECTIONS_FILES))
 
+ERROR_PATH=error_src/
+ERROR_FILES=
+ERROR_SRC=$(addprefix $(ERROR_PATH), $(ERROR_FILES))
+
 ############################################################################
 
 
@@ -44,6 +48,7 @@ SRC_FILES=minishell.c \
 $(PARSING_SRC) \
 $(BUILTINS_SRC) \
 $(REDIRECTIONS_SRC) \
+$(ERROR_SRC) \
 
 OBJECTS = $(SRC_FILES:.c=.o)
 FT = ft
