@@ -51,14 +51,17 @@ $(REDIRECTIONS_SRC) \
 $(ERROR_SRC) \
 
 OBJECTS = $(SRC_FILES:.c=.o)
-FT = ft
-
+FT = -L . -lft
+########
+READLINE_LIB=-L$(shell brew --prefix readline)/lib/ -lreadline
+READLINE_HEADER= -I . -I$(shell brew --prefix readline)/include/
+########
 all : $(NAME)
 
 $(NAME) : $(OBJECTS)
 	make -C $(LIBFT)
 	cp ./$(LIBFT)/$(LIBFT_NAME) ./
-	$(CC) $(CFLAGS) -L . -l $(FT) $(SRC_FILES) -o $(NAME)
+	$(CC) $(CFLAGS) $(READLINE_HEADER) $(FT) $(READLINE_LIB) $(SRC_FILES) -o $(NAME)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@

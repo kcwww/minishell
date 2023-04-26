@@ -6,7 +6,7 @@
 /*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/26 11:35:49 by kcw              ###   ########.fr       */
+/*   Updated: 2023/04/26 17:05:37 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,13 @@ int	main(int argc, char **argv)
 	(void)argv;
 	while (1)
 	{
-		ft_printf("minishell $ ");
-		get_line = get_next_line(0);
+		get_line = readline("minishell $ ");
 		if (get_line == NULL)
 		{
 			ft_printf("exit\n");
 			return (0);
 		}
-		ft_printf("%s", get_line);
+		ft_printf("%s\n", get_line);
 		free(get_line);
 	}
 }
