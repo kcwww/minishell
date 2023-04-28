@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   error_shell.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 11:37:57 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/26 11:39:05 by kcw              ###   ########.fr       */
+/*   Updated: 2023/04/28 14:08:36 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_SHELL_H
 # define ERROR_SHELL_H
+
+void    error_str();
 
 #endif

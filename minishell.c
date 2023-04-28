@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/26 17:05:37 by kcw              ###   ########.fr       */
+/*   Updated: 2023/04/28 14:07:55 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int argc, char **argv)
 		get_line = readline("minishell $ ");
 		if (get_line == NULL)
 		{
-			ft_printf("exit\n");
+			error_str();
 			return (0);
 		}
 		ft_printf("%s\n", get_line);
