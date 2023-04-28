@@ -6,7 +6,7 @@
 #    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/04/28 14:12:03 by chanwoki         ###   ########.fr        #
+#    Updated: 2023/04/28 15:45:27 by dkham            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,7 @@ $(PARSING_SRC) \
 $(BUILTINS_SRC) \
 $(REDIRECTIONS_SRC) \
 $(ERROR_SRC) \
-$(SIGNAL_SRC) \ 
+$(SIGNAL_SRC) 
 
 OBJECTS = $(SRC_FILES:.c=.o)
 FT = -L . -lft
