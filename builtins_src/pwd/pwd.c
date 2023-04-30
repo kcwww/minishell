@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 16:57:05 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/28 17:59:39 by dkham            ###   ########.fr       */
+/*   Created: 2023/04/28 17:09:23 by dkham             #+#    #+#             */
+/*   Updated: 2023/04/30 18:55:57 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../../minishell.h"
 
-# include "libft/libft.h"
-# include "parsing_src/parse.h"
-# include "builtins_src/bulitins.h"
-# include "redirections_src/redirections.h"
-# include "error_src/error_shell.h"
-# include <signal.h>
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <unistd.h>
+void	pwd(void)
+{
+	char	*pwd;
 
-#endif
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		perror("minishell: pwd: error");
+	}
+	ft_putendl_fd(pwd, 1);
+	free(pwd);
+}
+
+// int	main(void)
+// {
+// 	pwd();
+// 	return (0);
+// }

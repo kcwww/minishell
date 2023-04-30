@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
+#    By: dkham <dkham@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/04/28 15:45:27 by dkham            ###   ########.fr        #
+#    Updated: 2023/04/28 18:00:26 by dkham            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,12 +25,12 @@ RM=rm -f
 
 ############################################################################
 PARSING_PATH=parsing_src/
-PARSING_FILES=
+PARSING_FILES= 
 PARSING_SRC=$(addprefix $(PARSING_PATH), $(PARSING_FILES))
 
 
 BUILTINS_PATH=builtins_src/
-BUILTINS_FILES=
+BUILTINS_FILES= pwd/pwd.c
 BUILTINS_SRC=$(addprefix $(BUILTINS_PATH), $(BUILTINS_FILES))
 
 REDIRECTIONS_PATH=redirections_src/

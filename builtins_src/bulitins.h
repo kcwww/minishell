@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   bulitins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/26 11:20:35 by kcw              ###   ########.fr       */
+/*   Updated: 2023/04/30 19:59:47 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BULITINS_H
 # define BULITINS_H
+
+void	pwd(void);
+void	echo(char **args);
 
 #endif
