@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/04/30 12:29:18 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/02 21:53:35 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,58 +27,79 @@
 // getenv, tcsetattr, tcgetattr, tgetent, tgetflag,
 // tgetnum, tgetstr, tgoto, tputs
 
-void	cd(char **args)
-{
-	char	*pwd;
-	char	*oldpwd;
-	char	*home;
+// void	cd(char **args, t_execute *execute)
+// {
+// 	char	*pwd;
+// 	char	*oldpwd;
 
-	// initialize variables
-	pwd = NULL;
-	oldpwd = NULL;
-	home = NULL;
-	// get current working directory
-	pwd = getcwd(NULL, 0);
-	// get home directory
-	home = getenv("HOME");
-	// if no args, go to home directory
-	if (!args[1])
-	{
-		if (!home)
-		{
-			ft_putendl_fd("minishell: cd: HOME not set", 2);
-			return ;
-		}
-		chdir(home);
-	}
-	// if args[1] is "-", go to previous directory
-	else if (ft_strcmp(args[1], "-") == 0)
-	{
-		// get old working directory
-		oldpwd = getenv("OLDPWD");
-		if (!oldpwd)
-		{
-			ft_putendl_fd("minishell: cd: OLDPWD not set", 2);
-			return ;
-		}
-		chdir(oldpwd);
-	}
-	// else, go to the directory specified in args[1]
-	else
-	{
-		if (chdir(args[1]) == -1)
-		{
-			ft_putstr_fd("minishell: cd: ", 2);
-			ft_putstr_fd(args[1], 2);
-			ft_putstr_fd(": ", 2);
-			perror("");
-		}
-	}
-	// update OLDPWD and PWD
-	oldpwd = pwd;
-	pwd = getcwd(NULL, 0);
-	setenv("OLDPWD", oldpwd, 1);
-	setenv("PWD", pwd, 1);
-	// free memory
-	free(pwd);
-}
+// 	pwd = getcwd(NULL, 0);
+// 	if (!pwd)
+// 	{
+// 		perror("minishell: cd: error");
+// 		return ;
+// 	}
+// 	oldpwd = ft_strdup(pwd);
+// 	free(pwd);
+// 	if (args[1] == NULL)
+// 	{
+// 		pwd = getenv("HOME");
+// 		if (!pwd)
+// 		{
+// 			perror("minishell: cd: error");
+// 			return ;
+// 		}
+// 	}
+// 	else if (args[1][0] == '~')
+// 	{
+// 		pwd = ft_strjoin(getenv("HOME"), args[1] + 1);
+// 		if (!pwd)
+// 		{
+// 			perror("minishell: cd: error");
+// 			return ;
+// 		}
+// 	}
+// 	else
+// 		pwd = ft_strdup(args[1]);
+// 	if (chdir(pwd) == -1)
+// 	{
+// 		perror("minishell: cd: error");
+// 		free(pwd);
+// 		return ;
+// 	}
+// 	free(pwd);
+// 	pwd = getcwd(NULL, 0);
+// 	if (!pwd)
+// 	{
+// 		perror("minishell: cd: error");
+// 		return ;
+// 	}
+// 	set_env("OLDPWD", oldpwd, execute);
+// 	set_env("PWD", pwd, execute);
+// 	free(pwd);
+// 	free(oldpwd);
+// }
+
+// // set_env function
+// void	set_env(char *name, char *value, t_execute *execute)
+// {
+// 	int		i;
+// 	char	*tmp;
+
+// 	i = 0;
+// 	while (execute->env[i])
+// 	{
+// 		if (ft_strncmp(execute->env[i], name, ft_strlen(name)) == 0)
+// 		{
+// 			tmp = ft_strjoin(name, "=");
+// 			free(execute->env[i]);
+// 			execute->env[i] = ft_strjoin(tmp, value);
+// 			free(tmp);
+// 			return ;
+// 		}
+// 		i++;
+// 	}
+// 	tmp = ft_strjoin(name, "=");
+// 	execute->env[i] = ft_strjoin(tmp, value);
+// 	free(tmp);
+// 	execute->env[i + 1] = NULL;
+// }
