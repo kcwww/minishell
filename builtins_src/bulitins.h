@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/02 21:44:03 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/03 21:44:19 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ void	export(char **args, t_execute *execute);
 void	unset(char **args, t_execute *execute);
 void	env(t_execute *execute);
 void	cmd_exit(char **args, t_execute *execute);
+int		only_n_after_dash(const char *str);
+
 
 #endif
