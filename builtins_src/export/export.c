@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/05 16:46:28 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/05 17:40:20 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,33 @@
 
 // replicate export command(with no options) in bash
 // it should be able to add new variables to the environment
-// void	export(char **args, t_execute *execute)
-// {
-// 	int		i;
-// 	int		j;
-// 	t_env	*new_node;
 
-// 	i = 1;
-// 	if (args[1] == NULL)
-// 	{
-// 		print_env_list(execute->env);
-// 		return ;
-// 	}
-// 	while (args[i])
-// 	{
-// 		j = 0;
-// 		while (args[i][j] != '\0' && args[i][j] != '=')
-// 			j++;
-// 		if (args[i][j] == '=')
-// 		{
-// 			new_node = create_new_env_node(args[i]);
-// 			if (new_node)
-// 				add_env_node(execute->env, new_node);
-// 		}
-// 		else
-// 			ft_putendl_fd("minishell: export: not a valid identifier", 1);
-// 		i++;
-// 	}
-// }
+void	process_argument(char *arg, t_execute *execute)
+{
+	t_env	*new_node;
+	char	*equal_sign;
+
+	equal_sign = ft_strchr(arg, '=');
+	if (is_valid_identifier(arg))
+	{
+		if (equal_sign != NULL)
+		{
+			new_node = create_new_env_node(arg);
+			if (new_node)
+				add_env_node(execute->env, new_node);
+		}
+	}
+	else
+	{
+		ft_putstr_fd("minishell: export: `", 1);
+		ft_putstr_fd(arg, 1);
+		ft_putendl_fd("' is not a valid identifier", 1);
+	}
+}
 
 void	export(char **args, t_execute *execute)
 {
-	int		i;
-	t_env	*new_node;
+	int	i;
 
 	i = 1;
 	if (args[1] == NULL)
@@ -56,18 +50,7 @@ void	export(char **args, t_execute *execute)
 	}
 	while (args[i])
 	{
-		if (is_valid_identifier(args[i]))
-		{
-			new_node = create_new_env_node(args[i]);
-			if (new_node)
-				add_env_node(execute->env, new_node);
-		}
-		else
-		{
-			ft_putstr_fd("minishell: export: '", 1);
-			ft_putstr_fd(args[i], 1);
-			ft_putendl_fd("' is not a valid identifier", 1);
-		}
+		process_argument(args[i], execute);
 		i++;
 	}
 }
@@ -91,7 +74,7 @@ int	is_valid_identifier(char *arg)
 	return (0);
 }
 
-void	add_env_node(t_env *env, t_env *new_node)
+void	add_env_node(t_env *env, t_env *new_node) 
 {
 	t_env	*tmp;
 	size_t	new_node_key_len;

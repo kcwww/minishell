@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/05 15:34:10 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/05 17:32:14 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	free_env_list(t_env *env);
 void	add_env_node(t_env *env, t_env *new_node);
 void	print_env_list(t_env *env);
 int		is_valid_identifier(char *arg);
+void	process_argument(char *arg, t_execute *execute);
 
 
 #endif
