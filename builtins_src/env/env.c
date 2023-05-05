@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:30:03 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/05 13:32:08 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/05 13:37:29 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,20 @@
 
 // env with no options or arguments
 
-// void	env(t_execute *execute)
-// {
-// 	// int	i;
+void	env(t_execute *execute)
+{
+	t_env	*env;
 
-// 	// i = 0;
-// 	// while (execute->env[i])
-// 	// {
-// 	// 	ft_putendl_fd(execute->env[i], execute->fd_out);
-// 	// 	i++;
-// 	// }
-// }
+	env = execute->env;
+	while (env)
+	{
+		if (env->value)
+		{
+			ft_putstr_fd(env->key, execute->fd_out);
+			ft_putstr_fd("=", execute->fd_out);
+			ft_putstr_fd(env->value, execute->fd_out);
+			ft_putstr_fd("\n", execute->fd_out);
+		}
+		env = env->next;
+	}
+}
