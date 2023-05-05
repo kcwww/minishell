@@ -6,18 +6,25 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/05 11:52:40 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/05 13:34:15 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BULITINS_H
 # define BULITINS_H
 
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
+
 typedef struct s_execute
 {
 	int		fd_in;
 	int		fd_out;
-	char	**env;
+	t_env	*env;
 }	t_execute;
 
 void	pwd(void);
@@ -34,9 +41,10 @@ void	print_args(char **args, int i, int n_flag, t_execute *execute);
 int		handle_n_flag(char **args, int *i);
 char	*get_parent_dir(void);
 void	handle_special_cases(char **dir, char **last_dir);
-char	**copy_envp(char **envp);
-void	free_env(char **envp);
 
-
+t_env	*create_new_env_node(char *key_value_pair);
+t_env	*copy_env_list(char **envp);
+void	free_env_node(t_env *node);
+void	free_env_list(t_env *env);
 
 #endif
