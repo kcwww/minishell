@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:21:06 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/05 15:58:16 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/05 17:24:36 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,36 @@ void    init_signal()
     signal(SIGQUIT, SIG_IGN);
 }
 
-void    init_shell(t_shell *my_shell)
+void    init_env(t_env *my_env, char **env)
 {
-    ft_memset(my_shell, 0, sizeof(*my_shell));
+    int i;
+
+    my_env->next = NULL;
+    i = 0;
+    while (env[i])
+    {
+        my_env->var = ft_envsplit(env[i]);
+        my_env->param = my_env->var[0];
+        my_env->value = my_env->var[1];
+        i++;
+        if (env[i])
+            my_env->next = (t_env *)malloc(sizeof(t_env)); // NULL GUARD
+        my_env = my_env->next;
+    }
+}
+
+void    init_shell(t_shell *my_shell, char **env)
+{
+    my_shell->env = (t_env *)malloc(sizeof(t_env)); // NULL GUARD
+    //파이프 추가후 memset
+    init_env(my_shell->env, env);
+    
+    t_env *test;
+    test = my_shell->env;
+    while (test)
+    {
+        printf("%s : %s\n", test->param, test->value);
+        test = test->next;
+    }
     init_signal();
 }

@@ -6,7 +6,7 @@
 #    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/05/05 15:50:57 by chanwoki         ###   ########.fr        #
+#    Updated: 2023/05/05 17:15:35 by chanwoki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ ERROR_FILES=error_str.c
 ERROR_SRC=$(addprefix $(ERROR_PATH), $(ERROR_FILES))
 
 INIT_PATH=init_src/
-INIT_FILES=init_shell.c
+INIT_FILES=init_shell.c ft_envsplit.c
 INIT_SRC=$(addprefix $(INIT_PATH), $(INIT_FILES))
 
 ############################################################################

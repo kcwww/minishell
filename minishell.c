@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/05 15:56:53 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/05 17:17:59 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,25 @@ void	check_leaks(void)
 	system("leaks minishell");
 }
 
-int	main(int argc, char **argv)
+void	ft_shellclear(t_env **env)
+{
+	t_env	*start;
+
+	if (env == 0 || *env == 0)
+		return ;
+	start = *env;
+	while (start)
+	{
+		(*env) = (*env)->next;
+		free(start->var);
+		free(start->param);
+		free(start->value);
+		free(start);
+		start = *env;
+	}
+}
+
+int	main(int argc, char **argv, char **env)
 {
 	char	*get_line;
 	t_shell	my_shell;
@@ -26,13 +44,14 @@ int	main(int argc, char **argv)
 	if (argc != 1)
 		return (0);
 	(void)argv;
-	init_shell(&my_shell);
+	init_shell(&my_shell, env);
 	while (1)
 	{
 		get_line = readline("minishell $ ");
 		if (get_line == NULL)
 		{
 			printf("exit\n");
+			ft_shellclear(&my_shell.env);
 			return (0);
 		}
 		add_history(get_line);
