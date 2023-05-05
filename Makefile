@@ -6,7 +6,7 @@
 #    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/04/28 15:45:27 by dkham            ###   ########.fr        #
+#    Updated: 2023/05/05 15:50:57 by chanwoki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,9 +41,9 @@ ERROR_PATH=error_src/
 ERROR_FILES=error_str.c
 ERROR_SRC=$(addprefix $(ERROR_PATH), $(ERROR_FILES))
 
-SIGNAL_PATH=signal_src/
-SIGNAL_FILES=
-SIGNAL_SRC=$(addprefix $(SIGNAL_PATH), $(SIGNAL_FILES))
+INIT_PATH=init_src/
+INIT_FILES=init_shell.c
+INIT_SRC=$(addprefix $(INIT_PATH), $(INIT_FILES))
 
 ############################################################################
 
@@ -53,15 +53,15 @@ $(PARSING_SRC) \
 $(BUILTINS_SRC) \
 $(REDIRECTIONS_SRC) \
 $(ERROR_SRC) \
-$(SIGNAL_SRC) 
+$(INIT_SRC) 
 
 OBJECTS = $(SRC_FILES:.c=.o)
-FT = -L . -lft
+
 
 ########
 
-READLINE_LIB=-L$(shell brew --prefix readline)/lib/ -lreadline
-READLINE_HEADER= -I . -I$(shell brew --prefix readline)/include/
+READLINE_LIB= -lreadline -L${HOME}/.brew/opt/readline/lib -L . -lft
+READLINE_HEADER= -I . -I${HOME}/.brew/opt/readline/include -I include/
 
 ########
 
@@ -70,10 +70,10 @@ all : $(NAME)
 $(NAME) : $(OBJECTS)
 	make -C $(LIBFT)
 	cp ./$(LIBFT)/$(LIBFT_NAME) ./
-	$(CC) $(CFLAGS) $(READLINE_HEADER) $(FT) $(READLINE_LIB) $(SRC_FILES) -o $(NAME)
+	$(CC) $(CFLAGS) $(READLINE_HEADER) $(READLINE_LIB) $(SRC_FILES) -o $(NAME)
 
 %.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(READLINE_HEADER) -c $< -o $@
 
 clean :
 	make clean -C $(LIBFT)

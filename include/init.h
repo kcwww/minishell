@@ -1,16 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   init.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 17:29:49 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/26 11:20:50 by kcw              ###   ########.fr       */
+/*   Created: 2023/04/28 14:10:12 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/05 15:18:59 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#ifndef MINI_SIGNAL_H
+# define MINI_SIGNAL_H
+
+void    init_signal();
+void    sigint_handler(int signo);
 
 #endif
