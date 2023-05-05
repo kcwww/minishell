@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/05 18:16:51 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/05 18:45:13 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,14 @@
 
 void	export(char **args, t_execute *execute)
 {
-	int	i;
+	int		i;
+	t_env	*sorted_env;
 
 	i = 1;
 	if (args[1] == NULL)
 	{
-		print_env_list(execute->env);
+		sorted_env = sort_env_list(execute->env);
+		print_env_list(sorted_env);
 		return ;
 	}
 	while (args[i])
@@ -30,6 +32,51 @@ void	export(char **args, t_execute *execute)
 		process_argument(args[i], execute);
 		i++;
 	}
+}
+
+t_env	*sort_env_list(t_env *env)
+{
+	t_env	*tmp1;
+	t_env	*tmp2;
+	int		swapped;
+	size_t	max_length;
+
+	if (!env)
+		return (NULL);
+	swapped = 1;
+	while (swapped)
+	{
+		swapped = 0;
+		tmp1 = env;
+		while (tmp1->next != NULL)
+		{
+			tmp2 = tmp1->next;
+			if (ft_strlen(tmp1->key) > ft_strlen(tmp2->key))
+				max_length = ft_strlen(tmp1->key);
+			else
+				max_length = ft_strlen(tmp2->key);
+			if (ft_strncmp(tmp1->key, tmp2->key, max_length) > 0)
+			{
+				swap_env_nodes(tmp1, tmp2);
+				swapped = 1;
+			}
+			tmp1 = tmp1->next;
+		}
+	}
+	return (env);
+}
+
+void	swap_env_nodes(t_env *node1, t_env *node2)
+{
+	char	*temp_key;
+	char	*temp_value;
+
+	temp_key = node1->key;
+	temp_value = node1->value;
+	node1->key = node2->key;
+	node1->value = node2->value;
+	node2->key = temp_key;
+	node2->value = temp_value;
 }
 
 void	handle_argument_with_equals(char *arg, t_execute *execute)
