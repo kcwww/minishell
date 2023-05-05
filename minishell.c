@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/05 13:30:49 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/05 15:37:17 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,18 @@ t_env	*create_new_env_node(char *key_value_pair)
 	if (!new_node)
 		return (NULL);
 	equal_sign = ft_strchr(key_value_pair, '=');
-	*equal_sign = '\0';
-	new_node->key = ft_strdup(key_value_pair);
-	new_node->value = ft_strdup(equal_sign + 1);
-	*equal_sign = '=';
+	if (equal_sign)
+	{
+		*equal_sign = '\0';
+		new_node->key = ft_strdup(key_value_pair);
+		new_node->value = ft_strdup(equal_sign + 1);
+		*equal_sign = '=';
+	}
+	else
+	{
+		new_node->key = ft_strdup(key_value_pair);
+		new_node->value = ft_strdup("");
+	}
 	new_node->next = NULL;
 	return (new_node);
 }
