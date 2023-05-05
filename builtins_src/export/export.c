@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/05 18:45:13 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/05 18:55:33 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ t_env	*sort_env_list(t_env *env)
 	t_env	*tmp1;
 	t_env	*tmp2;
 	int		swapped;
-	size_t	max_length;
 
 	if (!env)
 		return (NULL);
@@ -51,11 +50,7 @@ t_env	*sort_env_list(t_env *env)
 		while (tmp1->next != NULL)
 		{
 			tmp2 = tmp1->next;
-			if (ft_strlen(tmp1->key) > ft_strlen(tmp2->key))
-				max_length = ft_strlen(tmp1->key);
-			else
-				max_length = ft_strlen(tmp2->key);
-			if (ft_strncmp(tmp1->key, tmp2->key, max_length) > 0)
+			if (cmp_env_nodes(tmp1, tmp2))
 			{
 				swap_env_nodes(tmp1, tmp2);
 				swapped = 1;
@@ -66,18 +61,45 @@ t_env	*sort_env_list(t_env *env)
 	return (env);
 }
 
-void	swap_env_nodes(t_env *node1, t_env *node2)
+int	cmp_env_nodes(t_env *tmp1, t_env *tmp2)
 {
-	char	*temp_key;
-	char	*temp_value;
+	size_t	max_length;
 
-	temp_key = node1->key;
-	temp_value = node1->value;
-	node1->key = node2->key;
-	node1->value = node2->value;
-	node2->key = temp_key;
-	node2->value = temp_value;
+	if (ft_strlen(tmp1->key) > ft_strlen(tmp2->key))
+		max_length = ft_strlen(tmp1->key);
+	else
+		max_length = ft_strlen(tmp2->key);
+	if (ft_strncmp(tmp1->key, tmp2->key, max_length) > 0)
+		return (1);
+	else
+		return (0);
 }
+
+void	swap_env_nodes(t_env *tmp1, t_env *tmp2)
+{
+	char	*tmp_key;
+	char	*tmp_value;
+
+	tmp_key = tmp1->key;
+	tmp_value = tmp1->value;
+	tmp1->key = tmp2->key;
+	tmp1->value = tmp2->value;
+	tmp2->key = tmp_key;
+	tmp2->value = tmp_value;
+}
+
+// void	swap_env_nodes(t_env *node1, t_env *node2)
+// {
+// 	char	*temp_key;
+// 	char	*temp_value;
+
+// 	temp_key = node1->key;
+// 	temp_value = node1->value;
+// 	node1->key = node2->key;
+// 	node1->value = node2->value;
+// 	node2->key = temp_key;
+// 	node2->value = temp_value;
+// }
 
 void	handle_argument_with_equals(char *arg, t_execute *execute)
 {
