@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/05 15:42:04 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/05 16:46:28 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,23 @@ int	is_valid_identifier(char *arg)
 void	add_env_node(t_env *env, t_env *new_node)
 {
 	t_env	*tmp;
+	size_t	new_node_key_len;
 
 	tmp = env;
-	while (tmp->next)
+	new_node_key_len = ft_strlen(new_node->key) + 1;
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->key, new_node->key, new_node_key_len) == 0)
+		{
+			free(tmp->value);
+			tmp->value = ft_strdup(new_node->value);
+			free_env_node(new_node);
+			return ;
+		}
+		if (tmp->next == NULL)
+			break ;
 		tmp = tmp->next;
+	}
 	tmp->next = new_node;
 }
 
