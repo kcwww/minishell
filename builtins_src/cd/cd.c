@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/06 15:19:38 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 15:59:00 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,50 @@
 
 void	cd(char **args, t_execute *execute)
 {
-	int		ret;
-	char	*path;
 	char	*oldpwd;
-	char	*newpwd;
-	t_env	*home_env;
 
 	oldpwd = getcwd(NULL, 0);
 	if (oldpwd == NULL)
 	{
-		ft_putendl_fd("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory", 1);
+		ft_putendl_fd("cd: error retrieving current directory: getcwd: \
+		cannot access parent directories: No such file or directory", 1);
 		return ;
 	}
 	if (args[1] == NULL)
+		handle_cd_no_args(execute, oldpwd);
+	else
+		handle_cd_with_args(execute, args[1], oldpwd);
+}
+
+void	handle_cd_no_args(t_execute *execute, char *oldpwd)
+{
+	t_env	*home_env;
+
+	home_env = find_env_node(execute->env, "HOME");
+	if (home_env == NULL || home_env->value == NULL || \
+	home_env->value[0] == '\0')
 	{
-		home_env = find_env_node(execute->env, "HOME");
-		if (home_env == NULL || home_env->value == NULL || home_env->value[0] == '\0')
-		{
-			ft_putendl_fd("minishell: cd: HOME not set", 1);
-			free(oldpwd);
-			return ;
-		}
-		path = home_env->value;
+		ft_putendl_fd("minishell: cd: HOME not set", 1);
+		free(oldpwd);
+		return ;
+	}
+	if (chdir(home_env->value) < 0)
+	{
+		ft_putstr_fd("minishell: cd: ", 1);
+		ft_putstr_fd(home_env->value, 1);
+		ft_putendl_fd(": No such file or directory", 1);
 	}
 	else
-		path = args[1];
-	ret = chdir(path);
-	if (ret < 0)
+	{
+		update_env_var(execute->env, "OLDPWD", oldpwd);
+		update_env_var(execute->env, "PWD", getcwd(NULL, 0));
+	}
+	free(oldpwd);
+}
+
+void	handle_cd_with_args(t_execute *execute, char *path, char *oldpwd)
+{
+	if (chdir(path) < 0)
 	{
 		ft_putstr_fd("minishell: cd: ", 1);
 		ft_putstr_fd(path, 1);
@@ -49,10 +66,8 @@ void	cd(char **args, t_execute *execute)
 		return ;
 	}
 	update_env_var(execute->env, "OLDPWD", oldpwd);
-	newpwd = getcwd(NULL, 0);
-	update_env_var(execute->env, "PWD", newpwd);
+	update_env_var(execute->env, "PWD", getcwd(NULL, 0));
 	free(oldpwd);
-	free(newpwd);
 }
 
 void	update_env_var(t_env *env, char *key, char *value)
