@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:09:50 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/06 17:08:48 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 17:10:32 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	print_args(char **args, int i, int n_flag, t_execute *execute)
 
 	while (args[i])
 	{
-		env_var_val = ger_env_var_value(execute, args[i]);
+		env_var_val = get_env_var_value(execute, args[i]);
 		if (env_var_val)
 			ft_putstr_fd(env_var_val, execute->fd_out);
 		else
@@ -75,7 +75,7 @@ void	print_args(char **args, int i, int n_flag, t_execute *execute)
 		ft_putstr_fd("\n", execute->fd_out);
 }
 
-char	*ger_env_var_value(t_execute *execute, const char *str)
+char	*get_env_var_value(t_execute *execute, const char *str)
 {
 	char	*value;
 	char	*key;
