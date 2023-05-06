@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/05 18:56:18 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 13:03:58 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,7 @@ void	handle_argument_without_equals(char *arg, t_execute *execute);
 t_env	*sort_env_list(t_env *env);
 int		cmp_env_nodes(t_env *tmp1, t_env *tmp2);
 void	swap_env_nodes(t_env *tmp1, t_env *tmp2);
+void	remove_env_node(char *key, t_env **env);
+
 
 #endif

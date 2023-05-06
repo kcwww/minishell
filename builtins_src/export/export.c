@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/05 18:55:33 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 12:51:20 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,93 +34,26 @@ void	export(char **args, t_execute *execute)
 	}
 }
 
-t_env	*sort_env_list(t_env *env)
+void	print_env_list(t_env *env)
 {
-	t_env	*tmp1;
-	t_env	*tmp2;
-	int		swapped;
+	t_env	*tmp;
 
-	if (!env)
-		return (NULL);
-	swapped = 1;
-	while (swapped)
+	tmp = env;
+	while (tmp)
 	{
-		swapped = 0;
-		tmp1 = env;
-		while (tmp1->next != NULL)
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(tmp->key, 1);
+		if (tmp->value && tmp->value[0] != '\0')
 		{
-			tmp2 = tmp1->next;
-			if (cmp_env_nodes(tmp1, tmp2))
-			{
-				swap_env_nodes(tmp1, tmp2);
-				swapped = 1;
-			}
-			tmp1 = tmp1->next;
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(tmp->value, 1);
+			ft_putendl_fd("\"", 1);
 		}
-	}
-	return (env);
-}
-
-int	cmp_env_nodes(t_env *tmp1, t_env *tmp2)
-{
-	size_t	max_length;
-
-	if (ft_strlen(tmp1->key) > ft_strlen(tmp2->key))
-		max_length = ft_strlen(tmp1->key);
-	else
-		max_length = ft_strlen(tmp2->key);
-	if (ft_strncmp(tmp1->key, tmp2->key, max_length) > 0)
-		return (1);
-	else
-		return (0);
-}
-
-void	swap_env_nodes(t_env *tmp1, t_env *tmp2)
-{
-	char	*tmp_key;
-	char	*tmp_value;
-
-	tmp_key = tmp1->key;
-	tmp_value = tmp1->value;
-	tmp1->key = tmp2->key;
-	tmp1->value = tmp2->value;
-	tmp2->key = tmp_key;
-	tmp2->value = tmp_value;
-}
-
-// void	swap_env_nodes(t_env *node1, t_env *node2)
-// {
-// 	char	*temp_key;
-// 	char	*temp_value;
-
-// 	temp_key = node1->key;
-// 	temp_value = node1->value;
-// 	node1->key = node2->key;
-// 	node1->value = node2->value;
-// 	node2->key = temp_key;
-// 	node2->value = temp_value;
-// }
-
-void	handle_argument_with_equals(char *arg, t_execute *execute)
-{
-	t_env	*new_node;
-
-	new_node = create_new_env_node(arg);
-	if (new_node)
-		add_env_node(execute->env, new_node);
-}
-
-void	handle_argument_without_equals(char *arg, t_execute *execute)
-{
-	t_env	*found_env;
-	t_env	*new_node;
-
-	found_env = find_env_node(execute->env, arg);
-	if (!found_env)
-	{
-		new_node = create_new_env_node(arg);
-		if (new_node)
-			add_env_node(execute->env, new_node);
+		else
+		{
+			ft_putendl_fd("", 1);
+		}
+		tmp = tmp->next;
 	}
 }
 
@@ -144,23 +77,6 @@ void	process_argument(char *arg, t_execute *execute)
 	}
 }
 
-t_env	*find_env_node(t_env *env, char *key)
-{
-	t_env	*tmp;
-	size_t	key_len;
-
-	tmp = env;
-	key_len = ft_strlen(key);
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->key, key, key_len) == 0
-			&& tmp->key[key_len] == '\0')
-			return (tmp);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
 int	is_valid_identifier(char *arg)
 {
 	int	i;
@@ -178,50 +94,4 @@ int	is_valid_identifier(char *arg)
 		return (1);
 	}
 	return (0);
-}
-
-void	add_env_node(t_env *env, t_env *new_node)
-{
-	t_env	*tmp;
-	size_t	new_node_key_len;
-
-	tmp = env;
-	new_node_key_len = ft_strlen(new_node->key) + 1;
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->key, new_node->key, new_node_key_len) == 0)
-		{
-			free(tmp->value);
-			tmp->value = ft_strdup(new_node->value);
-			free_env_node(new_node);
-			return ;
-		}
-		if (tmp->next == NULL)
-			break ;
-		tmp = tmp->next;
-	}
-	tmp->next = new_node;
-}
-
-void	print_env_list(t_env *env)
-{
-	t_env	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(tmp->key, 1);
-		if (tmp->value && tmp->value[0] != '\0')
-		{
-			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd(tmp->value, 1);
-			ft_putendl_fd("\"", 1);
-		}
-		else
-		{
-			ft_putendl_fd("", 1);
-		}
-		tmp = tmp->next;
-	}
 }

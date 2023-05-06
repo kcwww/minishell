@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/05 15:37:17 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 12:22:52 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,31 +45,6 @@ int	main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-t_env	*create_new_env_node(char *key_value_pair)
-{
-	t_env	*new_node;
-	char	*equal_sign;
-
-	new_node = (t_env *)malloc(sizeof(t_env));
-	if (!new_node)
-		return (NULL);
-	equal_sign = ft_strchr(key_value_pair, '=');
-	if (equal_sign)
-	{
-		*equal_sign = '\0';
-		new_node->key = ft_strdup(key_value_pair);
-		new_node->value = ft_strdup(equal_sign + 1);
-		*equal_sign = '=';
-	}
-	else
-	{
-		new_node->key = ft_strdup(key_value_pair);
-		new_node->value = ft_strdup("");
-	}
-	new_node->next = NULL;
-	return (new_node);
-}
-
 t_env	*copy_env_list(char **envp)
 {
 	t_env	*head;
@@ -95,14 +70,29 @@ t_env	*copy_env_list(char **envp)
 	return (head);
 }
 
-void	free_env_node(t_env *node)
+t_env	*create_new_env_node(char *key_value_pair)
 {
-	if (node)
+	t_env	*new_node;
+	char	*equal_sign;
+
+	new_node = (t_env *)malloc(sizeof(t_env));
+	if (!new_node)
+		return (NULL);
+	equal_sign = ft_strchr(key_value_pair, '=');
+	if (equal_sign)
 	{
-		free(node->key);
-		free(node->value);
-		free(node);
+		*equal_sign = '\0';
+		new_node->key = ft_strdup(key_value_pair);
+		new_node->value = ft_strdup(equal_sign + 1);
+		*equal_sign = '=';
 	}
+	else
+	{
+		new_node->key = ft_strdup(key_value_pair);
+		new_node->value = ft_strdup("");
+	}
+	new_node->next = NULL;
+	return (new_node);
 }
 
 void	free_env_list(t_env *head)
@@ -116,5 +106,15 @@ void	free_env_list(t_env *head)
 		next = current->next;
 		free_env_node(current);
 		current = next;
+	}
+}
+
+void	free_env_node(t_env *node)
+{
+	if (node)
+	{
+		free(node->key);
+		free(node->value);
+		free(node);
 	}
 }

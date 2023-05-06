@@ -6,7 +6,7 @@
 #    By: dkham <dkham@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/05/02 21:47:35 by dkham            ###   ########.fr        #
+#    Updated: 2023/05/06 12:53:56 by dkham            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ PARSING_SRC=$(addprefix $(PARSING_PATH), $(PARSING_FILES))
 
 
 BUILTINS_PATH=builtins_src/
-BUILTINS_FILES= builtin.c pwd/pwd.c echo/echo.c cd/cd.c env/env.c exit/exit.c export/export.c unset/unset.c
+BUILTINS_FILES= builtin.c pwd/pwd.c echo/echo.c cd/cd.c env/env.c exit/exit.c export/export.c  export/export_utils.c export/export_utils_2.c unset/unset.c
 BUILTINS_SRC=$(addprefix $(BUILTINS_PATH), $(BUILTINS_FILES))
 
 REDIRECTIONS_PATH=redirections_src/
