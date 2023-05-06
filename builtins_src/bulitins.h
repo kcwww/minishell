@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/06 16:03:22 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 17:08:28 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	env(t_execute *execute);
 void	cmd_exit(char **args, t_execute *execute);
 
 int		only_n_after_dash(const char *str);
-char	*expand_env_var(const char *str);
+char	*ger_env_var_value(t_execute *execute, const char *str);
 void	print_args(char **args, int i, int n_flag, t_execute *execute);
 int		handle_n_flag(char **args, int *i);
 char	*get_parent_dir(void);
@@ -61,7 +61,5 @@ void	update_env_var(t_env *env, char *key, char *value);
 void	handle_cd_no_args(t_execute *execute, char *oldpwd);
 void	handle_cd_with_args(t_execute *execute, char *path, char *oldpwd);
 t_env	*create_and_add_new_env_node(t_env *env, char *key, char *value);
-
-
 
 #endif
