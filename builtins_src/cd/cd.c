@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/06 15:59:00 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 16:05:40 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,6 @@ void	handle_cd_with_args(t_execute *execute, char *path, char *oldpwd)
 void	update_env_var(t_env *env, char *key, char *value)
 {
 	t_env	*found_env;
-	t_env	*new_node;
-	char	*key_value_pair;
-	size_t	key_len;
 
 	found_env = find_env_node(env, key);
 	if (found_env)
@@ -85,16 +82,26 @@ void	update_env_var(t_env *env, char *key, char *value)
 	}
 	else
 	{
-		key_len = ft_strlen(key);
-		key_value_pair = (char *)malloc((key_len + ft_strlen(value) + 2) * sizeof(char));
-		if (!key_value_pair)
-			return ;
-		ft_strlcpy(key_value_pair, key, key_len + 1);
-		key_value_pair[key_len] = '=';
-		ft_strlcpy(key_value_pair + key_len + 1, value, ft_strlen(value) + 1);
-		new_node = create_new_env_node(key_value_pair);
-		if (new_node)
-			add_env_node(env, new_node);
-		free(key_value_pair);
+		create_and_add_new_env_node(env, key, value);
 	}
+}
+
+t_env	*create_and_add_new_env_node(t_env *env, char *key, char *value)
+{
+	t_env	*new_node;
+	char	*key_value_pair;
+	size_t	key_len;
+
+	key_len = ft_strlen(key);
+	key_value_pair = malloc((key_len + ft_strlen(value) + 2) * sizeof(char));
+	if (!key_value_pair)
+		return (NULL);
+	ft_strlcpy(key_value_pair, key, key_len + 1);
+	key_value_pair[key_len] = '=';
+	ft_strlcpy(key_value_pair + key_len + 1, value, ft_strlen(value) + 1);
+	new_node = create_new_env_node(key_value_pair);
+	if (new_node)
+		add_env_node(env, new_node);
+	free(key_value_pair);
+	return (new_node);
 }
