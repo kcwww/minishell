@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/06 14:56:55 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 15:19:38 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ void	cd(char **args, t_execute *execute)
 	t_env	*home_env;
 
 	oldpwd = getcwd(NULL, 0);
+	if (oldpwd == NULL)
+	{
+		ft_putendl_fd("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory", 1);
+		return ;
+	}
 	if (args[1] == NULL)
 	{
 		home_env = find_env_node(execute->env, "HOME");
@@ -49,7 +54,6 @@ void	cd(char **args, t_execute *execute)
 	free(oldpwd);
 	free(newpwd);
 }
-
 
 void	update_env_var(t_env *env, char *key, char *value)
 {
