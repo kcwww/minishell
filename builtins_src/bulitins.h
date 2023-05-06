@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/06 17:10:39 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 18:45:22 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	export(char **args, t_execute *execute);
 void	unset(char **args, t_execute *execute);
 void	env(t_execute *execute);
 void	cmd_exit(char **args, t_execute *execute);
+void	free_2d_array(char **split_array);
 
 int		only_n_after_dash(const char *str);
 char	*get_env_var_value(t_execute *execute, const char *str);

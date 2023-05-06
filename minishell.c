@@ -6,16 +6,16 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/06 12:22:52 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/06 18:46:34 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	check_leaks(void)
-// {
-// 	system("leaks minishell");
-// }
+void	check_leaks(void)
+{
+	system("leaks minishell");
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -23,6 +23,7 @@ int	main(int argc, char **argv, char **envp)
 	char		**args;
 	t_execute	execute;
 
+	atexit(check_leaks);
 	if (argc != 1)
 		return (0);
 	(void)argv;
@@ -38,11 +39,27 @@ int	main(int argc, char **argv, char **envp)
 		args = ft_split(get_line, ' ');
 		execute.fd_out = 1;
 		builtin(args, &execute);
+		free_2d_array(args);
 		add_history(get_line);
 		free(get_line);
 	}
 	free_env_list(execute.env);
 	return (0);
+}
+
+void	free_2d_array(char **array)
+{
+	char	**temp;
+
+	temp = array;
+	if (array == NULL)
+		return ;
+	while (*temp)
+	{
+		free(*temp);
+		temp++;
+	}
+	free(array);
 }
 
 t_env	*copy_env_list(char **envp)
