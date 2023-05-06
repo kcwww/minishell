@@ -6,7 +6,7 @@
 #    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/05/05 17:15:35 by chanwoki         ###   ########.fr        #
+#    Updated: 2023/05/06 13:27:00 by chanwoki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ ERROR_FILES=error_str.c
 ERROR_SRC=$(addprefix $(ERROR_PATH), $(ERROR_FILES))
 
 INIT_PATH=init_src/
-INIT_FILES=init_shell.c ft_envsplit.c
+INIT_FILES=init_shell.c ft_envsplit.c find_value.c ft_strcmp.c
 INIT_SRC=$(addprefix $(INIT_PATH), $(INIT_FILES))
 
 ############################################################################
@@ -53,7 +53,7 @@ $(PARSING_SRC) \
 $(BUILTINS_SRC) \
 $(REDIRECTIONS_SRC) \
 $(ERROR_SRC) \
-$(INIT_SRC) 
+$(INIT_SRC)
 
 OBJECTS = $(SRC_FILES:.c=.o)
 
