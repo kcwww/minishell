@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 13:48:15 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/06 15:39:19 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/06 15:42:37 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void	check_quotation(char *str)
 		{
 			q = check_double(str, i + 1, '\"');
 			if (q == -1)
+			{
 				error_str();
+				break ;
+			}
 			else
 				i = q;
 		}
@@ -48,7 +51,10 @@ void	check_quotation(char *str)
 		{
 			q = check_double(str, i + 1, '\'');
 			if (q == -1)
+			{
 				error_str();
+				break ;
+			}
 			else
 				i = q;
 		}
