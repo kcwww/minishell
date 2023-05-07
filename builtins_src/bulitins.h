@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/06 18:45:22 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 13:03:27 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,43 +24,50 @@ typedef struct s_execute
 {
 	int		fd_in;
 	int		fd_out;
+	char	**args;
 	t_env	*env;
 }	t_execute;
 
-void	builtin(char **args, t_execute *execute);
-void	pwd(void);
-void	echo(char **args, t_execute *execute);
-void	cd(char **args, t_execute *execute);
-void	export(char **args, t_execute *execute);
-void	unset(char **args, t_execute *execute);
-void	env(t_execute *execute);
-void	cmd_exit(char **args, t_execute *execute);
-void	free_2d_array(char **split_array);
+void	builtin(t_execute *execute);
 
-int		only_n_after_dash(const char *str);
-char	*get_env_var_value(t_execute *execute, const char *str);
-void	print_args(char **args, int i, int n_flag, t_execute *execute);
+void	pwd(void);
+
+void	echo(t_execute *execute);
 int		handle_n_flag(char **args, int *i);
-char	*get_parent_dir(void);
-void	handle_special_cases(char **dir, char **last_dir);
-t_env	*create_new_env_node(char *key_value_pair);
-t_env	*copy_env_list(char **envp);
-void	free_env_node(t_env *node);
-void	free_env_list(t_env *env);
-void	add_env_node(t_env *env, t_env *new_node);
+int		only_n_after_dash(const char *str);
+void	print_args(t_execute *execute, int i, int n_flag);
+char	*get_env_var_value(t_execute *execute, const char *str);
+
+void	cmd_exit(t_execute *execute);
+char	*validate_exit_args(t_execute *execute, int *exit_code);
+
+void	env(t_execute *execute);
+
+void	export(t_execute *execute);
 void	print_env_list(t_env *env);
-int		is_valid_identifier(char *arg);
 void	process_argument(char *arg, t_execute *execute);
-t_env	*find_env_node(t_env *env, char *key);
-void	handle_argument_with_equals(char *arg, t_execute *execute);
-void	handle_argument_without_equals(char *arg, t_execute *execute);
+int		is_valid_identifier(char *arg);
 t_env	*sort_env_list(t_env *env);
 int		cmp_env_nodes(t_env *tmp1, t_env *tmp2);
 void	swap_env_nodes(t_env *tmp1, t_env *tmp2);
+void	handle_argument_with_equals(char *arg, t_execute *execute);
+void	handle_argument_without_equals(char *arg, t_execute *execute);
+t_env	*find_env_node(t_env *env, char *key);
+void	add_env_node(t_env *env, t_env *new_node);
+
+void	unset(t_execute *execute);
 void	remove_env_node(char *key, t_env **env);
-void	update_env_var(t_env *env, char *key, char *value);
+
+void	cd(t_execute *execute);
 void	handle_cd_no_args(t_execute *execute, char *oldpwd);
 void	handle_cd_with_args(t_execute *execute, char *path, char *oldpwd);
+void	update_env_var(t_env *env, char *key, char *value);
 t_env	*create_and_add_new_env_node(t_env *env, char *key, char *value);
+
+void	free_2d_array(char **array);
+t_env	*copy_env_list(char **envp);
+t_env	*create_new_env_node(char *key_value_pair);
+void	free_env_list(t_env *head);
+void	free_env_node(t_env *node);
 
 #endif

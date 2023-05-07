@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:09:50 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/06 17:10:32 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 12:21:40 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 // echo $a option 구현해야 함
 
-void	echo(char **args, t_execute *execute)
+void	echo(t_execute *execute)
 {
 	int	i;
 	int	n_flag;
 
 	i = 1;
-	n_flag = handle_n_flag(args, &i);
-	print_args(args, i, n_flag, execute);
+	n_flag = handle_n_flag(execute->args, &i);
+	print_args(execute, i, n_flag);
 }
 
 int	handle_n_flag(char **args, int *i)
@@ -56,18 +56,18 @@ int	only_n_after_dash(const char *str)
 	return (1);
 }
 
-void	print_args(char **args, int i, int n_flag, t_execute *execute)
+void	print_args(t_execute *execute, int i, int n_flag)
 {
 	char	*env_var_val;
 
-	while (args[i])
+	while (execute->args[i])
 	{
-		env_var_val = get_env_var_value(execute, args[i]);
+		env_var_val = get_env_var_value(execute, execute->args[i]);
 		if (env_var_val)
 			ft_putstr_fd(env_var_val, execute->fd_out);
 		else
-			ft_putstr_fd(args[i], execute->fd_out);
-		if (args[i + 1])
+			ft_putstr_fd(execute->args[i], execute->fd_out);
+		if (execute->args[i + 1])
 			ft_putstr_fd(" ", execute->fd_out);
 		i++;
 	}

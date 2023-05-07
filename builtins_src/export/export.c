@@ -6,30 +6,27 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/06 12:51:20 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 12:41:52 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// replicate export command(with no options) in bash
-// it should be able to add new variables to the environment
-
-void	export(char **args, t_execute *execute)
+void	export(t_execute *execute)
 {
 	int		i;
 	t_env	*sorted_env;
 
 	i = 1;
-	if (args[1] == NULL)
+	if (execute->args[1] == NULL)
 	{
 		sorted_env = sort_env_list(execute->env);
 		print_env_list(sorted_env);
 		return ;
 	}
-	while (args[i])
+	while (execute->args[i])
 	{
-		process_argument(args[i], execute);
+		process_argument(execute->args[i], execute);
 		i++;
 	}
 }

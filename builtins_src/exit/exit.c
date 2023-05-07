@@ -6,43 +6,54 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/02 21:59:10 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 12:31:28 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// fucntion name: exit
-// reproduce the behavior of exit() in bash (with no options)
-
-void	cmd_exit(char **args, t_execute *execute)
+void	cmd_exit(t_execute *execute)
 {
-	int i;
+	int		exit_code;
+	char	*error_message;
+
+	error_message = validate_exit_args(execute, &exit_code);
+	if (error_message)
+	{
+		ft_putstr_fd("exit\n", execute->fd_out);
+		ft_putstr_fd("minishell: exit: ", execute->fd_out);
+		ft_putstr_fd(error_message, execute->fd_out);
+		ft_putstr_fd("\n", execute->fd_out);
+	}
+	else
+		exit(exit_code);
+}
+
+char	*validate_exit_args(t_execute *execute, int *exit_code)
+{
+	int	i;
 
 	i = 0;
-	if (args[1])
+	if (execute->args[1])
 	{
-		while (args[1][i])
+		while (execute->args[1][i])
 		{
-			if (ft_isdigit(args[1][i]) == 0)
+			if (ft_isdigit(execute->args[1][i]) == 0)
 			{
-				ft_putstr_fd("exit\n", execute->fd_out);
-				ft_putstr_fd("minishell: exit: ", execute->fd_out);
-				ft_putstr_fd(args[1], execute->fd_out);
-				ft_putstr_fd(": numeric argument required\n", execute->fd_out);
-				exit(255);
+				*exit_code = 255;
+				return ("numeric argument required");
 			}
 			i++;
 		}
-		if (args[2])
+		if (execute->args[2])
 		{
-			ft_putstr_fd("exit\n", execute->fd_out);
-			ft_putstr_fd("minishell: exit: too many arguments\n", execute->fd_out);
-			exit(1);
+			*exit_code = 1;
+			return ("too many arguments");
 		}
 		else
-			exit(ft_atoi(args[1]));
+			*exit_code = ft_atoi(execute->args[1]);
 	}
 	else
-		exit(0);
+		*exit_code = 0;
+	return (NULL);
 }

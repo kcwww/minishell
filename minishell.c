@@ -6,24 +6,23 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/06 18:46:34 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 12:20:12 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_leaks(void)
-{
-	system("leaks minishell");
-}
+// void	check_leaks(void)
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int argc, char **argv, char **envp)
 {
 	char		*get_line;
-	char		**args;
 	t_execute	execute;
 
-	atexit(check_leaks);
+	//atexit(check_leaks);
 	if (argc != 1)
 		return (0);
 	(void)argv;
@@ -36,10 +35,10 @@ int	main(int argc, char **argv, char **envp)
 			error_str();
 			return (0);
 		}
-		args = ft_split(get_line, ' ');
+		execute.args = ft_split(get_line, ' ');
 		execute.fd_out = 1;
-		builtin(args, &execute);
-		free_2d_array(args);
+		builtin(&execute);
+		free_2d_array(execute.args);
 		add_history(get_line);
 		free(get_line);
 	}

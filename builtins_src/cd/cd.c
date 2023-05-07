@@ -6,13 +6,13 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/06 16:05:40 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 12:55:07 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	cd(char **args, t_execute *execute)
+void	cd(t_execute *execute)
 {
 	char	*oldpwd;
 
@@ -23,10 +23,10 @@ void	cd(char **args, t_execute *execute)
 		cannot access parent directories: No such file or directory", 1);
 		return ;
 	}
-	if (args[1] == NULL)
+	if (execute->args[1] == NULL)
 		handle_cd_no_args(execute, oldpwd);
 	else
-		handle_cd_with_args(execute, args[1], oldpwd);
+		handle_cd_with_args(execute, execute->args[1], oldpwd);
 }
 
 void	handle_cd_no_args(t_execute *execute, char *oldpwd)

@@ -6,13 +6,11 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:30:03 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/05 19:08:44 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 12:33:13 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-// env with no options or arguments
 
 void	env(t_execute *execute)
 {
