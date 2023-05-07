@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/07 12:55:07 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 14:11:50 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 void	cd(t_execute *execute)
 {
-	char	*oldpwd;
+	char	*cur_pwd;
 
-	oldpwd = getcwd(NULL, 0);
-	if (oldpwd == NULL)
+	cur_pwd = getcwd(NULL, 0);
+	if (cur_pwd == NULL)
 	{
 		ft_putendl_fd("cd: error retrieving current directory: getcwd: \
 		cannot access parent directories: No such file or directory", 1);
 		return ;
 	}
 	if (execute->args[1] == NULL)
-		handle_cd_no_args(execute, oldpwd);
+		handle_cd_no_args(execute, cur_pwd);
 	else
-		handle_cd_with_args(execute, execute->args[1], oldpwd);
+		handle_cd_with_args(execute, execute->args[1], cur_pwd);
 }
 
-void	handle_cd_no_args(t_execute *execute, char *oldpwd)
+void	handle_cd_no_args(t_execute *execute, char *cur_pwd)
 {
 	t_env	*home_env;
 
@@ -38,7 +38,7 @@ void	handle_cd_no_args(t_execute *execute, char *oldpwd)
 	home_env->value[0] == '\0')
 	{
 		ft_putendl_fd("minishell: cd: HOME not set", 1);
-		free(oldpwd);
+		free(cur_pwd);
 		return ;
 	}
 	if (chdir(home_env->value) < 0)
@@ -49,30 +49,33 @@ void	handle_cd_no_args(t_execute *execute, char *oldpwd)
 	}
 	else
 	{
-		update_env_var(execute->env, "OLDPWD", oldpwd);
+		update_env_var(execute->env, "OLDPWD", cur_pwd);
 		update_env_var(execute->env, "PWD", getcwd(NULL, 0));
 	}
-	free(oldpwd);
+	free(cur_pwd);
 }
 
-void	handle_cd_with_args(t_execute *execute, char *path, char *oldpwd)
+void	handle_cd_with_args(t_execute *execute, char *path, char *cur_pwd)
 {
 	if (chdir(path) < 0)
 	{
 		ft_putstr_fd("minishell: cd: ", 1);
 		ft_putstr_fd(path, 1);
 		ft_putendl_fd(": No such file or directory", 1);
-		free(oldpwd);
+		free(cur_pwd);
 		return ;
 	}
-	update_env_var(execute->env, "OLDPWD", oldpwd);
+	update_env_var(execute->env, "OLDPWD", cur_pwd);
 	update_env_var(execute->env, "PWD", getcwd(NULL, 0));
-	free(oldpwd);
+	free(cur_pwd);
 }
 
 void	update_env_var(t_env *env, char *key, char *value)
 {
 	t_env	*found_env;
+	size_t	key_len;
+	char	*key_val_pair;
+	t_env	*new_node;
 
 	found_env = find_env_node(env, key);
 	if (found_env)
@@ -82,26 +85,16 @@ void	update_env_var(t_env *env, char *key, char *value)
 	}
 	else
 	{
-		create_and_add_new_env_node(env, key, value);
+		key_len = ft_strlen(key);
+		key_val_pair = malloc((key_len + ft_strlen(value) + 2) * sizeof(char));
+		if (!key_val_pair)
+			return ;
+		ft_strlcpy(key_val_pair, key, key_len + 1);
+		key_val_pair[key_len] = '=';
+		ft_strlcpy(key_val_pair + key_len + 1, value, ft_strlen(value) + 1);
+		new_node = create_new_env_node(key_val_pair);
+		if (new_node)
+			add_env_node(env, new_node);
+		free(key_val_pair);
 	}
-}
-
-t_env	*create_and_add_new_env_node(t_env *env, char *key, char *value)
-{
-	t_env	*new_node;
-	char	*key_value_pair;
-	size_t	key_len;
-
-	key_len = ft_strlen(key);
-	key_value_pair = malloc((key_len + ft_strlen(value) + 2) * sizeof(char));
-	if (!key_value_pair)
-		return (NULL);
-	ft_strlcpy(key_value_pair, key, key_len + 1);
-	key_value_pair[key_len] = '=';
-	ft_strlcpy(key_value_pair + key_len + 1, value, ft_strlen(value) + 1);
-	new_node = create_new_env_node(key_value_pair);
-	if (new_node)
-		add_env_node(env, new_node);
-	free(key_value_pair);
-	return (new_node);
 }

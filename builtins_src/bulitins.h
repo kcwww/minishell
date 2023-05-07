@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/07 13:03:27 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/07 14:12:25 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	cd(t_execute *execute);
 void	handle_cd_no_args(t_execute *execute, char *oldpwd);
 void	handle_cd_with_args(t_execute *execute, char *path, char *oldpwd);
 void	update_env_var(t_env *env, char *key, char *value);
-t_env	*create_and_add_new_env_node(t_env *env, char *key, char *value);
 
 void	free_2d_array(char **array);
 t_env	*copy_env_list(char **envp);
