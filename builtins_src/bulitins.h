@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/07 14:12:25 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/11 22:06:04 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_execute
 	int		fd_in;
 	int		fd_out;
 	char	**args;
+	char	**redir;
 	t_env	*env;
 }	t_execute;
 
