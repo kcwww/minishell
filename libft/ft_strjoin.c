@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 13:24:48 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/06 14:08:55 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:40:27 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	size_t	i;
 	size_t	j;
 
-	i = gnl_strlen(s1);
-	j = gnl_strlen(s2);
+	i = ft_strlen(s1);
+	j = ft_strlen(s2);
 	re = (char *)malloc(sizeof(char) * (i + j + 1));
 	if (re == NULL)
 		return (NULL);

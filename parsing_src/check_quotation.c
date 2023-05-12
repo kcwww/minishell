@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 13:48:15 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/06 15:42:37 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/06 16:17:52 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_double(char *str, int i, char mark)
 	return (-1);
 }
 
-void	check_quotation(char *str)
+int	check_quotation(char *str)
 {
 	int		i;
 	int		q;
@@ -42,7 +42,7 @@ void	check_quotation(char *str)
 			if (q == -1)
 			{
 				error_str();
-				break ;
+				return (0);
 			}
 			else
 				i = q;
@@ -53,11 +53,12 @@ void	check_quotation(char *str)
 			if (q == -1)
 			{
 				error_str();
-				break ;
+				return (0);
 			}
 			else
 				i = q;
 		}
 		i++;
 	}
+	return (1);
 }

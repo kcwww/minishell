@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/06 15:27:57 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:23:17 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,15 @@ int	main(int argc, char **argv, char **env)
 			ft_shellclear(&my_shell.env);
 			return (0);
 		}
-		check_quotation(get_line);
 		add_history(get_line);
-		printf("%s\n", get_line);
-		if (ft_strcmp("None", find_value(get_line, my_shell.env)) != 0)
-			printf("%s\n", find_value(get_line, my_shell.env));
+		if (check_quotation(get_line))
+		{
+			printf("%s\n", get_line); // delete
+			if (ft_strcmp("None", find_value(get_line, my_shell.env)) != 0) //delete
+				printf("%s\n", find_value(get_line, my_shell.env)); //delete
+
+			parsing_start(get_line, &my_shell);
+		}
 		free(get_line);
 	}
 }

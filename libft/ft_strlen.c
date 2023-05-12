@@ -6,15 +6,15 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 14:19:32 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/06 14:06:10 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/12 16:06:11 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(char *s)
+int	ft_strlen(char *s)
 {
-	size_t	i;
+	int	i;
 
 	if (s == NULL)
 		return (0);
