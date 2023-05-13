@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/13 12:30:56 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/13 12:41:04 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@
 // 	struct s_env	*next;
 // }	t_env;
 
-// typedef struct s_execute // 모든 것을 담고 있는 struct
-// {
-// 	int		fd_in;
-// 	int		fd_out;
-// 	t_pipes	*head; // 시작 주소
-// 	t_env	*env; // 환경변수
-// }	t_execute;
+typedef struct s_execute // 모든 것을 담고 있는 struct
+{
+	int		fd_in;
+	int		fd_out;
+	t_pipes	*head; // 시작 주소
+	t_env	*env; // 환경변수
+}	t_execute;
 
 t_pipes	*create_head(void);
 t_cmd	*create_simple_cmd(void);

@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:19:18 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 12:23:50 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/13 12:39:32 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ int	main(int argc, char **argv, char **env)
 
 			parsing_start(get_line, &my_shell);
 		}
+
+//		execute(&my_shell);
+
 		free(get_line);
 		free_all(&my_shell);
 	}
