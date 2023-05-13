@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 16:57:05 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/13 12:03:59 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/05/13 12:24:29 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/13 12:24:34 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "include/init.h"
 # include <signal.h>
 # include <stdio.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # define REDIRECTION 123
