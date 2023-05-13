@@ -3,63 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   bulitins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/13 10:45:39 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 12:30:56 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BULITINS_H
 # define BULITINS_H
 
+// typedef struct s_pipes
+// {
+// 	struct s_pipes	*next;
+// 	struct s_cmd	*simple_cmd; // pipe 기준 커맨드 덩어리 전체
+// }	t_pipes;
+
+// typedef struct s_cmd
+// {
+// //	인풋 cat << a > 1 | cat << b > 2 | cat << c > 3로 가정:
+//     char	**word; // cat 들어감
+// 	char	**redirection; // << > 들어감
+// 	char  **redir_value; // a, 1 들어감
+// }	t_cmd;
+
 // typedef struct s_env
 // {
-// 	char			*key;
-// 	char			*value;
+// 	char			**var; // 환경변수 리스트 각 줄
+// 	char			*key; // key
+// 	char			*value; // value
 // 	struct s_env	*next;
-// }					t_env;
+// }	t_env;
 
-// typedef struct s_execute
+// typedef struct s_execute // 모든 것을 담고 있는 struct
 // {
 // 	int		fd_in;
 // 	int		fd_out;
-// 	char	**word;
-// 	char	**redir;
-// 	t_env	*env;
+// 	t_pipes	*head; // 시작 주소
+// 	t_env	*env; // 환경변수
 // }	t_execute;
-
-
-
-typedef struct s_pipes
-{
-	struct s_pipes	*next;
-	struct s_cmd	*simple_cmd; // pipe 기준 커맨드 덩어리 전체
-}	t_pipes;
-
-typedef struct s_cmd
-{
-//	인풋 cat << a > 1 | cat << b > 2 | cat << c > 3로 가정:
-    char	**word; // cat 들어감
-	char	**redirection; // << > 들어감
-	char  **redir_value; // a, 1 들어감
-}	t_cmd;
-
-typedef struct s_env
-{
-	char			**var; // 환경변수 리스트 각 줄
-	char			*key; // key
-	char			*value; // value
-	struct s_env	*next;
-}	t_env;
-
-typedef struct s_execute // 모든 것을 담고 있는 struct
-{
-	int		fd_in;
-	int		fd_out;
-	t_pipes	*head; // 시작 주소
-	t_env	*env; // 환경변수
-}	t_execute;
 
 t_pipes	*create_head(void);
 t_cmd	*create_simple_cmd(void);

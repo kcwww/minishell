@@ -6,7 +6,7 @@
 #    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/13 12:24:42 by chanwoki          #+#    #+#              #
-#    Updated: 2023/05/13 12:25:39 by chanwoki         ###   ########.fr        #
+#    Updated: 2023/05/13 12:31:44 by chanwoki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,9 +29,9 @@ PARSING_FILES=check_quotation.c parsing.c parsing2.c free_all.c
 PARSING_SRC=$(addprefix $(PARSING_PATH), $(PARSING_FILES))
 
 
-BUILTINS_PATH=builtins_src/
-BUILTINS_FILES= builtin.c pwd/pwd.c echo/echo.c cd/cd.c env/env.c exit/exit.c export/export.c  export/export_utils.c export/export_utils_2.c unset/unset.c
-BUILTINS_SRC=$(addprefix $(BUILTINS_PATH), $(BUILTINS_FILES))
+# BUILTINS_PATH=builtins_src/
+# BUILTINS_FILES= builtin.c pwd/pwd.c echo/echo.c cd/cd.c env/env.c exit/exit.c export/export.c  export/export_utils.c export/export_utils_2.c unset/unset.c
+# BUILTINS_SRC=$(addprefix $(BUILTINS_PATH), $(BUILTINS_FILES))
 
 REDIRECTIONS_PATH=redirections_src/
 REDIRECTIONS_FILES=

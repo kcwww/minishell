@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:24:29 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 12:24:34 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/13 12:30:43 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,15 @@ typedef struct s_pipes
 typedef struct s_env
 {
 	char			**var; // 환경변수 리스트
-	char			*param; // key
+	char			*key; // key
 	char			*value; // value
 	struct s_env	*next;
 }	t_env;
 
 typedef struct s_shell
 {
+	int				fd_in;
+	int				fd_out;
 	struct s_pipes	*head; //
 	struct s_env	*env; // 환경변수
 }	t_shell;
