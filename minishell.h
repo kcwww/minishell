@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:57:05 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/12 15:37:28 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/13 12:03:59 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,22 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# define REDIRECTION 123
+# define WORD 234
+# define PIPE 456
+
 
 typedef struct s_cmd
 {
 	char	**word;
-	char	redirection;
+	char	**redirection;
+	char	**redir_value;
 }	t_cmd;
 
 typedef struct s_pipes
 {
 	struct s_pipes	*next;
-	struct s_cmd	simple_cmd;
+	struct s_cmd	*simple_cmd;
 }	t_pipes;
 
 typedef struct s_env
@@ -60,5 +65,7 @@ typedef struct s_token
 void	init_shell(t_shell *my_shell, char **env);
 char	*find_value(char *key, t_env *env);
 void	parsing_start(char *str, t_shell *my_shell);
+void	make_simple_command(t_token *token, t_shell *my_shell);
+void	free_all(t_shell *ms);
 
 #endif

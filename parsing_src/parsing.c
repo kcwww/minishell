@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 15:58:57 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/12 17:45:03 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/13 11:48:29 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	add_word(t_token *token, char *str)
 			return (-1);
 		token->value[0] = '|';
 		token->value[1] = '\0';
+		token->type = PIPE;
 		return (1);
 	}
 
@@ -37,6 +38,7 @@ int	add_word(t_token *token, char *str)
 			token->value[0] = '>';
 			token->value[1] = '>';
 			token->value[2] = '\0';
+			token->type = REDIRECTION;
 			return (2);
 		}
 		else
@@ -46,6 +48,7 @@ int	add_word(t_token *token, char *str)
 				return (-1);
 			token->value[0] = '>';
 			token->value[1] = '\0';
+			token->type = REDIRECTION;
 			return (1);
 		}
 	}
@@ -60,6 +63,7 @@ int	add_word(t_token *token, char *str)
 			token->value[0] = '<';
 			token->value[1] = '<';
 			token->value[2] = '\0';
+			token->type = REDIRECTION;
 			return (2);
 		}
 		else
@@ -69,6 +73,7 @@ int	add_word(t_token *token, char *str)
 				return (-1);
 			token->value[0] = '<';
 			token->value[1] = '\0';
+			token->type = REDIRECTION;
 			return (1);
 		}
 	}
@@ -98,6 +103,7 @@ int	add_word(t_token *token, char *str)
 	if (token->value == 0)
 		return (-1);
 	ft_strlcpy(token->value, str, i + 1);
+	token->type = WORD;
 	return (i);
 }
 
@@ -109,7 +115,6 @@ void	tokenizer(char *str, t_shell *ms)
 	int		i;
 
 	i = 0;
-	(void)ms;
 
 	token = (t_token *)malloc(sizeof(t_token));
 	if (token == 0)
@@ -144,7 +149,9 @@ void	tokenizer(char *str, t_shell *ms)
 		printf("token.value: %s\n", start->value);
 		start = start->next;
 	}
-
+	printf("tokenizer end\n\n\n");
+	usleep(1000000);
+	make_simple_command(token, ms);
 	while (token)
 	{
 		free(token->value);
