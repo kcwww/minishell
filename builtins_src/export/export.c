@@ -6,29 +6,29 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/13 10:37:44 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 13:08:29 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	export(t_execute *execute)
+void	export(t_shell *myshell)
 {
 	int		i;
 	t_env	*sorted_env;
 	char	**word;
 
-	word = execute->head->simple_cmd->word;
+	word = myshell->head->simple_cmd->word;
 	i = 1;
 	if (word[1] == NULL)
 	{
-		sorted_env = sort_env_list(execute->env);
+		sorted_env = sort_env_list(myshell->env);
 		print_env_list(sorted_env);
 		return ;
 	}
 	while (word[i])
 	{
-		process_argument(word[i], execute);
+		process_argument(word[i], myshell);
 		i++;
 	}
 }
@@ -56,7 +56,7 @@ void	print_env_list(t_env *env)
 	}
 }
 
-void	process_argument(char *arg, t_execute *execute)
+void	process_argument(char *arg, t_shell *myshell)
 {
 	char	*equal_sign;
 
@@ -64,9 +64,9 @@ void	process_argument(char *arg, t_execute *execute)
 	if (is_valid_identifier(arg))
 	{
 		if (equal_sign != NULL)
-			handle_argument_with_equals(arg, execute);
+			handle_argument_with_equals(arg, myshell);
 		else
-			handle_argument_without_equals(arg, execute);
+			handle_argument_without_equals(arg, myshell);
 	}
 	else
 	{

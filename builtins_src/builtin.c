@@ -6,133 +6,21 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/13 12:15:12 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 14:08:34 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// void	builtin(t_execute *execute)
-// {
-// 	if (ft_strncmp(execute->word[0], "echo", 5) == 0)
-// 		echo(execute);
-// 	else if (ft_strncmp(execute->word[0], "pwd", 4) == 0)
-// 		pwd();
-// 	else if (ft_strncmp(execute->word[0], "cd", 3) == 0)
-// 		cd(execute);
-// 	else if (ft_strncmp(execute->word[0], "export", 7) == 0)
-// 		export(execute);
-// 	else if (ft_strncmp(execute->word[0], "unset", 6) == 0)
-// 		unset(execute);
-// 	else if (ft_strncmp(execute->word[0], "env", 4) == 0)
-// 		env(execute);
-// 	else if (ft_strncmp(execute->word[0], "exit", 5) == 0)
-// 		cmd_exit(execute);
-// 	else
-// 		ft_putendl_fd("minishell: command not found", 1);
-// }
-
-char	*check_access(t_execute *my_shell, char *cmd)
-{
-	int		i;
-	char	*path;
-	char	**paths;
-
-	// If the command is already an absolute path, return it directly.
-	if (cmd[0] == '/')
-	{
-		if (access(cmd, X_OK) == 0) // if the file exists and is executable
-			return (ft_strdup(cmd));
-		else
-			return (NULL);
-	}
-
-	paths = get_paths_from_env(my_shell->env);
-	i = 0;
-	while (paths && paths[i]) // iterate through the path list to find the file
-	{
-		path = ft_strjoin(paths[i], "/"); // append slash
-		char *full_path_to_cmd = ft_strjoin(path, cmd);
-		free(path);
-		if (access(full_path_to_cmd, X_OK) == 0) // if the file exists and is executable, break the loop
-		{
-			free_2d_array(paths);
-			return (full_path_to_cmd);
-		}
-		free(full_path_to_cmd);
-		i++;
-	}
-	free_2d_array(paths);
-	return (NULL);
-}
-
-// A helper function to count the number of segments separated by ':'
-int count_paths(char *str)
-{
-    int count = 0;
-    for (int i = 0; str[i]; i++)
-        if (str[i] == ':')
-            count++;
-    return count + 1; // +1 for the extra path before the first :
-}
-
-// A helper function to get a single path segment
-char *get_path(char **str)
-{
-    char *start = *str;
-    while (**str && **str != ':')
-        (*str)++;
-    char *path = ft_substr(start, 0, *str - start);
-    if (**str)
-        (*str)++; // Skip the ':' character
-    return path;
-}
-
-char **get_paths_from_env(t_env *env)
-{
-	char *path_var = NULL;
-	t_env *current = env;
-
-	// Iterate through the linked list to find the PATH variable
-	while (current != NULL)
-	{
-		if (ft_strncmp(current->key, "PATH", ft_strlen("PATH")) == 0)
-		{
-			path_var = current->value;
-			break;
-		}
-		current = current->next;
-	}
-
-	// If PATH variable is not found, return NULL
-	if (!path_var)
-		return NULL;
-
-	// Count the number of paths in the PATH variable
-	int path_count = count_paths(path_var);
-
-	// Allocate memory for the paths array
-	char **paths = (char **)malloc(sizeof(char *) * (path_count + 1)); // +1 for the NULL at the end
-
-	// Get the separate paths
-	int i = 0;
-	while (i < path_count)
-	{
-		paths[i] = get_path(&path_var);
-		i++;
-	}
-	paths[path_count] = NULL;
-
-	return (paths); // Added parentheses in the return statement
-}
-
-void	execute(t_execute *my_shell)
+void	execute(t_shell *my_shell)
 {
 	t_pipes	*head;
 	pid_t	pid;
 	int		fd[2];
 	t_cmd	*cmd;
 	char	*path_to_cmd;
+	char	*temp;
+	char	*err_msg;
 
 	head = my_shell->head;
 	while (head)
@@ -182,7 +70,11 @@ void	execute(t_execute *my_shell)
 					}
 					else
 					{
-						fprintf(stderr, "minishell: %s: command not found\n", cmd->word[0]);
+						temp = ft_strjoin(cmd->word[0], ": command not found");
+						err_msg = ft_strjoin("minishell: ", temp);
+						ft_putendl_fd(err_msg, STDERR_FILENO);
+						free(temp);
+						free(err_msg);
 						exit(EXIT_FAILURE);
 					}
 				}
@@ -198,7 +90,29 @@ void	execute(t_execute *my_shell)
 	}
 }
 
-void	builtin(t_execute *execute)
+int	is_builtin(char *cmd)
+{
+	char	*builtin_str[7];
+	int		i;
+
+	builtin_str[0] = "echo";
+	builtin_str[1] = "pwd";
+	builtin_str[2] = "cd";
+	builtin_str[3] = "export";
+	builtin_str[4] = "unset";
+	builtin_str[5] = "env";
+	builtin_str[6] = "exit";
+	i = 0;
+	while (i < 7)  // 빌트인 명령어의 수만큼 반복
+	{
+		if (ft_strncmp(cmd, builtin_str[i], ft_strlen(builtin_str[i]) + 1) == 0)
+			return (1);  // 빌트인 명령어일 경우 1을 반환
+		i++;
+	}
+	return (0);  // 빌트인 명령어가 아닐 경우 0을 반환
+}
+
+void	builtin(t_shell *execute)
 {
 	char	**word;
 
@@ -224,26 +138,106 @@ void	builtin(t_execute *execute)
 	}
 }
 
-int	is_builtin(char *cmd)
+char	*check_access(t_shell *my_shell, char *cmd)
 {
-	char	*builtin_str[7];
 	int		i;
+	char	*path;
+	char	**paths;
 
-	builtin_str[0] = "echo";
-	builtin_str[1] = "pwd";
-	builtin_str[2] = "cd";
-	builtin_str[3] = "export";
-	builtin_str[4] = "unset";
-	builtin_str[5] = "env";
-	builtin_str[6] = "exit";
-	i = 0;
-	while (i < 7)  // 빌트인 명령어의 수만큼 반복
+	if (cmd[0] == '/')	// If the command is already an absolute path, return it directly.
 	{
-		if (ft_strncmp(cmd, builtin_str[i], ft_strlen(builtin_str[i]) + 1) == 0)
-			return (1);  // 빌트인 명령어일 경우 1을 반환
+		if (access(cmd, X_OK) == 0) // if the file exists and is executable
+			return (ft_strdup(cmd));
+		else
+			return (NULL);
+	}
+	paths = get_paths_from_env(my_shell->env);
+	i = 0;
+	while (paths && paths[i]) // iterate through the path list to find the file
+	{
+		path = ft_strjoin(paths[i], "/"); // append slash
+		char *full_path_to_cmd = ft_strjoin(path, cmd);
+		free(path);
+		if (access(full_path_to_cmd, X_OK) == 0) // if the file exists and is executable, break the loop
+		{
+			free_2d_array(paths);
+			return (full_path_to_cmd);
+		}
+		free(full_path_to_cmd);
 		i++;
 	}
-	return (0);  // 빌트인 명령어가 아닐 경우 0을 반환
+	free_2d_array(paths);
+	return (NULL);
+}
+
+
+
+// A helper function to count the number of segments separated by ':'
+int	count_paths(char *str)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ':')
+			count++;
+		i++;
+	}
+	return (count + 1); // +1 for the extra path before the first :
+}
+
+// A helper function to get a single path segment
+char	*get_path(char **str)
+{
+	char	*start;
+	char	*path;
+
+	start = *str;
+	while (**str && **str != ':')
+		(*str)++;
+	path = ft_substr(start, 0, *str - start);
+	if (**str)
+		(*str)++; // Skip the ':' character
+	return (path);
+}
+
+char	**get_paths_from_env(t_env *env)
+{
+	char	*path_var;
+	t_env	*current;
+	int		path_count;
+	int		i;
+
+	path_var = NULL;
+	current = env;
+	while (current != NULL)	// Iterate through the linked list to find the PATH variable
+	{
+		if (ft_strncmp(current->key, "PATH", ft_strlen("PATH")) == 0)
+		{
+			path_var = current->value;
+			break ;
+		}
+		current = current->next;
+	}
+	if (!path_var)	// If PATH variable is not found, return NULL
+		return (NULL);
+	path_count = count_paths(path_var); // Count the number of paths in the PATH variable
+	// Allocate memory for the paths array
+	char **paths = (char **)malloc(sizeof(char *) * (path_count + 1)); // +1 for the NULL at the end
+
+	// Get the separate paths
+	i = 0;
+	while (i < path_count)
+	{
+		paths[i] = get_path(&path_var);
+		i++;
+	}
+	paths[path_count] = NULL;
+
+	return (paths); // Added parentheses in the return statement
 }
 
 void	handle_redirections(t_cmd *cmd)
@@ -323,4 +317,19 @@ void	handle_redirections(t_cmd *cmd)
 		}
 		i++;
 	}
+}
+
+void	free_2d_array(char **array)
+{
+	char	**temp;
+
+	temp = array;
+	if (array == NULL)
+		return ;
+	while (*temp)
+	{
+		free(*temp);
+		temp++;
+	}
+	free(array);
 }

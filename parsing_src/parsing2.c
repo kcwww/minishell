@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 10:28:45 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 12:02:55 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/13 14:21:08 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	make_simple_command(t_token *token, t_shell *ms)
 
 
 
-	printf("before\n");
+
 
 
 
@@ -171,15 +171,15 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		tmp = tmp->next;
 	}
 
-	printf("after\n");
 
-	tmp = token;
-	while (tmp)
-	{
-		printf("type: %d ", tmp->type);
-		printf("value: %s\n", tmp->value);
-		tmp = tmp->next;
-	}
+
+	// tmp = token;
+	// while (tmp)
+	// {
+	// 	printf("type: %d ", tmp->type);
+	// 	printf("value: %s\n", tmp->value);
+	// 	tmp = tmp->next;
+	// }
 
 	pipe = ms->head;
 	while (pipe)

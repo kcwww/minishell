@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:09:50 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/13 10:35:36 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 14:09:51 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 // echo $a option 구현해야 함
 
-void	echo(t_execute *execute)
+void	echo(t_shell *myshell)
 {
 	int		i;
 	int		n_flag;
 	char	**word;
 
-	word = execute->head->simple_cmd->word;
+	word = myshell->head->simple_cmd->word;
 	i = 1;
 	n_flag = handle_n_flag(word, &i);
-	print_word(execute, i, n_flag);
+	print_word(myshell, i, n_flag);
 }
 
 int	handle_n_flag(char **word, int *i)
@@ -58,28 +58,28 @@ int	only_n_after_dash(const char *str)
 	return (1);
 }
 
-void	print_word(t_execute *execute, int i, int n_flag)
+void	print_word(t_shell *myshell, int i, int n_flag)
 {
 	char	*env_var_val;
 	char	**word;
 
-	word = execute->head->simple_cmd->word;
+	word = myshell->head->simple_cmd->word;
 	while (word[i])
 	{
-		env_var_val = get_env_var_value(execute, word[i]);
+		env_var_val = get_env_var_value(myshell, word[i]);
 		if (env_var_val)
-			ft_putstr_fd(env_var_val, execute->fd_out);
+			ft_putstr_fd(env_var_val, myshell->fd_out);
 		else
-			ft_putstr_fd(word[i], execute->fd_out);
+			ft_putstr_fd(word[i], myshell->fd_out);
 		if (word[i + 1])
-			ft_putstr_fd(" ", execute->fd_out);
+			ft_putstr_fd(" ", myshell->fd_out);
 		i++;
 	}
 	if (n_flag == 0)
-		ft_putstr_fd("\n", execute->fd_out);
+		ft_putstr_fd("\n", myshell->fd_out);
 }
 
-char	*get_env_var_value(t_execute *execute, const char *str)
+char	*get_env_var_value(t_shell *myshell, char *str)
 {
 	char	*value;
 	char	*key;
@@ -88,7 +88,7 @@ char	*get_env_var_value(t_execute *execute, const char *str)
 	if (str[0] == '$')
 	{
 		key = ft_strdup(str + 1);
-		found_env = find_env_node(execute->env, key);
+		found_env = find_env_node(myshell->env, key);
 		free(key);
 		if (found_env && found_env->value)
 			value = found_env->value;

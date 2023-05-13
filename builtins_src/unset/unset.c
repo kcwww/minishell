@@ -6,13 +6,13 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:33:13 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/12 17:57:26 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 13:04:09 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	unset(t_execute *execute)
+void	unset(t_shell *execute)
 {
 	int		i;
 	char	**word;

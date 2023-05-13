@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_value.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 13:14:12 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/06 13:27:34 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/13 13:57:55 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*find_value(char *key, t_env *env)
 	lst = env;
 	while (lst)
 	{
-		if (ft_strcmp(key, lst->param) == 0)
+		if (ft_strcmp(key, lst->key) == 0)
 			return (lst->value);
 		lst = lst->next;
 	}

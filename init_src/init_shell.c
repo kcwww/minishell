@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:21:06 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/05 17:24:36 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/13 14:18:11 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void    init_env(t_env *my_env, char **env)
     while (env[i])
     {
         my_env->var = ft_envsplit(env[i]);
-        my_env->param = my_env->var[0];
+        my_env->key = my_env->var[0];
         my_env->value = my_env->var[1];
         i++;
         if (env[i])
@@ -53,12 +53,12 @@ void    init_shell(t_shell *my_shell, char **env)
     //파이프 추가후 memset
     init_env(my_shell->env, env);
     
-    t_env *test;
-    test = my_shell->env;
-    while (test)
-    {
-        printf("%s : %s\n", test->param, test->value);
-        test = test->next;
-    }
+    // t_env *test;
+    // test = my_shell->env;
+    // while (test)
+    // {
+    //     printf("%s : %s\n", test->key, test->value);
+    //     test = test->next;
+    // }
     init_signal();
 }
