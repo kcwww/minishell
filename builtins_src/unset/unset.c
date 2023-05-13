@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:33:13 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/07 12:50:01 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/12 17:57:26 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 void	unset(t_execute *execute)
 {
 	int		i;
+	char	**word;
 
+	word = execute->head->simple_cmd->word;
 	i = 1;
-	while (execute->args[i])
+	while (word[i])
 	{
-		if (is_valid_identifier(execute->args[i]))
-			remove_env_node(execute->args[i], &execute->env);
+		if (is_valid_identifier(word[i]))
+			remove_env_node(word[i], &execute->env);
 		else
 		{
 			ft_putstr_fd("minishell: unset: '", 1);
-			ft_putstr_fd(execute->args[i], 1);
+			ft_putstr_fd(word[i], 1);
 			ft_putendl_fd("' is not a valid identifier", 1);
 		}
 		i++;

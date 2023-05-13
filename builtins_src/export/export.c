@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/07 12:41:52 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 10:37:44 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@ void	export(t_execute *execute)
 {
 	int		i;
 	t_env	*sorted_env;
+	char	**word;
 
+	word = execute->head->simple_cmd->word;
 	i = 1;
-	if (execute->args[1] == NULL)
+	if (word[1] == NULL)
 	{
 		sorted_env = sort_env_list(execute->env);
 		print_env_list(sorted_env);
 		return ;
 	}
-	while (execute->args[i])
+	while (word[i])
 	{
-		process_argument(execute->args[i], execute);
+		process_argument(word[i], execute);
 		i++;
 	}
 }

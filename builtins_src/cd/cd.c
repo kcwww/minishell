@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/07 14:11:50 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/12 17:54:27 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	cd(t_execute *execute)
 {
 	char	*cur_pwd;
+	char	**word;
 
+	word = execute->head->simple_cmd->word;
 	cur_pwd = getcwd(NULL, 0);
 	if (cur_pwd == NULL)
 	{
@@ -23,13 +25,13 @@ void	cd(t_execute *execute)
 		cannot access parent directories: No such file or directory", 1);
 		return ;
 	}
-	if (execute->args[1] == NULL)
-		handle_cd_no_args(execute, cur_pwd);
+	if (word[1] == NULL)
+		handle_cd_no_word(execute, cur_pwd);
 	else
-		handle_cd_with_args(execute, execute->args[1], cur_pwd);
+		handle_cd_with_word(execute, word[1], cur_pwd);
 }
 
-void	handle_cd_no_args(t_execute *execute, char *cur_pwd)
+void	handle_cd_no_word(t_execute *execute, char *cur_pwd)
 {
 	t_env	*home_env;
 
@@ -55,7 +57,7 @@ void	handle_cd_no_args(t_execute *execute, char *cur_pwd)
 	free(cur_pwd);
 }
 
-void	handle_cd_with_args(t_execute *execute, char *path, char *cur_pwd)
+void	handle_cd_with_word(t_execute *execute, char *path, char *cur_pwd)
 {
 	if (chdir(path) < 0)
 	{

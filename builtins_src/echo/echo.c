@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:09:50 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/07 12:21:40 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 10:35:36 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,24 @@
 
 void	echo(t_execute *execute)
 {
-	int	i;
-	int	n_flag;
+	int		i;
+	int		n_flag;
+	char	**word;
 
+	word = execute->head->simple_cmd->word;
 	i = 1;
-	n_flag = handle_n_flag(execute->args, &i);
-	print_args(execute, i, n_flag);
+	n_flag = handle_n_flag(word, &i);
+	print_word(execute, i, n_flag);
 }
 
-int	handle_n_flag(char **args, int *i)
+int	handle_n_flag(char **word, int *i)
 {
 	int	n_flag;
 
 	n_flag = 0;
-	while (args[*i] && ft_strncmp(args[*i], "-n", 2) == 0)
+	while (word[*i] && ft_strncmp(word[*i], "-n", 2) == 0)
 	{
-		if (only_n_after_dash(args[*i]))
+		if (only_n_after_dash(word[*i]))
 		{
 			n_flag = 1;
 			(*i)++;
@@ -56,18 +58,20 @@ int	only_n_after_dash(const char *str)
 	return (1);
 }
 
-void	print_args(t_execute *execute, int i, int n_flag)
+void	print_word(t_execute *execute, int i, int n_flag)
 {
 	char	*env_var_val;
+	char	**word;
 
-	while (execute->args[i])
+	word = execute->head->simple_cmd->word;
+	while (word[i])
 	{
-		env_var_val = get_env_var_value(execute, execute->args[i]);
+		env_var_val = get_env_var_value(execute, word[i]);
 		if (env_var_val)
 			ft_putstr_fd(env_var_val, execute->fd_out);
 		else
-			ft_putstr_fd(execute->args[i], execute->fd_out);
-		if (execute->args[i + 1])
+			ft_putstr_fd(word[i], execute->fd_out);
+		if (word[i + 1])
 			ft_putstr_fd(" ", execute->fd_out);
 		i++;
 	}

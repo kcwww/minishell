@@ -6,41 +6,79 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/11 22:06:04 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 10:45:39 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BULITINS_H
 # define BULITINS_H
 
+// typedef struct s_env
+// {
+// 	char			*key;
+// 	char			*value;
+// 	struct s_env	*next;
+// }					t_env;
+
+// typedef struct s_execute
+// {
+// 	int		fd_in;
+// 	int		fd_out;
+// 	char	**word;
+// 	char	**redir;
+// 	t_env	*env;
+// }	t_execute;
+
+
+
+typedef struct s_pipes
+{
+	struct s_pipes	*next;
+	struct s_cmd	*simple_cmd; // pipe 기준 커맨드 덩어리 전체
+}	t_pipes;
+
+typedef struct s_cmd
+{
+//	인풋 cat << a > 1 | cat << b > 2 | cat << c > 3로 가정:
+    char	**word; // cat 들어감
+	char	**redirection; // << > 들어감
+	char  **redir_value; // a, 1 들어감
+}	t_cmd;
+
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
+	char			**var; // 환경변수 리스트 각 줄
+	char			*key; // key
+	char			*value; // value
 	struct s_env	*next;
-}					t_env;
+}	t_env;
 
-typedef struct s_execute
+typedef struct s_execute // 모든 것을 담고 있는 struct
 {
 	int		fd_in;
 	int		fd_out;
-	char	**args;
-	char	**redir;
-	t_env	*env;
+	t_pipes	*head; // 시작 주소
+	t_env	*env; // 환경변수
 }	t_execute;
 
+t_pipes	*create_head(void);
+t_cmd	*create_simple_cmd(void);
+
 void	builtin(t_execute *execute);
+void	execute(t_execute *my_shell);
+int		is_builtin(char *cmd);
+void	handle_redirections(t_cmd *cmd);
 
 void	pwd(void);
 
 void	echo(t_execute *execute);
-int		handle_n_flag(char **args, int *i);
+int		handle_n_flag(char **word, int *i);
 int		only_n_after_dash(const char *str);
-void	print_args(t_execute *execute, int i, int n_flag);
+void	print_word(t_execute *execute, int i, int n_flag);
 char	*get_env_var_value(t_execute *execute, const char *str);
 
 void	cmd_exit(t_execute *execute);
-char	*validate_exit_args(t_execute *execute, int *exit_code);
+char	*validate_exit_word(t_execute *execute, int *exit_code);
 
 void	env(t_execute *execute);
 
@@ -60,8 +98,8 @@ void	unset(t_execute *execute);
 void	remove_env_node(char *key, t_env **env);
 
 void	cd(t_execute *execute);
-void	handle_cd_no_args(t_execute *execute, char *oldpwd);
-void	handle_cd_with_args(t_execute *execute, char *path, char *oldpwd);
+void	handle_cd_no_word(t_execute *execute, char *oldpwd);
+void	handle_cd_with_word(t_execute *execute, char *path, char *oldpwd);
 void	update_env_var(t_env *env, char *key, char *value);
 
 void	free_2d_array(char **array);

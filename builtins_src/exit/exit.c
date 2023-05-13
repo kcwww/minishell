@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/07 12:31:28 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/13 10:36:06 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ void	cmd_exit(t_execute *execute)
 {
 	int		exit_code;
 	char	*error_message;
+	char	**word;
 
-	error_message = validate_exit_args(execute, &exit_code);
+	word = execute->head->simple_cmd->word;
+	error_message = validate_exit_word(execute, &exit_code);
 	if (error_message)
 	{
 		ft_putstr_fd("exit\n", execute->fd_out);
@@ -29,29 +31,31 @@ void	cmd_exit(t_execute *execute)
 		exit(exit_code);
 }
 
-char	*validate_exit_args(t_execute *execute, int *exit_code)
+char	*validate_exit_word(t_execute *execute, int *exit_code)
 {
-	int	i;
+	int		i;
+	char	**word;
 
+	word = execute->head->simple_cmd->word;
 	i = 0;
-	if (execute->args[1])
+	if (word[1])
 	{
-		while (execute->args[1][i])
+		while (word[1][i])
 		{
-			if (ft_isdigit(execute->args[1][i]) == 0)
+			if (ft_isdigit(word[1][i]) == 0)
 			{
 				*exit_code = 255;
 				return ("numeric argument required");
 			}
 			i++;
 		}
-		if (execute->args[2])
+		if (word[2])
 		{
 			*exit_code = 1;
 			return ("too many arguments");
 		}
 		else
-			*exit_code = ft_atoi(execute->args[1]);
+			*exit_code = ft_atoi(word[1]);
 	}
 	else
 		*exit_code = 0;
