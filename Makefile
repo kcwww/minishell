@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
+#    By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/05/13 12:10:01 by chanwoki         ###   ########.fr        #
+#    Updated: 2023/05/14 12:25:32 by kcw              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,8 +60,8 @@ OBJECTS = $(SRC_FILES:.c=.o)
 
 ########
 
-READLINE_LIB= -lreadline -L${HOME}/.brew/opt/readline/lib -L . -lft
-READLINE_HEADER= -I . -I${HOME}/.brew/opt/readline/include -I include/
+READLINE_LIB= -L$(shell brew --prefix readline)/lib/ -lreadline -L . -lft
+READLINE_HEADER= -I . -I$(shell brew --prefix readline)/include/ -I include/
 
 ########
 

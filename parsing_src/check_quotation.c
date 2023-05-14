@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_quotation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 13:48:15 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/06 16:17:52 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/14 12:20:03 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 int	check_double(char *str, int i, char mark)
 {
-	int idx;
-
-	idx = i;
 	while (str[i])
 	{
 		if (str[i] == mark)
