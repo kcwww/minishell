@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:24:29 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 14:13:04 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/14 11:21:12 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,7 @@ void	builtin(t_shell *execute);
 int		is_builtin(char *cmd);
 void	handle_redirections(t_cmd *cmd);
 void	free_2d_array(char **array);
+void	child_process(t_shell *my_shell, t_pipes *head, int fd[], t_cmd *cmd);
+void	parent_process(t_pipes *head, int fd[]);
 
 #endif

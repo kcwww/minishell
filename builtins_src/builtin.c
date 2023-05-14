@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/14 11:15:19 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/14 11:21:06 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	execute(t_shell *my_shell)
 			else if (pid == 0)  // 자식 프로세스
 				child_process(my_shell, head, fd, cmd);
 			else  // 부모 프로세스
-				parent_process(head, fd, pid);
+				parent_process(head, fd);
 		}
 		head = head->next;
 	}
@@ -366,7 +366,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, int fd[], t_cmd *cmd)
 	}
 }
 
-void	parent_process(t_pipes *head, int fd[], pid_t pid)
+void	parent_process(t_pipes *head, int fd[])
 {
 	wait(NULL);
 	if (head->next)

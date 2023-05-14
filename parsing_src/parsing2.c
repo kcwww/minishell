@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 10:28:45 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 14:21:08 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/14 11:48:30 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		tmp = tmp->next;
 		i++;
 	}
-
 	tmp = token;
 	while (tmp->next)
 		tmp = tmp->next;
@@ -170,9 +169,6 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		}
 		tmp = tmp->next;
 	}
-
-
-
 	// tmp = token;
 	// while (tmp)
 	// {
@@ -180,7 +176,6 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	// 	printf("value: %s\n", tmp->value);
 	// 	tmp = tmp->next;
 	// }
-
 	pipe = ms->head;
 	while (pipe)
 	{

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 15:58:57 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 14:18:10 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/14 11:26:56 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	add_word(t_token *token, char *str)
 		token->type = PIPE;
 		return (1);
 	}
-
 	if (str[0] == '>')
 	{
 		if (str[1] == '>')
@@ -52,7 +51,6 @@ int	add_word(t_token *token, char *str)
 			return (1);
 		}
 	}
-
 	if (str[0] == '<')
 	{
 		if (str[1] == '<')
@@ -77,7 +75,6 @@ int	add_word(t_token *token, char *str)
 			return (1);
 		}
 	}
-
 	while (str[i])
 	{
 		if (str[i] == '\"')
@@ -98,7 +95,6 @@ int	add_word(t_token *token, char *str)
 			break ;
 		i++;
 	}
-
 	token->value = (char *)malloc(sizeof(char) * (i + 1));
 	if (token->value == 0)
 		return (-1);
@@ -115,7 +111,6 @@ void	tokenizer(char *str, t_shell *ms)
 	int		i;
 
 	i = 0;
-
 	token = (t_token *)malloc(sizeof(t_token));
 	if (token == 0)
 		return ;
@@ -142,7 +137,6 @@ void	tokenizer(char *str, t_shell *ms)
 		token = token->next;
 		token->next = NULL;
 	}
-
 	// token = start;
 	// while (start)
 	// {
