@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/14 11:21:06 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/14 19:52:22 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	execute(t_shell *my_shell)
 	pid_t	pid;
 	int		fd[2];
 	t_cmd	*cmd;
-
+	// 노트: 현재 코드의 경우 pwd > a 경우를 처리하지 못함. // < a pwd에서 메인 프로세스가 stdin/out 잃어버리지 않아야 한다
 	head = my_shell->head;
 	while (head)
 	{
@@ -278,9 +278,9 @@ void	handle_redirections(t_cmd *cmd)
 			while (1)
 			{
 				line = readline("> "); // Read the input
-				if (strcmp(line, cmd->redir_value[i]) == 0) // If the limiter is found, break out of the loop
+				if (ft_strcmp(line, cmd->redir_value[i]) == 0) // If the limiter is found, break out of the loop
 					break;
-				write(fd, line, strlen(line)); // Write the input into the temporary file
+				write(fd, line, ft_strlen(line)); // Write the input into the temporary file
 				write(fd, "\n", 1); // Write a newline character
 				free(line); // Don't forget to free the allocated memory
 			}
@@ -325,27 +325,26 @@ void	child_process(t_shell *my_shell, t_pipes *head, int fd[], t_cmd *cmd)
 	char	*temp;
 	char	*err_msg;
 
-		if (head->next)  // 다음 파이프가 있다면
-		{
+	if (head->next)  // 다음 파이프가 있다면
+	{
 		close(fd[0]);  // 파이프의 읽기 끝을 닫습니다
-		//dup2(fd[1], STDOUT_FILENO);  
-		if (dup2(fd[1], STDOUT_FILENO) < 0) // 파이프의 쓰기 끝을 표준 출력에 복제합니다
+		if (dup2(fd[1], STDOUT_FILENO) < 0) // 파이프의 쓰기 끝을 표준 출력에 복제합니다 		//dup2(fd[1], STDOUT_FILENO);
 			exit(EXIT_FAILURE);
 		close(fd[1]);  // 원래의 쓰기 끝을 닫습니다
-		}
-		if (head != my_shell->head)  // 첫번째 파이프가 아니라면 (즉, 이전 파이프가 있다면)
-		{
+	}
+	if (head != my_shell->head)  // 첫번째 파이프가 아니라면 (즉, 이전 파이프가 있다면)
+	{
 		//dup2(fd[0], STDIN_FILENO);  
 		if (dup2(fd[0], STDIN_FILENO) < 0) // 이전 파이프의 읽기 끝을 표준 입력에 복제합니다
 			exit(EXIT_FAILURE);
 		close(fd[0]);  // 원래의 읽기 끝을 닫습니다
 		close(fd[1]);  // 원래의 쓰기 끝을 닫습니다
-		}
-		handle_redirections(cmd);  // 리다이렉션을 처리합니다 (입력, 출력을 파일로 바꾸는 등)
-		if (is_builtin(cmd->word[0]))  // 명령어가 빌트인 명령어인지 확인합니다 (echo, cd 등)
+	}
+	handle_redirections(cmd);  // 리다이렉션을 처리합니다 (입력, 출력을 파일로 바꾸는 등)
+	if (is_builtin(cmd->word[0]))  // 명령어가 빌트인 명령어인지 확인합니다 (echo, cd 등)
 		builtin(my_shell);  // 빌트인 명령어라면 해당 함수를 실행합니다
-		else  // 빌트인 명령어가 아니라면
-		{
+	else  // 빌트인 명령어가 아니라면
+	{
 		path_to_cmd = check_access(my_shell, cmd->word[0]);  // 명령어에 해당하는 파일이 실행 가능한지 확인하고, 그 경로를 얻어옵니다
 		if (path_to_cmd != NULL)  // 경로를 찾았다면
 		{

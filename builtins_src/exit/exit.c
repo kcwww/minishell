@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/13 13:08:06 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/14 12:45:53 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void	cmd_exit(t_shell *myshell)
 {
 	int		exit_code;
 	char	*error_message;
-	char	**word;
 
-	word = myshell->head->simple_cmd->word;
 	error_message = validate_exit_word(myshell, &exit_code);
 	if (error_message)
 	{
