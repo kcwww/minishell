@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:19:18 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/18 19:28:42 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/20 13:34:31 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int argc, char **argv, char **env)
 			// printf("%s\n", find_value(get_line, my_shell.env)); //delete
 			parsing_start(get_line, &my_shell);
 		}
-		execute(&my_shell);
+		execute(&my_shell, env);
 		free(get_line);
 		free_all(&my_shell);
 	}

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:24:29 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/18 17:41:31 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/20 14:03:02 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,20 @@ t_env	*find_env_node(t_env *env, char *key);
 void	add_env_node(t_env *env, t_env *new_node);
 void	free_env_node(t_env *node);
 
-void	pwd(void);
+void	pwd(t_shell *my_shell);
 
 void	unset(t_shell *execute);
 void	remove_env_node(char *key, t_env **env);
 
-void	execute(t_shell *my_shell);
-void	handle_heredocs(t_shell *my_shell);
+void	execute(t_shell *my_shell, char **env);
+void	handle_heredocs(t_shell *my_shell, int *heredoc_used);
 void	handle_redirections(t_shell *my_shell);
-void	child_process(t_shell *my_shell, t_pipes *head, int *fd, t_cmd *cmd);
-void	parent_process(t_pipes *head, int *fd);
+int		is_builtin(char *cmd);
+void	builtin(t_shell *my_shell);
+void	cleanup_heredocs(void);
+void	child_process(t_shell *my_shell, int *fd, t_cmd *cmd, char **env);
+char	*get_path(char **env);
+char	*check_access(char *path_var, char *cmd);
+void	parent_process(int *fd);
 
 #endif
