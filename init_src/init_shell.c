@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/05 14:21:06 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 14:18:11 by dkham            ###   ########.fr       */
+/*   Created: 2023/05/20 12:34:54 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/20 14:02:49 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ void    init_env(t_env *my_env, char **env)
     }
 }
 
-void    init_shell(t_shell *my_shell, char **env)
+void	init_shell(t_shell *my_shell, char **env)
 {
     my_shell->env = (t_env *)malloc(sizeof(t_env)); // NULL GUARD
     //파이프 추가후 memset
+    ft_memset(my_shell->env, 0, sizeof(t_env));
     init_env(my_shell->env, env);
-    
+
     // t_env *test;
     // test = my_shell->env;
     // while (test)

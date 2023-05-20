@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/13 10:28:45 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/14 11:48:30 by dkham            ###   ########.fr       */
+/*   Created: 2023/05/20 12:33:38 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/20 13:25:04 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,18 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	t_token	*tmp;
 	t_pipes	*pipe;
 
+
 	tmp = token;
+
 	i = 0;
 	pipes = 0;
 	while (tmp)
 	{
-		if (i == 0 && tmp->type == PIPE)
-			return ;
+		// if (i == 0 && tmp->type == PIPE)
+		// {
+		// 	printf("pipe error\n"); //delete
+		// 	return ;
+		// }
 		if (tmp->type == PIPE)
 			pipes++;
 		tmp = tmp->next;
@@ -35,8 +40,8 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	tmp = token;
 	while (tmp->next)
 		tmp = tmp->next;
-	if (tmp->type == PIPE)
-		return ;
+	// if (tmp->type == PIPE)
+	// 	return ;
 
 
 
@@ -125,12 +130,6 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		return ;
 	pipe->simple_cmd->redir_value[re_word] = NULL;
 
-
-
-
-
-
-
 	pipe = ms->head;
 	tmp = token;
 	re_flag = 0;
@@ -169,6 +168,7 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		}
 		tmp = tmp->next;
 	}
+
 	// tmp = token;
 	// while (tmp)
 	// {
@@ -176,6 +176,7 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	// 	printf("value: %s\n", tmp->value);
 	// 	tmp = tmp->next;
 	// }
+
 	pipe = ms->head;
 	while (pipe)
 	{

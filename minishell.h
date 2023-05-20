@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/13 12:24:29 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/20 14:03:02 by dkham            ###   ########.fr       */
+/*   Created: 2023/05/20 15:25:39 by dkham             #+#    #+#             */
+/*   Updated: 2023/05/20 15:25:43 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_shell
 {
 	int				fd_in;
 	int				fd_out;
+	int				error;
 	struct s_pipes	*head; //
 	struct s_env	*env; // 환경변수
 }	t_shell;
@@ -66,7 +67,7 @@ typedef struct s_token
 int	g_exit_status;
 
 void	init_shell(t_shell *my_shell, char **env);
-char	*find_value(char *key, t_env *env);
+char	*find_value(char *key, t_shell *ms);
 void	parsing_start(char *str, t_shell *my_shell);
 void	make_simple_command(t_token *token, t_shell *my_shell);
 void	free_all(t_shell *ms);
@@ -116,5 +117,7 @@ void	child_process(t_shell *my_shell, int *fd, t_cmd *cmd, char **env);
 char	*get_path(char **env);
 char	*check_access(char *path_var, char *cmd);
 void	parent_process(int *fd);
+
+void	free_env(t_env *env);
 
 #endif

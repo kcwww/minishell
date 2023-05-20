@@ -6,11 +6,26 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:03:31 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 12:09:41 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/20 12:57:35 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		free(env->var);
+		free(env->key);
+		free(env->value);
+		tmp = env;
+		env = env->next;
+		free(tmp);
+	}
+}
 
 void	free_all(t_shell *ms)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/06 15:58:57 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/14 13:04:18 by dkham            ###   ########.fr       */
+/*   Created: 2023/05/20 12:34:00 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/20 14:06:37 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,56 +103,93 @@ int add_word(t_token *token, char *str)
 }
 void    tokenizer(char *str, t_shell *ms)
 {
-    t_token *token;
-    t_token *start;
-    char    *new_str;
-    int     i;
-    i = 0;
-    token = (t_token *)malloc(sizeof(t_token));
-    if (token == 0)
-        return ;
-    ft_memset(token, 0, sizeof(t_token));
-    start = token;
-    while (i < ft_strlen(str))
-    {
-        while (str[i] == ' ')
-            i++;
-        if (str[i] == '\0')
-            break ;
-        new_str = ft_substr(str, i, ft_strlen(str) - i);
-        if (new_str == NULL)
-            return ;
-        i = i + add_word(token, new_str);
-        free(new_str);
-        while (str[i] == ' ')
-            i++;
-        if (str[i] == '\0')
-            break ;
-        token->next = (t_token *)malloc(sizeof(t_token));
-        if (token->next == 0)
-            return ;
-        token = token->next;
-        token->next = NULL;
-    }
-    // token = start;
-    // while (token)
-    // {
-    //  printf("token.value: %s\n", token->value);
-    //  token = token->next;
-    // }
-    // printf("tokenizer end\n\n\n");
-    // usleep(1000000);
-    make_simple_command(start, ms);
-    
-    while (start)
-    {
-        token = start->next;
-        free(start->value);
-        free(start);
-        start = token;
-    }
+	t_token	*token;
+	t_token	*start;
+	char	*new_str;
+	int		i;
+
+	i = 0;
+	token = (t_token *)malloc(sizeof(t_token));
+	if (token == 0)
+		return ;
+	ft_memset(token, 0, sizeof(t_token));
+	start = token;
+	while (i < ft_strlen(str))
+	{
+		while (str[i] == ' ')
+			i++;
+		if (str[i] == '\0')
+			break ;
+		new_str = ft_substr(str, i, ft_strlen(str) - i);
+
+		if (new_str == NULL)
+			return ;
+		i = i + add_word(token, new_str);
+
+		free(new_str);
+		while (str[i] == ' ')
+			i++;
+		if (str[i] == '\0')
+			break ;
+		token->next = (t_token *)malloc(sizeof(t_token));
+		if (token->next == 0)
+			return ;
+		token = token->next;
+		token->next = NULL;
+	}
+
+	//printf("tokenizer end\n\n\n");
+	// token = start;
+	// while (token)
+	// {
+	// 	printf("token.value: %s\n", token->value);
+	// 	token = token->next;
+	// }
+	// printf("tokenizer end\n\n\n");
+	// usleep(1000000);
+
+	make_simple_command(start, ms);
+
+	while (start)
+	{
+		token = start->next;
+		free(start->value);
+		free(start);
+		start = token;
+	}
 }
+
+void	check_pipes(t_shell *ms)
+{
+	t_pipes	*pipe;
+
+	pipe = ms->head;
+	while (pipe)
+	{
+		if (pipe->simple_cmd->word[0] == NULL && pipe->simple_cmd->redirection[0] == NULL)
+		{
+			printf("bash: syntax error near unexpected token `|'\n");
+			ms->error = 1;
+			return ;
+		}
+		if (pipe->simple_cmd->redirection[0] != NULL && pipe->simple_cmd->redir_value[0] == NULL)
+		{
+			printf("bash: syntax error near unexpected token `newline'\n");
+			ms->error = 1;
+			return ;
+		}
+		pipe = pipe->next;
+	}
+}
+
 void    parsing_start(char *str, t_shell *ms)
 {
-    tokenizer(str, ms);
+	// if (str[0] == '|')
+	// {
+	// 	printf("hee\n");
+	// 	return ; // error message
+	// }
+	ms->error = 0;
+	tokenizer(str, ms);
+	check_pipes(ms);
 }

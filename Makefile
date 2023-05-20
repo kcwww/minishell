@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dkham <dkham@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/05/13 12:24:42 by chanwoki          #+#    #+#              #
-#    Updated: 2023/05/13 13:59:34 by dkham            ###   ########.fr        #
+#    Created: 2023/05/20 12:32:44 by chanwoki          #+#    #+#              #
+#    Updated: 2023/05/20 15:27:35 by dkham            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,8 +59,8 @@ OBJECTS = $(SRC_FILES:.c=.o)
 
 ########
 
-READLINE_LIB= -lreadline -L${HOME}/.brew/opt/readline/lib -L . -lft
-READLINE_HEADER= -I . -I${HOME}/.brew/opt/readline/include -I include/
+READLINE_LIB= -L$(shell brew --prefix readline)/lib/ -lreadline -L . -lft
+READLINE_HEADER= -I . -I$(shell brew --prefix readline)/include/ -I include/
 
 ########
 
