@@ -6,23 +6,23 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:27:10 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/20 15:27:12 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/20 16:01:48 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_leaks(void)
-{
-	system("leaks minishell");
-}
+// void	check_leaks(void)
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int argc, char **argv, char **env)
 {
 	char	*get_line;
 	t_shell	my_shell;
 
-	atexit(check_leaks);
+	//atexit(check_leaks);
 	if (argc != 1)
 		return (0);
 	(void)argv;

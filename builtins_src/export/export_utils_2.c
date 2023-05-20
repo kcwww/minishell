@@ -6,32 +6,32 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 12:51:38 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/13 14:12:52 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/20 17:56:57 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	handle_argument_with_equals(char *arg, t_shell *myshell)
+void	handle_argument_with_equals(char *arg, t_shell *my_shell)
 {
 	t_env	*new_node;
 
 	new_node = create_new_env_node(arg);
 	if (new_node)
-		add_env_node(myshell->env, new_node);
+		add_env_node(my_shell->env, new_node);
 }
 
-void	handle_argument_without_equals(char *arg, t_shell *myshell)
+void	handle_argument_without_equals(char *arg, t_shell *my_shell)
 {
 	t_env	*found_env;
 	t_env	*new_node;
 
-	found_env = find_env_node(myshell->env, arg);
+	found_env = find_env_node(my_shell->env, arg);
 	if (!found_env)
 	{
 		new_node = create_new_env_node(arg);
 		if (new_node)
-			add_env_node(myshell->env, new_node);
+			add_env_node(my_shell->env, new_node);
 	}
 }
 

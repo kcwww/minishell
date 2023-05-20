@@ -6,69 +6,69 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/13 14:11:38 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/20 17:54:16 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	cd(t_shell *myshell)
+void	cd(t_shell *my_shell)
 {
 	char	*cur_pwd;
 	char	**word;
 
-	word = myshell->head->simple_cmd->word;
+	word = my_shell->head->simple_cmd->word;
 	cur_pwd = getcwd(NULL, 0);
 	if (cur_pwd == NULL)
 	{
 		ft_putendl_fd("cd: error retrieving current directory: getcwd: \
-		cannot access parent directories: No such file or directory", 1);
+		cannot access parent directories: No such file or directory", my_shell->fd_out);
 		return ;
 	}
 	if (word[1] == NULL)
-		handle_cd_no_word(myshell, cur_pwd);
+		handle_cd_no_word(my_shell, cur_pwd);
 	else
-		handle_cd_with_word(myshell, word[1], cur_pwd);
+		handle_cd_with_word(my_shell, word[1], cur_pwd);
 }
 
-void	handle_cd_no_word(t_shell *myshell, char *cur_pwd)
+void	handle_cd_no_word(t_shell *my_shell, char *cur_pwd)
 {
 	t_env	*home_env;
 
-	home_env = find_env_node(myshell->env, "HOME");
+	home_env = find_env_node(my_shell->env, "HOME");
 	if (home_env == NULL || home_env->value == NULL || \
 	home_env->value[0] == '\0')
 	{
-		ft_putendl_fd("minishell: cd: HOME not set", 1);
+		ft_putendl_fd("minishell: cd: HOME not set", my_shell->fd_out);
 		free(cur_pwd);
 		return ;
 	}
 	if (chdir(home_env->value) < 0)
 	{
-		ft_putstr_fd("minishell: cd: ", 1);
-		ft_putstr_fd(home_env->value, 1);
-		ft_putendl_fd(": No such file or directory", 1);
+		ft_putstr_fd("minishell: cd: ", my_shell->fd_out);
+		ft_putstr_fd(home_env->value, my_shell->fd_out);
+		ft_putendl_fd(": No such file or directory", my_shell->fd_out);
 	}
 	else
 	{
-		update_env_var(myshell->env, "OLDPWD", cur_pwd);
-		update_env_var(myshell->env, "PWD", getcwd(NULL, 0));
+		update_env_var(my_shell->env, "OLDPWD", cur_pwd);
+		update_env_var(my_shell->env, "PWD", getcwd(NULL, 0));
 	}
 	free(cur_pwd);
 }
 
-void	handle_cd_with_word(t_shell *myshell, char *path, char *cur_pwd)
+void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd)
 {
 	if (chdir(path) < 0)
 	{
-		ft_putstr_fd("minishell: cd: ", 1);
-		ft_putstr_fd(path, 1);
-		ft_putendl_fd(": No such file or directory", 1);
+		ft_putstr_fd("minishell: cd: ", my_shell->fd_out);
+		ft_putstr_fd(path, my_shell->fd_out);
+		ft_putendl_fd(": No such file or directory", my_shell->fd_out);
 		free(cur_pwd);
 		return ;
 	}
-	update_env_var(myshell->env, "OLDPWD", cur_pwd);
-	update_env_var(myshell->env, "PWD", getcwd(NULL, 0));
+	update_env_var(my_shell->env, "OLDPWD", cur_pwd);
+	update_env_var(my_shell->env, "PWD", getcwd(NULL, 0));
 	free(cur_pwd);
 }
 

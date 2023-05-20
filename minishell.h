@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:25:39 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/20 15:25:43 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/20 17:55:45 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_shell
 {
 	int				fd_in;
 	int				fd_out;
+	int				pipe_fd[2];
 	int				error;
 	struct s_pipes	*head; //
 	struct s_env	*env; // 환경변수
@@ -90,7 +91,7 @@ void	cmd_exit(t_shell *execute);
 char	*validate_exit_word(t_shell *execute, int *exit_code);
 
 void	export(t_shell *execute);
-void	print_env_list(t_env *env);
+void	print_env_list(t_env *env, t_shell *my_shell);
 void	process_argument(char *arg, t_shell *execute);
 int		is_valid_identifier(char *arg);
 t_env	*sort_env_list(t_env *env);
@@ -113,10 +114,10 @@ void	handle_redirections(t_shell *my_shell);
 int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell);
 void	cleanup_heredocs(void);
-void	child_process(t_shell *my_shell, int *fd, t_cmd *cmd, char **env);
+void	child_process(t_shell *my_shell, char **env);
 char	*get_path(char **env);
 char	*check_access(char *path_var, char *cmd);
-void	parent_process(int *fd);
+void	parent_process(t_shell *my_shell);
 
 void	free_env(t_env *env);
 

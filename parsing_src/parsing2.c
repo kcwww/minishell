@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:33:38 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/20 13:25:04 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/20 16:33:02 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,28 +177,28 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	// 	tmp = tmp->next;
 	// }
 
-	pipe = ms->head;
-	while (pipe)
-	{
-		int j = 0;
-		while (pipe->simple_cmd->word[j])
-		{
-			printf("word: %s\n", pipe->simple_cmd->word[j]);
-			j++;
-		}
-		j = 0;
-		while (pipe->simple_cmd->redirection[j])
-		{
-			printf("redirection: %s\n", pipe->simple_cmd->redirection[j]);
-			j++;
-		}
-		j = 0;
-		while (pipe->simple_cmd->redir_value[j])
-		{
-			printf("redir_value: %s\n", pipe->simple_cmd->redir_value[j]);
-			j++;
-		}
-		pipe = pipe->next;
-		printf("next\n");
-	}
+	// pipe = ms->head;
+	// while (pipe)
+	// {
+	// 	int j = 0;
+	// 	while (pipe->simple_cmd->word[j])
+	// 	{
+	// 		printf("word: %s\n", pipe->simple_cmd->word[j]);
+	// 		j++;
+	// 	}
+	// 	j = 0;
+	// 	while (pipe->simple_cmd->redirection[j])
+	// 	{
+	// 		printf("redirection: %s\n", pipe->simple_cmd->redirection[j]);
+	// 		j++;
+	// 	}
+	// 	j = 0;
+	// 	while (pipe->simple_cmd->redir_value[j])
+	// 	{
+	// 		printf("redir_value: %s\n", pipe->simple_cmd->redir_value[j]);
+	// 		j++;
+	// 	}
+	// 	pipe = pipe->next;
+	// 	printf("next\n");
+	// }
 }
