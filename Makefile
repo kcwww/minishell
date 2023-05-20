@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+         #
+#    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/04/25 16:28:01 by kcw               #+#    #+#              #
-#    Updated: 2023/05/14 12:51:58 by kcw              ###   ########.fr        #
+#    Created: 2023/05/20 12:32:44 by chanwoki          #+#    #+#              #
+#    Updated: 2023/05/20 12:37:19 by chanwoki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,9 +28,8 @@ PARSING_PATH=parsing_src/
 PARSING_FILES=check_quotation.c parsing.c parsing2.c free_all.c
 PARSING_SRC=$(addprefix $(PARSING_PATH), $(PARSING_FILES))
 
-
 BUILTINS_PATH=builtins_src/
-BUILTINS_FILES=
+#BUILTINS_FILES= builtin.c pwd/pwd.c echo/echo.c cd/cd.c env/env.c exit/exit.c export/export.c  export/export_utils.c export/export_utils_2.c unset/unset.c
 BUILTINS_SRC=$(addprefix $(BUILTINS_PATH), $(BUILTINS_FILES))
 
 REDIRECTIONS_PATH=redirections_src/

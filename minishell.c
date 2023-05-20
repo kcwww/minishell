@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/20 12:24:56 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/20 12:25:00 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/05/20 12:30:44 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/20 14:04:06 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,6 @@
 void	check_leaks(void)
 {
 	system("leaks minishell");
-}
-
-void	ft_shellclear(t_env **env)
-{
-	t_env	*start;
-
-	if (env == 0 || *env == 0)
-		return ;
-	start = *env;
-	while (start)
-	{
-		(*env) = (*env)->next;
-		free(start->var);
-		free(start->param);
-		free(start->value);
-		free(start);
-		start = *env;
-	}
 }
 
 int	main(int argc, char **argv, char **env)
@@ -51,21 +33,21 @@ int	main(int argc, char **argv, char **env)
 		if (get_line == NULL)
 		{
 			printf("exit\n");
-			ft_shellclear(&my_shell.env);
+			free_env(my_shell.env);
 			return (0);
 		}
 		add_history(get_line);
 		if (check_quotation(get_line))
 		{
-			if (ft_strcmp("None", find_value(get_line, &my_shell)) != 0) //delete
-				printf("%s\n", find_value(get_line, &my_shell)); //delete
+			// if (ft_strcmp("None", find_value(get_line, &my_shell)) != 0) //delete
+			// 	printf("%s\n", find_value(get_line, &my_shell)); //delete
 			parsing_start(get_line, &my_shell);
 		}
-
-//
-
-
+		if (my_shell.error == 1)
+			printf("no execute\n");
+			//execute();
 		free(get_line);
 		free_all(&my_shell);
 	}
+	return (0);
 }

@@ -1,16 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bulitins.h                                         :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 17:36:14 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/26 11:20:35 by kcw              ###   ########.fr       */
+/*   Created: 2023/04/28 17:09:23 by dkham             #+#    #+#             */
+/*   Updated: 2023/05/05 12:49:32 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BULITINS_H
-# define BULITINS_H
+#include "../../minishell.h"
 
-#endif
+void	pwd(void)
+{
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		perror("minishell: pwd: error");
+	}
+	ft_putendl_fd(pwd, 1);
+	free(pwd);
+}
