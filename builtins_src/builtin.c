@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/14 19:52:22 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/18 21:33:00 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@
 		: if 아웃리다이렉션이 있으면, 아웃풋fd를 받아서 아웃풋fd를 표준출력으로 바꾼다
 		: else if 아웃리다이렉션이 없고, 파이프가 있으면, 파이프에 쓴다
 		: 나머지는 stdout으로 출력한다 (ls 같은 경우 등)
+	
+	=> 예. pwd > a
+	
 */
 
 void	execute(t_shell *my_shell)
@@ -52,16 +55,18 @@ void	execute(t_shell *my_shell)
 	pid_t	pid;
 	int		fd[2];
 	t_cmd	*cmd;
-	// 노트: 현재 코드의 경우 pwd > a 경우를 처리하지 못함. // < a pwd에서 메인 프로세스가 stdin/out 잃어버리지 않아야 한다
+
 	head = my_shell->head;
 	while (head)
 	{
 		cmd = head->simple_cmd;
-		if (!head->next && is_builtin(cmd->word[0]))  // 파이프가 없고 빌트인 명령어인 경우
-			builtin(my_shell);  // 빌트인 명령어 바로 실행
+		handle_heredocs(cmd); // Handle here-docs and replace them with regular input redirections
+		handle_redirections(cmd); // Handle other redirections
+		if (!head->next && is_builtin(cmd->word[0])) // Handle builtin commands
+			builtin(my_shell);
 		else
-		{
-			if (head->next && pipe(fd) < 0)  // 파이프가 있는 경우: 파이프 생성
+		{	
+			if (head->next && pipe(fd) < 0) // Handle pipes and forks
 			{
 				perror("pipe error");
 				exit(EXIT_FAILURE);
@@ -72,302 +77,172 @@ void	execute(t_shell *my_shell)
 				perror("fork error");
 				exit(EXIT_FAILURE);
 			}
-			else if (pid == 0)  // 자식 프로세스
+			else if (pid == 0)
 				child_process(my_shell, head, fd, cmd);
-			else  // 부모 프로세스
+			else
 				parent_process(head, fd);
+		}
+		head = head->next;
+	}
+	cleanup_heredocs(); // Clean up temporary here-doc files
+}
+
+void	handle_heredocs(t_shell *my_shell)
+{
+	t_pipes	*head;
+	int		i;
+	int		fd;
+	char	*line;
+// 이 함수는 my_shell->head를 순회하면서 각 command에 대해 '<<' redirection을 찾습니다. 
+// 만약 찾는다면, 그 redirection을 처리하고, 그 결과를 임시 파일 "temp.txt"에 기록합니다. 
+// 그 후, '<<' redirection을 '<'로 바꾸고, redirection 값으로 "temp.txt"를 사용합니다.
+	head = my_shell->head;
+	while (head)
+	{
+		i = 0;
+		while (head->simple_cmd->redirection && head->simple_cmd->redirection[i])
+		{
+			if (ft_strcmp(head->simple_cmd->redirection[i], "<<") == 0)
+			{
+				fd = open("temp.txt", O_CREAT | O_RDWR | O_TRUNC, 0644);
+				while (1)
+				{
+					line = readline("> ");
+					if (ft_strcmp(line, head->simple_cmd->redir_value[i]) == 0)
+					{
+						free(line);
+						break ;
+					}
+					ft_putendl_fd(line, fd);
+					free(line);
+				}
+				free(head->simple_cmd->redirection[i]);
+				head->simple_cmd->redirection[i] = ft_strdup("<");
+				free(head->simple_cmd->redir_value[i]);
+				head->simple_cmd->redir_value[i] = ft_strdup("temp.txt");
+				close(fd);
+			}
+			i++;
 		}
 		head = head->next;
 	}
 }
 
-int	is_builtin(char *cmd)
+void	handle_redirections(t_shell *my_shell)
 {
-	char	*builtin_str[7];
 	int		i;
-
-	builtin_str[0] = "echo";
-	builtin_str[1] = "pwd";
-	builtin_str[2] = "cd";
-	builtin_str[3] = "export";
-	builtin_str[4] = "unset";
-	builtin_str[5] = "env";
-	builtin_str[6] = "exit";
-	i = 0;
-	while (i < 7)  // 빌트인 명령어의 수만큼 반복
+	int		fd;
+	t_pipes	*head;
+	t_cmd	*cmd;
+// 이 함수는 my_shell->head를 순회하면서 각 command에 대해 '<'나 '>' 리다이렉션을 찾습니다. 
+// 만약 찾는다면, 그 리다이렉션을 처리하고, 그 결과를 my_shell의 fd_in 또는 fd_out에 저장합니다. 
+// '<' 리다이렉션은 파일에서 읽어오는 역할을 하고, '>' 리다이렉션은 파일에 쓰는 역할을 합니다. 
+// 이 결과를 my_shell의 fd_in 또는 fd_out에 저장하는 이유는, 이후에 이 파일 디스크립터를 사용해서 실제로 데이터를 읽거나 쓸 수 있도록 하기 위함입니다.
+	head = my_shell->head;
+	while (head)
 	{
-		if (ft_strncmp(cmd, builtin_str[i], ft_strlen(builtin_str[i]) + 1) == 0)
-			return (1);  // 빌트인 명령어일 경우 1을 반환
-		i++;
+		cmd = head->simple_cmd;
+		i = 0;
+		while (cmd->redirection[i])
+		{
+			if (ft_strcmp(cmd->redirection[i], "<") == 0)
+			{
+				fd = open(cmd->redir_value[i], O_RDONLY);
+				if (fd < 0)
+				{
+					ft_putstr_fd("Error opening file for reading\n", 2);
+					exit(EXIT_FAILURE);
+				}
+				my_shell->fd_in = fd;
+			}
+			else if (ft_strcmp(cmd->redirection[i], ">") == 0)
+			{
+				fd = open(cmd->redir_value[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (fd < 0)
+				{
+					ft_putstr_fd("Error opening file for writing\n", 2);
+					exit(EXIT_FAILURE);
+				}
+				my_shell->fd_out = fd;
+			}
+			i++;
+		}
+		head = head->next;
 	}
-	return (0);  // 빌트인 명령어가 아닐 경우 0을 반환
+	return ;
 }
 
-void	builtin(t_shell *execute)
+void	cleanup_heredocs(void)
 {
-	char	**word;
-
-	word = execute->head->simple_cmd->word;
-	if (ft_strncmp(word[0], "echo", 5) == 0)
-		echo(execute);
-	else if (ft_strncmp(word[0], "pwd", 4) == 0)
-		pwd();
-	else if (ft_strncmp(word[0], "cd", 3) == 0)
-		cd(execute);
-	else if (ft_strncmp(word[0], "export", 7) == 0)
-		export(execute);
-	else if (ft_strncmp(word[0], "unset", 6) == 0)
-		unset(execute);
-	else if (ft_strncmp(word[0], "env", 4) == 0)
-		env(execute);
-	else if (ft_strncmp(word[0], "exit", 5) == 0)
-		cmd_exit(execute);
-	else
+	if (unlink("temp.txt") == -1)
 	{
-		printf("minishell: command not found: %s\n", word[0]);
+		perror("Failed to remove temporary file");
+	}
+}
+
+void	child_process(t_shell *my_shell, t_pipes *head, int *fd, t_cmd *cmd)
+{
+// 이 두 조건은 프로세스의 입력이 표준 입력 (키보드)로부터 오는 것이 아니라 다른 곳 (파이프 또는 사용자 지정 파일)에서 오는 경우를 처리하기 위한 것입니다.
+
+// 첫번째 if 조건은 프로세스의 입력이 파이프로부터 오는 경우를 처리합니다.
+// 여기서 fd[0]는 이전 명령의 출력을 가져오는 파이프의 파일 디스크립터입니다.
+// 만약 fd[0]가 표준 입력인 0이 아니라면 (fd[0] != 0), 입력이 파이프를 통해 오는 것이므로, 표준 입력을 fd[0]로 변경합니다. (dup2(fd[0], 0)).
+// 예를 들어, "command1 | command2"라는 명령이 있다면, command2의 fd[0]는 command1의 출력을 가리킵니다.
+
+// 두번째 else if 조건은 프로세스의 입력이 사용자가 지정한 파일이나 파일 디스크립터로부터 오는 경우를 처리합니다.
+// 여기서 my_shell->fd_in은 사용자가 입력 리디렉션을 설정한 파일 디스크립터를 가리킵니다.
+// 만약 my_shell->fd_in이 표준 입력인 0이 아니라면 (my_shell->fd_in != 0), 입력이 사용자가 지정한 파일이나 파일 디스크립터로부터 오는 것이므로, 표준 입력을 my_shell->fd_in로 변경합니다. (dup2(my_shell->fd_in, 0)). 
+// 예를 들어, "command < file"라는 명령이 있다면, command의 my_shell->fd_in은 file을 가리킵니다.
+	if (dup2(fd[0], 0) == -1)
+		exit(EXIT_FAILURE);
+	else if (my_shell->fd_in != 0)
+	{
+		if (dup2(my_shell->fd_in, 0) == -1)
+			exit(EXIT_FAILURE);
+	}
+// 이 부분은 파이프의 출력(fd[1])을 현재 프로세스의 표준 출력(1)으로 리디렉션하는 역할을 합니다. 이는 파이프라인에서 이전 명령어의 출력을 다음 명령어의 입력으로 연결할 때 필요합니다. 
+// 예를 들어 "command1 | command2"라는 명령어에서, command1의 출력이 command2의 입력으로 갈 때, 이 부분이 그 역할을 합니다.
+// 위 부분은 my_shell 구조체에 저장된 fd_out을 표준 출력으로 리디렉션하는 역할을 합니다. 
+// 이는 "command > file" 같은 명령에서 표준 출력을 파일로 리디렉션할 때 필요합니다. 여기서, my_shell->fd_out은 handle_redirections 함수에서 설정됩니다.
+	if (dup2(fd[1], 1) == -1)
+		exit(EXIT_FAILURE);
+	else if (my_shell->fd_out != 1)
+	{
+		if (dup2(my_shell->fd_out, 1) == -1)
+			exit(EXIT_FAILURE);
+	}
+// 내장된 명령어가 입력되었는지를 검사하고, 만약 그렇다면 해당 내장 명령어를 실행합니다. 그 후 프로세스를 성공적으로 종료합니다.
+	if (is_builtin(cmd->word[0]))
+	{
+		builtin(my_shell);
+		exit(EXIT_SUCCESS);
+	}
+// 입력받은 명령어가 내장 명령어가 아닌 경우를 처리합니다. 
+// execve 함수는 새로운 프로그램을 실행하는 역할을 하는데, 이 때 첫 번째 인자는 실행할 프로그램의 경로, 두 번째 인자는 프로그램에 전달할 인자들의 배열, 세 번째 인자는 새로운 프로세스의 환경 변수를 담은 배열입니다.
+// 이 부분에서는 새로운 프로그램의 경로로 cmd->word[0]를, 인자 배열로 cmd->word를 사용하고 있습니다. 이는 "ls -l" 같은 명령어를 처리할 때 "ls"가 프로그램 경로, "-l"이 인자가 되는 것입니다.
+// 그리고 환경 변수 배열로는 NULL을 사용하고 있는데, 이는 현재 프로세스의 환경 변수를 그대로 상속받는 것을 의미합니다.
+	else if (execve(cmd->word[0], cmd->word, NULL) == -1)
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putendl_fd(cmd->word[0], 2);
 		exit(EXIT_FAILURE);
 	}
 }
 
-char	*check_access(t_shell *my_shell, char *cmd)
+void	parent_process(t_pipes *head, int *fd)
 {
-	int		i;
-	char	*path;
-	char	**paths;
+	int	status;
+	//이 함수는 파이프를 통해 데이터를 전송한 후에 필요없는 파이프를 닫고, 자식 프로세스가 종료될 때까지 대기하는 역할을 합니다.
 
-	if (cmd[0] == '/')	// If the command is already an absolute path, return it directly.
-	{
-		if (access(cmd, F_OK) == 0) // if the file exists and is executable
-			return (ft_strdup(cmd));
-		else
-			return (NULL);
-	}
-	paths = get_paths_from_env(my_shell->env);
-	i = 0;
-	while (paths && paths[i]) // iterate through the path list to find the file
-	{
-		path = ft_strjoin(paths[i], "/"); // append slash
-		char *full_path_to_cmd = ft_strjoin(path, cmd);
-		free(path);
-		if (access(full_path_to_cmd, F_OK) == 0) // if the file exists and is executable, break the loop
-		{
-			free_2d_array(paths);
-			return (full_path_to_cmd);
-		}
-		free(full_path_to_cmd);
-		i++;
-	}
-	free_2d_array(paths);
-	return (NULL);
-}
-
-char	**get_paths_from_env(t_env *env)
-{
-	char	*path_var;
-	t_env	*current;
-	int		path_count;
-	int		i;
-
-	path_var = NULL;
-	current = env;
-	while (current != NULL)	// Iterate through the linked list to find the PATH variable
-	{
-		if (ft_strncmp(current->key, "PATH", ft_strlen("PATH")) == 0)
-		{
-			path_var = current->value;
-			break ;
-		}
-		current = current->next;
-	}
-	if (!path_var)	// If PATH variable is not found, return NULL
-		return (NULL);
-	path_count = count_paths(path_var); // Count the number of paths in the PATH variable
-	char **paths = (char **)malloc(sizeof(char *) * (path_count + 1)); // +1 for the NULL at the end
-	i = 0;
-	while (i < path_count)
-	{
-		paths[i] = get_path(&path_var); 	// Get the separate paths
-		i++;
-	}
-	paths[path_count] = NULL;
-	return (paths); // Added parentheses in the return statement
-}
-
-// A helper function to count the number of segments separated by ':'
-int	count_paths(char *str)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == ':')
-			count++;
-		i++;
-	}
-	return (count + 1); // +1 for the extra path before the first :
-}
-
-// A helper function to get a single path segment
-char	*get_path(char **str)
-{
-	char	*start;
-	char	*path;
-
-	start = *str;
-	while (**str && **str != ':')
-		(*str)++;
-	path = ft_substr(start, 0, *str - start);
-	if (**str)
-		(*str)++; // Skip the ':' character
-	return (path);
-}
-
-void	handle_redirections(t_cmd *cmd)
-{
-	int		i;
-	int		fd;
-	char	*line;
-
-	i = 0;
-	while (cmd->redirection[i])
-	{
-		if (ft_strncmp(cmd->redirection[i], "<", 2) == 0)
-		{
-			fd = open(cmd->redir_value[i], O_RDONLY, 0644); // 입력 리다이렉션
-			if (fd < 0)
-			{
-				perror("open error");
-				exit(EXIT_FAILURE);
-			}
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
-		else if (ft_strncmp(cmd->redirection[i], ">", 2) == 0)
-		{
-			fd = open(cmd->redir_value[i], O_WRONLY | O_CREAT | O_TRUNC, 0644); // 출력 리다이렉션
-			if (fd < 0)
-			{
-				perror("open error");
-				exit(EXIT_FAILURE);
-			}
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		else if (ft_strncmp(cmd->redirection[i], ">>", 3) == 0)
-		{
-			fd = open(cmd->redir_value[i], O_WRONLY | O_CREAT | O_APPEND, 0644); // 출력 리다이렉션 (추가 모드)
-			if (fd < 0)
-			{
-				perror("open error");
-				exit(EXIT_FAILURE);
-			}
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		else if (ft_strncmp(cmd->redirection[i], "<<", 3) == 0) // heredoc
-		{
-			fd = open("temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644); // Open a temporary file for here-document redirection
-			if (fd < 0)
-			{
-				perror("open error");
-				exit(EXIT_FAILURE);
-			}
-			while (1)
-			{
-				line = readline("> "); // Read the input
-				if (ft_strcmp(line, cmd->redir_value[i]) == 0) // If the limiter is found, break out of the loop
-					break;
-				write(fd, line, ft_strlen(line)); // Write the input into the temporary file
-				write(fd, "\n", 1); // Write a newline character
-				free(line); // Don't forget to free the allocated memory
-			}
-			free(line); // Don't forget to free the allocated memory
-			close(fd); // Close the temporary file
-			fd = open("temp.txt", O_RDONLY, 0644); // Re-open the temporary file for reading
-			if (fd < 0)
-			{
-				perror("open error");
-				exit(EXIT_FAILURE);
-			}
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-			if (remove("temp.txt") != 0) // Delete the temporary file
-			{
-				perror("Error deleting temporary file");
-				exit(EXIT_FAILURE);
-			}
-		}
-		i++;
-	}
-}
-
-void	free_2d_array(char **array)
-{
-	char	**temp;
-
-	temp = array;
-	if (array == NULL)
-		return ;
-	while (*temp)
-	{
-		free(*temp);
-		temp++;
-	}
-	free(array);
-}
-
-void	child_process(t_shell *my_shell, t_pipes *head, int fd[], t_cmd *cmd)
-{
-	char	*path_to_cmd;
-	char	*temp;
-	char	*err_msg;
-
-	if (head->next)  // 다음 파이프가 있다면
-	{
-		close(fd[0]);  // 파이프의 읽기 끝을 닫습니다
-		if (dup2(fd[1], STDOUT_FILENO) < 0) // 파이프의 쓰기 끝을 표준 출력에 복제합니다 		//dup2(fd[1], STDOUT_FILENO);
-			exit(EXIT_FAILURE);
-		close(fd[1]);  // 원래의 쓰기 끝을 닫습니다
-	}
-	if (head != my_shell->head)  // 첫번째 파이프가 아니라면 (즉, 이전 파이프가 있다면)
-	{
-		//dup2(fd[0], STDIN_FILENO);  
-		if (dup2(fd[0], STDIN_FILENO) < 0) // 이전 파이프의 읽기 끝을 표준 입력에 복제합니다
-			exit(EXIT_FAILURE);
-		close(fd[0]);  // 원래의 읽기 끝을 닫습니다
-		close(fd[1]);  // 원래의 쓰기 끝을 닫습니다
-	}
-	handle_redirections(cmd);  // 리다이렉션을 처리합니다 (입력, 출력을 파일로 바꾸는 등)
-	if (is_builtin(cmd->word[0]))  // 명령어가 빌트인 명령어인지 확인합니다 (echo, cd 등)
-		builtin(my_shell);  // 빌트인 명령어라면 해당 함수를 실행합니다
-	else  // 빌트인 명령어가 아니라면
-	{
-		path_to_cmd = check_access(my_shell, cmd->word[0]);  // 명령어에 해당하는 파일이 실행 가능한지 확인하고, 그 경로를 얻어옵니다
-		if (path_to_cmd != NULL)  // 경로를 찾았다면
-		{
-			execve(path_to_cmd, cmd->word, NULL);  // 해당 경로의 프로그램을 실행합니다
-			free(path_to_cmd);  // 경로 문자열 메모리를 해제합니다
-			perror("execve error");  // execve 함수가 실패했다면 오류 메시지를 출력합니다
-			exit(EXIT_FAILURE);  // 실패했으므로 프로세스를 종료합니다
-		}
-		else  // 명령어에 해당하는 파일을 찾지 못했다면
-		{
-			temp = ft_strjoin(cmd->word[0], ": command not found");  // 오류 메시지를 생성합니다
-			err_msg = ft_strjoin("minishell: ", temp);  // 오류 메시지에 쉘 이름을 추가합니다
-			ft_putendl_fd(err_msg, STDERR_FILENO);  // 오류 메시지를 표준 에러에 출력합니다
-			free(temp);  // 메시지 문자열 메모리를 해제합니다
-			free(err_msg);  // 메시지 문자열 메모리를 해제합니다
-			exit(EXIT_FAILURE);
-		}
-	}
-}
-
-void	parent_process(t_pipes *head, int fd[])
-{
-	wait(NULL);
-	if (head->next)
+	if (fd[0] != 0) // fd[0]가 표준 입력이 아니라면 (즉, 파이프나 파일 등 다른 소스에서 입력을 받는다면) fd[0]를 닫습니다.
+		close(fd[0]);
+	if (fd[1] != 1) // fd[1]이 표준 출력이 아니라면 (즉, 출력이 파이프나 파일 등 다른 곳으로 가는 경우) fd[1]을 닫습니다.
 		close(fd[1]);
+	while (wait(&status) > 0) // 부모 프로세스가 자식 프로세스가 종료될 때까지 기다리게 합니다. wait 함수는 자식 프로세스의 종료 상태를 받아오는 역할을 합니다.
+	{
+		if (WIFEXITED(status)) // 자식 프로세스가 어떻게 종료되었는지를 확인하고, 그에 따른 exit 상태를 전역 변수 g_exit_status에 저장합니다.
+			g_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_status = WTERMSIG(status);
+	}
 }

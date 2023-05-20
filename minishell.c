@@ -6,16 +6,16 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:19:18 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/14 19:40:23 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/18 19:28:42 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_leaks(void)
-{
-	system("leaks minishell");
-}
+// void	check_leaks(void)
+// {
+// 	system("leaks minishell");
+// }
 
 int	main(int argc, char **argv, char **env)
 {

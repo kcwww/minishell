@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:24:29 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/14 11:21:12 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/18 17:41:31 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@
 # define PIPE 456
 
 typedef struct s_cmd
-{
-	char	**word;
-	char	**redirection;
-	char	**redir_value;
+{ // cat << a > 1
+	char	**word; 		// "cat"
+	char	**redirection;	// "<<", ">"
+	char	**redir_value;	// "a", "1"
 }	t_cmd;
 
 typedef struct s_pipes
@@ -62,6 +62,8 @@ typedef struct s_token
 	char			*value;
 	struct s_token	*next;
 }	t_token;
+
+int	g_exit_status;
 
 void	init_shell(t_shell *my_shell, char **env);
 char	*find_value(char *key, t_env *env);
@@ -104,16 +106,10 @@ void	pwd(void);
 void	unset(t_shell *execute);
 void	remove_env_node(char *key, t_env **env);
 
-char	*check_access(t_shell *my_shell, char *cmd);
-int		count_paths(char *str);
-char	*get_path(char **str);
-char	**get_paths_from_env(t_env *env);
 void	execute(t_shell *my_shell);
-void	builtin(t_shell *execute);
-int		is_builtin(char *cmd);
-void	handle_redirections(t_cmd *cmd);
-void	free_2d_array(char **array);
-void	child_process(t_shell *my_shell, t_pipes *head, int fd[], t_cmd *cmd);
-void	parent_process(t_pipes *head, int fd[]);
+void	handle_heredocs(t_shell *my_shell);
+void	handle_redirections(t_shell *my_shell);
+void	child_process(t_shell *my_shell, t_pipes *head, int *fd, t_cmd *cmd);
+void	parent_process(t_pipes *head, int *fd);
 
 #endif
