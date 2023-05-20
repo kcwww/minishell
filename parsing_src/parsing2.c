@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 10:28:45 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/13 12:02:55 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/14 12:36:51 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,6 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	pipe->simple_cmd->redir_value[re_word] = NULL;
 
 
-
-	printf("before\n");
-
-
-
 	pipe = ms->head;
 	tmp = token;
 	re_flag = 0;
@@ -171,15 +166,13 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		tmp = tmp->next;
 	}
 
-	printf("after\n");
-
-	tmp = token;
-	while (tmp)
-	{
-		printf("type: %d ", tmp->type);
-		printf("value: %s\n", tmp->value);
-		tmp = tmp->next;
-	}
+	// tmp = token;
+	// while (tmp)
+	// {
+	// 	printf("type: %d ", tmp->type);
+	// 	printf("value: %s\n", tmp->value);
+	// 	tmp = tmp->next;
+	// }
 
 	pipe = ms->head;
 	while (pipe)

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 17:32:07 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/13 12:34:47 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/05/20 12:24:56 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/20 12:25:00 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,8 @@ int	main(int argc, char **argv, char **env)
 		add_history(get_line);
 		if (check_quotation(get_line))
 		{
-			printf("%s\n", get_line); // delete
-			if (ft_strcmp("None", find_value(get_line, my_shell.env)) != 0) //delete
-				printf("%s\n", find_value(get_line, my_shell.env)); //delete
-
+			if (ft_strcmp("None", find_value(get_line, &my_shell)) != 0) //delete
+				printf("%s\n", find_value(get_line, &my_shell)); //delete
 			parsing_start(get_line, &my_shell);
 		}
 

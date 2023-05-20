@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:57:05 by kcw               #+#    #+#             */
-/*   Updated: 2023/05/13 12:03:59 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/14 12:48:41 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_token
 }	t_token;
 
 void	init_shell(t_shell *my_shell, char **env);
-char	*find_value(char *key, t_env *env);
+char	*find_value(char *key, t_shell *ms);
 void	parsing_start(char *str, t_shell *my_shell);
 void	make_simple_command(t_token *token, t_shell *my_shell);
 void	free_all(t_shell *ms);
