@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:25:39 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/20 17:55:45 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/21 21:02:52 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ typedef struct s_cmd
 	char	**word; 		// "cat"
 	char	**redirection;	// "<<", ">"
 	char	**redir_value;	// "a", "1"
+	// int		fd_in;
+	// int		fd_out;
+	// int		pipe_fd[2];
+	// int		dup_in_fd; // 0
+	// int		dup_out_fd; // 1
 }	t_cmd;
 
 typedef struct s_pipes
@@ -65,7 +70,7 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-int	g_exit_status;
+int		g_exit_status;
 
 void	init_shell(t_shell *my_shell, char **env);
 char	*find_value(char *key, t_shell *ms);
@@ -108,13 +113,14 @@ void	pwd(t_shell *my_shell);
 void	unset(t_shell *execute);
 void	remove_env_node(char *key, t_env **env);
 
+void	init_fd(t_shell *my_shell);
 void	execute(t_shell *my_shell, char **env);
 void	handle_heredocs(t_shell *my_shell, int *heredoc_used);
 void	handle_redirections(t_shell *my_shell);
 int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell);
 void	cleanup_heredocs(void);
-void	child_process(t_shell *my_shell, char **env);
+void	child_process(t_shell *my_shell, t_pipes *head, char **env);
 char	*get_path(char **env);
 char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell);

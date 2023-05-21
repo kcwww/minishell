@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:33:38 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/20 16:33:02 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/21 21:15:16 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ void	make_simple_command(t_token *token, t_shell *ms)
 			if (pipe->simple_cmd->redir_value == NULL)
 				return ;
 			pipe->simple_cmd->redir_value[re_word] = NULL;
+			// pipe->simple_cmd->fd_in = 0;
+			// pipe->simple_cmd->fd_out = 1;
+			// pipe->simple_cmd->pipe_fd[0] = 0;
+			// pipe->simple_cmd->pipe_fd[1] = 1;
 			pipe = pipe->next;
 			re_flag = 0;
 			re_num = 0;
