@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/21 21:55:52 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/23 16:32:12 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@
 		: 나머지는 표준출력으로 출력한다 (ls 같은 경우 등)
 	
 	=> 예. pwd > a
-	
 */
 
 void	init_fd(t_shell *my_shell)
@@ -62,7 +61,6 @@ void	execute(t_shell *my_shell, char **env)
 	t_pipes	*head;
 	pid_t	pid;
 	pid_t	exited_pid;
-	//t_cmd	*cmd;
 	int		heredoc_used;
 	int		status;
 	int		i;
@@ -70,7 +68,7 @@ void	execute(t_shell *my_shell, char **env)
 	i = 0;
 	status = 0;
 	heredoc_used = 0;
-	//init_fd(my_shell);
+	my_shell->prev_pipe_fd_0 = 0;
 	head = my_shell->head;
 	// printf("=================================\n");
 	// while (head)
@@ -84,17 +82,22 @@ void	execute(t_shell *my_shell, char **env)
 	// }
 	// printf("=================================\n");
 	// head = my_shell->head;
-	
-	
 	/*
-		while 문 안에 init_fd를 넣을 경우, ls -l | ls -l 은 정상 출력 됨.
-		(init_fd가 밖에 있을 경우, pipe_fd[0]이 3, pipe_fd[1]이 4로 설정되어서 아무 것도 출력되지 않음)
+
+		while 문 밖에 init_fd를 넣을 경우:
+		-> ls -l | ls -l 은 정상 출력 안됨
 		
-		단, ls -l | wc -l을 할 경우, 종료가 되지 않고 무한 루프에 빠짐
-		이는 wc -l을 실행할 때 이전 파이프에서 실행된 ls -l의 출력을 읽어와야 하는데, pipe_fd[0]와 pipe_fd[1]이 0, 1로 다시 초기화되어
-		ls -l의 출력을 읽어올 수 없기 때문임 (else if (my_shell->pipe_fd[0] != 0) 실행 안됨)
 		
-		고로 while 문 안에 init_fd를 넣는 것도 적절치 않음.
+		while 문 안에 init_fd를 넣을 경우:
+		
+		-> ls -l | ls -l 은 정상 출력 됨
+		
+		-> ls -l | wc -l을 할 경우, 종료 되지 않고 무한 루프에 빠짐
+		이는 wc -l을 실행할 때 이전 파이프에서 실행된 ls -l의 출력을 읽어와야 하는데,
+		두 번째 루프에서 pipe_fd[0]와 pipe_fd[1]이 0, 1로 다시 초기화되어
+		ls -l의 출력을 읽어올 수 없기 때문임 (else if (my_shell->pipe_fd[0] != 0) 분기 실행 안됨)
+		
+		고로 while 문 안에 init_fd를 넣는 것도 적절치 않음
 		=> struct 재구성
 		
 		typedef struct s_cmd
@@ -114,39 +117,39 @@ void	execute(t_shell *my_shell, char **env)
 		ls -l의 경우 처음에 0, 1, 0, 1로 초기화 된 후, pipe() 만나면 pipe_fd[0] = 3, pipe_fd[1] = 4로 바뀜 (자식, 부모 모두 같은 상태)
 		
 		추가사항: 부모에서 dup2로 input을 pipe_fd[0]으로 바꿈(=3번)
-		
 		wc -l의 경우 처음에 0, 1, 0, 1로 초기화 된 후, head->next가 null 이므로 pipe를 열지 않는다.
 		fork 실행 되면, 앞에 if 문들 다 패스하고 바로 execve 실행됨.
 		==> 검증 필요
 		
-		파싱 부분에서 초기화 필요!.
-		
+		파싱 부분에서 초기화 필요!
 	*/
-	
+	init_fd(my_shell);
 	while (head)
 	{
-		init_fd(my_shell);
-		printf("fd_in: %d\n", my_shell->fd_in);
-		printf("fd_out: %d\n", my_shell->fd_out);
-		printf("pipe_fd[0]: %d\n", my_shell->pipe_fd[0]);
-		printf("pipe_fd[1]: %d\n", my_shell->pipe_fd[1]);
+		// printf("================시작=================\n");
+		// printf("fd_in: %d\n", my_shell->fd_in);
+		// printf("fd_out: %d\n", my_shell->fd_out);
+		// printf("pipe_fd[0]: %d\n", my_shell->pipe_fd[0]);
+		// printf("pipe_fd[1]: %d\n", my_shell->pipe_fd[1]);
 		i++;
-		//cmd = head->simple_cmd;
 		handle_heredocs(my_shell, &heredoc_used); // Handle here-docs and replace them with regular input redirections
 		handle_redirections(my_shell); // Handle other redirections
 		if (!head->next && is_builtin(head->simple_cmd->word[0])) // Handle builtin commands
 			builtin(my_shell);
 		else
 		{
-			//if (head->next && pipe(my_shell->pipe_fd) == -1)
-			if (head->next)
+			if (head->next && pipe(my_shell->pipe_fd) == -1)
 			{
-				if (pipe(my_shell->pipe_fd) == -1)
-				{
-					perror("pipe error");
-					exit(EXIT_FAILURE);
-				}
+				perror("pipe error");
+				exit(EXIT_FAILURE);
 			}
+
+			// printf("================파이프 후=================\n");
+			// printf("fd_in: %d\n", my_shell->fd_in);
+			// printf("fd_out: %d\n", my_shell->fd_out);
+			// printf("pipe_fd[0]: %d\n", my_shell->pipe_fd[0]);
+			// printf("pipe_fd[1]: %d\n", my_shell->pipe_fd[1]);
+
 			pid = fork();
 			if (pid < 0)
 			{
@@ -154,14 +157,14 @@ void	execute(t_shell *my_shell, char **env)
 				exit(EXIT_FAILURE);
 			}
 			else if (pid == 0)
-				child_process(my_shell, head, env);//child_process(my_shell, env);
+				child_process(my_shell, head, env, i);
 			else
 				parent_process(my_shell);
 		}
 		head = head->next;
 	}
 	if (heredoc_used)
-		cleanup_heredocs(); // Clean up temporary here-doc files only if heredoc was used
+		cleanup_heredocs();
 	while (i--)
 	{
 		exited_pid = waitpid(-1, &status, 0);
@@ -350,8 +353,7 @@ void	cleanup_heredocs(void)
 	나머지는 표준출력으로 출력한다 (ls 같은 경우 등)
 */
 
-//void	child_process(t_shell *my_shell, char **env)
-void	child_process(t_shell *my_shell, t_pipes *head, char **env)
+void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 {
 	char	*path_var;
 	char	*full_path;
@@ -369,16 +371,16 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env)
 			}
 			close(my_shell->fd_in);
 		}
-		else if (my_shell->pipe_fd[0] != 0) // If there is a pipe and no input redirection
+		else if (my_shell->pipe_fd[0] != 0 && i != 1) // If there is a pipe and no input redirection
 		{
 			if (dup2(my_shell->pipe_fd[0], 0) == -1)
 			{
 				perror("dup2");
 				exit(EXIT_FAILURE);
 			}
-			close(my_shell->pipe_fd[0]);
+			//close(my_shell->pipe_fd[0]); // 항상 닫아야 하므로 밖으로 뺌
 		}
-		if (my_shell->fd_out != 1) // Output redirsection handling
+		if (my_shell->fd_out != 1) // Output redirection handling
 		{
 			if (dup2(my_shell->fd_out, 1) == -1)
 			{
@@ -396,7 +398,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env)
 			}
 			close(my_shell->pipe_fd[1]);
 		}
-		//ft_putendl_fd(full_path, 2);
+		close(my_shell->pipe_fd[0]);
 		if (execve(full_path, head->simple_cmd->word, env) == -1)
 		{
 			perror("execve");
@@ -457,6 +459,41 @@ void	parent_process(t_shell *my_shell)
 	if (my_shell->fd_out != 1) // fd_out이 표준 출력이 아니라면 (즉, 출력이 파이프나 파일 등 다른 곳으로 전달되는 경우) fd_out을 닫습니다.
 		close(my_shell->fd_out);
 	close(my_shell->pipe_fd[1]); // write-side를 닫음
-	dup2(my_shell->pipe_fd[0], 0); // pipe의 read-side를 STDIN으로 복제 (포크 전에 미리 세팅)
-	close(my_shell->pipe_fd[0]); // read-side를 닫음
+	//dup2(my_shell->pipe_fd[0], 0); // pipe의 read-side를 STDIN으로 복제 (포크 전에 미리 세팅)
+	// close(my_shell->pipe_fd[0]); // read-side를 닫음
+
+	/*
+
+	ls -l | wc -l | cat 했다고 가정
+	
+	<ls -l 실행>
+	다음에 파이프(| wc -l)가 있으므로, pipe() 함수 실행되어 pipe_fd[0],[1]이 3, 4로 바뀜
+	그리고 나서 fork 하면 부모/자식 각각 3,4/3,4가 열려있는 꼴이 됨
+	
+	자식은 써주는 일을 하므로 3번 리드 사이드는 읽어올 필요가 없어 닫아줌 (close(my_shell->pipe_fd[0]);)
+	자식에서 4번 라이트 사이드는 dup2 후 execve 하면 자동으로 닫힘
+
+	부모에서 라이트 사이드 4번은 부모에서 써줄 일이 없으므로 닫아줌 (close(my_shell->pipe_fd[1]);)
+	부모에서 리드 사이드인 3은 이후 다음 세대 자식에서 읽어올 때 필요하므로 부모에서 닫지 않음
+	(-> 그 다음 루프에서 닫아야 함)
+	=> 부모: 3 / 자식: 다 닫힘 
+	
+	<wc -l 실행>
+	3은 부모에서 닫지 않아 열려있음
+	다음에 파이프(| cat)가 있으므로, pipe() 함수 실행되어 pipe_fd[0],[1]이 5, 6으로 바뀜
+	fork 하면 부모는 (3) 5,6 / 자식 (3) 5, 6 (괄호 안 숫자는 열린 상태 의미)
+	자식에서 (3)이 초기값 0이 아니면 dup2로 3에서 인풋 받아옴. 5는 닫음
+	dup2 execve로 6에 쓰고 자동으로 닫힌다.
+
+	부모는 라이트 사이드 6을 닫아준다.
+	5번은 다음을 위해서 남긴다.
+	부모에서 3번은 두번째루프부터 무조건 닫는다.
+	=> 부모: 5 / 자식: 다 닫힘.
+	
+	<cat 실행>
+	자식은 5에서 dup2로 받아옴. execve 하면 기본이 stdout으로 출력
+	부모는 5를 닫아줌
+	
+	
+	*/
 }

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:27:10 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/20 16:01:48 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/22 19:59:09 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,13 @@ int	main(int argc, char **argv, char **env)
 		if (get_line == NULL)
 		{
 			printf("exit\n");
+			ft_putendl_fd("hihi", 2);
 			free_env(my_shell.env);
 			return (0);
 		}
 		add_history(get_line);
 		if (check_quotation(get_line))
 		{
-			// if (ft_strcmp("None", find_value(get_line, &my_shell)) != 0) //delete
-			// 	printf("%s\n", find_value(get_line, &my_shell)); //delete
 			parsing_start(get_line, &my_shell);
 		}
 		if (my_shell.error == 1)

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:25:39 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/21 21:02:52 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/23 16:28:24 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_shell
 	int				fd_in;
 	int				fd_out;
 	int				pipe_fd[2];
+	int				prev_pipe_fd_0;
 	int				error;
 	struct s_pipes	*head; //
 	struct s_env	*env; // 환경변수
@@ -120,7 +121,7 @@ void	handle_redirections(t_shell *my_shell);
 int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell);
 void	cleanup_heredocs(void);
-void	child_process(t_shell *my_shell, t_pipes *head, char **env);
+void	child_process(my_shell, head, env, i);
 char	*get_path(char **env);
 char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell);
