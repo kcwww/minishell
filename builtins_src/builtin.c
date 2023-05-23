@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/23 16:32:12 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/23 18:05:59 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	init_fd(t_shell *my_shell)
 	my_shell->fd_out = 1;
 	my_shell->pipe_fd[0] = 0;
 	my_shell->pipe_fd[1] = 1;
+	my_shell->prev_pipe_fd_0 = 0;
+	my_shell->last_cmd_flag = 0;
 }
 
 void	execute(t_shell *my_shell, char **env)
@@ -68,73 +70,16 @@ void	execute(t_shell *my_shell, char **env)
 	i = 0;
 	status = 0;
 	heredoc_used = 0;
-	my_shell->prev_pipe_fd_0 = 0;
 	head = my_shell->head;
-	// printf("=================================\n");
-	// while (head)
-	// {
-	// 	for (int i = 0; head->simple_cmd->word[i]; ++i)
-	// 	{
-	// 		printf("%s\n", head->simple_cmd->word[i]);
-	// 	}
-	// 	printf("\n");
-	// 	head = head->next;
-	// }
-	// printf("=================================\n");
-	// head = my_shell->head;
-	/*
-
-		while 문 밖에 init_fd를 넣을 경우:
-		-> ls -l | ls -l 은 정상 출력 안됨
-		
-		
-		while 문 안에 init_fd를 넣을 경우:
-		
-		-> ls -l | ls -l 은 정상 출력 됨
-		
-		-> ls -l | wc -l을 할 경우, 종료 되지 않고 무한 루프에 빠짐
-		이는 wc -l을 실행할 때 이전 파이프에서 실행된 ls -l의 출력을 읽어와야 하는데,
-		두 번째 루프에서 pipe_fd[0]와 pipe_fd[1]이 0, 1로 다시 초기화되어
-		ls -l의 출력을 읽어올 수 없기 때문임 (else if (my_shell->pipe_fd[0] != 0) 분기 실행 안됨)
-		
-		고로 while 문 안에 init_fd를 넣는 것도 적절치 않음
-		=> struct 재구성
-		
-		typedef struct s_cmd
-		{ // cat << a > 1
-			char	**word; 		// "cat"
-			char	**redirection;	// "<<", ">"
-			char	**redir_value;	// "a", "1"
-			// int		fd_in; // 0
-			// int		fd_out; // 1
-			// int		pipe_fd[2]; // pipe_fd[0] = 0; pipe_fd[1] = 1
-			// int		dup_in_fd; // 0
-			// int		dup_out_fd; // 1
-		}	t_cmd;
-		
-		파싱할 때 fd_in = 0, fd_out = 1, pipe_fd[0] = 0; pipe_fd[1] = 1를 각 simple_cmd 별로 초기화 함.
-		ls -l | wc -l을 할 때,
-		ls -l의 경우 처음에 0, 1, 0, 1로 초기화 된 후, pipe() 만나면 pipe_fd[0] = 3, pipe_fd[1] = 4로 바뀜 (자식, 부모 모두 같은 상태)
-		
-		추가사항: 부모에서 dup2로 input을 pipe_fd[0]으로 바꿈(=3번)
-		wc -l의 경우 처음에 0, 1, 0, 1로 초기화 된 후, head->next가 null 이므로 pipe를 열지 않는다.
-		fork 실행 되면, 앞에 if 문들 다 패스하고 바로 execve 실행됨.
-		==> 검증 필요
-		
-		파싱 부분에서 초기화 필요!
-	*/
 	init_fd(my_shell);
 	while (head)
 	{
-		// printf("================시작=================\n");
-		// printf("fd_in: %d\n", my_shell->fd_in);
-		// printf("fd_out: %d\n", my_shell->fd_out);
-		// printf("pipe_fd[0]: %d\n", my_shell->pipe_fd[0]);
-		// printf("pipe_fd[1]: %d\n", my_shell->pipe_fd[1]);
+		if (head->next == NULL)
+			my_shell->last_cmd_flag = 1;
 		i++;
 		handle_heredocs(my_shell, &heredoc_used); // Handle here-docs and replace them with regular input redirections
-		handle_redirections(my_shell); // Handle other redirections
-		if (!head->next && is_builtin(head->simple_cmd->word[0])) // Handle builtin commands
+		handle_redirections(my_shell);
+		if (!head->next && is_builtin(head->simple_cmd->word[0]))
 			builtin(my_shell);
 		else
 		{
@@ -143,13 +88,6 @@ void	execute(t_shell *my_shell, char **env)
 				perror("pipe error");
 				exit(EXIT_FAILURE);
 			}
-
-			// printf("================파이프 후=================\n");
-			// printf("fd_in: %d\n", my_shell->fd_in);
-			// printf("fd_out: %d\n", my_shell->fd_out);
-			// printf("pipe_fd[0]: %d\n", my_shell->pipe_fd[0]);
-			// printf("pipe_fd[1]: %d\n", my_shell->pipe_fd[1]);
-
 			pid = fork();
 			if (pid < 0)
 			{
@@ -159,7 +97,7 @@ void	execute(t_shell *my_shell, char **env)
 			else if (pid == 0)
 				child_process(my_shell, head, env, i);
 			else
-				parent_process(my_shell);
+				parent_process(my_shell, i);
 		}
 		head = head->next;
 	}
@@ -373,8 +311,9 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 		}
 		else if (my_shell->pipe_fd[0] != 0 && i != 1) // If there is a pipe and no input redirection
 		{
-			if (dup2(my_shell->pipe_fd[0], 0) == -1)
+			if (dup2(my_shell->prev_pipe_fd_0, 0) == -1)//if (dup2(my_shell->pipe_fd[0], 0) == -1)
 			{
+				
 				perror("dup2");
 				exit(EXIT_FAILURE);
 			}
@@ -389,16 +328,18 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 			}
 			close(my_shell->fd_out);
 		}
-		else if (my_shell->pipe_fd[1] != 1) // If there is a pipe and no output redirection
+		else if (my_shell->pipe_fd[1] != 1 && my_shell->last_cmd_flag != 1) // If there is a pipe and no output redirection
 		{
 			if (dup2(my_shell->pipe_fd[1], 1) == -1)
 			{
+				ft_putendl_fd("hello", 2);
 				perror("dup2");
 				exit(EXIT_FAILURE);
 			}
 			close(my_shell->pipe_fd[1]);
 		}
-		close(my_shell->pipe_fd[0]);
+		if (my_shell->pipe_fd[0] != 0)
+			close(my_shell->pipe_fd[0]);
 		if (execve(full_path, head->simple_cmd->word, env) == -1)
 		{
 			perror("execve");
@@ -452,18 +393,21 @@ char *check_access(char *path_var, char *cmd)
 	return (full_path);
 }
 
-void	parent_process(t_shell *my_shell)
+void	parent_process(t_shell *my_shell, int i)
 {
 	if (my_shell->fd_in != 0) // fd_in이 표준 입력이 아니라면 (즉, 입력이 파이프나 파일 등 다른 곳으로부터 오는 경우) fd_in을 닫습니다.
 		close(my_shell->fd_in);
 	if (my_shell->fd_out != 1) // fd_out이 표준 출력이 아니라면 (즉, 출력이 파이프나 파일 등 다른 곳으로 전달되는 경우) fd_out을 닫습니다.
 		close(my_shell->fd_out);
-	close(my_shell->pipe_fd[1]); // write-side를 닫음
 	//dup2(my_shell->pipe_fd[0], 0); // pipe의 read-side를 STDIN으로 복제 (포크 전에 미리 세팅)
-	// close(my_shell->pipe_fd[0]); // read-side를 닫음
+	
+	if (my_shell->pipe_fd[1] != 1)
+		close(my_shell->pipe_fd[1]); // write-side를 닫음
+	if (i != 1) // 첫 심플 커맨드인 경우 실행 안함
+		close(my_shell->prev_pipe_fd_0); // 전 커맨드에서 안 닫고 살려둔 pipe_fd[0]을 닫아줌
+	my_shell->prev_pipe_fd_0 = my_shell->pipe_fd[0]; // 파이프 리드 사이드 다음 루프 위해 저장
 
 	/*
-
 	ls -l | wc -l | cat 했다고 가정
 	
 	<ls -l 실행>
@@ -474,7 +418,7 @@ void	parent_process(t_shell *my_shell)
 	자식에서 4번 라이트 사이드는 dup2 후 execve 하면 자동으로 닫힘
 
 	부모에서 라이트 사이드 4번은 부모에서 써줄 일이 없으므로 닫아줌 (close(my_shell->pipe_fd[1]);)
-	부모에서 리드 사이드인 3은 이후 다음 세대 자식에서 읽어올 때 필요하므로 부모에서 닫지 않음
+	부모에서 리드 사이드인 3은 이후 다음 세대 자식에서 읽어올 때 필요하므로 부모에서 닫지 않고 변수 만들어 저장
 	(-> 그 다음 루프에서 닫아야 함)
 	=> 부모: 3 / 자식: 다 닫힘 
 	
@@ -482,12 +426,12 @@ void	parent_process(t_shell *my_shell)
 	3은 부모에서 닫지 않아 열려있음
 	다음에 파이프(| cat)가 있으므로, pipe() 함수 실행되어 pipe_fd[0],[1]이 5, 6으로 바뀜
 	fork 하면 부모는 (3) 5,6 / 자식 (3) 5, 6 (괄호 안 숫자는 열린 상태 의미)
-	자식에서 (3)이 초기값 0이 아니면 dup2로 3에서 인풋 받아옴. 5는 닫음
+	자식에서 첫 simple_cmd 아니면 dup2로 3에서 인풋 받아옴. 5는 닫음
 	dup2 execve로 6에 쓰고 자동으로 닫힌다.
 
 	부모는 라이트 사이드 6을 닫아준다.
 	5번은 다음을 위해서 남긴다.
-	부모에서 3번은 두번째루프부터 무조건 닫는다.
+	부모에서 3번은 두번째 루프부터 무조건 닫는다.
 	=> 부모: 5 / 자식: 다 닫힘.
 	
 	<cat 실행>
