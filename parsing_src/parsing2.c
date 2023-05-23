@@ -12,6 +12,17 @@
 
 #include "../minishell.h"
 
+void	init_simple_cmd(t_cmd	*cmd)
+{
+	ft_memset(cmd, 0, sizeof(t_cmd));
+	cmd->fd_in = 0;
+	cmd->fd_out = 1;
+	cmd->pipe_fd[1] = 1;
+	cmd->pipe_fd[0] = 0;
+	cmd->dup_in_fd = 0;
+	cmd->dup_out_fd = 1;
+}
+
 void	make_simple_command(t_token *token, t_shell *ms)
 {
 	int		i;
@@ -52,7 +63,8 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	pipe->simple_cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (pipe->simple_cmd == NULL)
 		return ;
-	ft_memset(pipe->simple_cmd, 0, sizeof(t_cmd));
+	init_simple_cmd(pipe->simple_cmd);
+
 
 	while (pipes > 0)
 	{
@@ -63,7 +75,7 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		pipe->simple_cmd = (t_cmd *)malloc(sizeof(t_cmd));
 		if (pipe->simple_cmd == NULL)
 			return ;
-		ft_memset(pipe->simple_cmd, 0, sizeof(t_cmd));
+		init_simple_cmd(pipe->simple_cmd);
 		pipes--;
 	}
 	pipe->next = NULL;

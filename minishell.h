@@ -32,6 +32,11 @@ typedef struct s_cmd
 	char	**word; 		// "cat"
 	char	**redirection;	// "<<", ">"
 	char	**redir_value;	// "a", "1"
+	int		fd_in; // 0
+	int		fd_out; // 1
+	int		pipe_fd[2]; // pipe_fd[0] = 0; pipe_fd[1] = 1
+	int		dup_in_fd; // 0
+	int		dup_out_fd; // 1
 }	t_cmd;
 
 typedef struct s_pipes
