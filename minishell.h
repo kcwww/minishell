@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:25:39 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/23 17:55:44 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/23 21:48:24 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_shell
 	int				pipe_fd[2];
 	int				prev_pipe_fd_0;
 	int				last_cmd_flag;
+	int				heredoc_used;
 	int				error;
 	struct s_pipes	*head; //
 	struct s_env	*env; // 환경변수
@@ -117,8 +118,8 @@ void	remove_env_node(char *key, t_env **env);
 
 void	init_fd(t_shell *my_shell);
 void	execute(t_shell *my_shell, char **env);
-void	handle_heredocs(t_shell *my_shell, int *heredoc_used);
-void	handle_redirections(t_shell *my_shell);
+void	handle_heredocs(t_shell *my_shell);
+void	handle_redirections(t_shell *my_shell, t_pipes	*head);
 int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell);
 void	cleanup_heredocs(void);

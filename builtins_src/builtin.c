@@ -6,11 +6,14 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/23 18:05:59 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/24 21:53:32 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+// heredoc 내용물
+// head가 null 안 만나고 여러 번 도는 게 문제이다
 
 /*
 	빌트인 함수는 부모에서 실행 (단, 파이프 있을 경우 자식에서 실행)
@@ -27,7 +30,7 @@
 	-> command의 아웃풋을 output.txt에 넣는다
 	----------------------------------------------------
 
-	=> 예. cat << a > 1 | cat << b > 2 | cat << c > 3
+	=> 예. cat << a > 1  | cat << b > 2 | cat << c > 3
 	먼저 히어독을 처리하고 리다이렉션을 처리한다
 	-> 임시 파일을 3개 만든다:
 	-> 만약 apple, banana, a, b, c 입력 시
@@ -41,7 +44,7 @@
 	-> 자식에서 실행:
 		: if 인리다이렉션(<)이 있으면, my_shell->fd_in를 표준입력으로 바꾼다
 		: else if 인리다이렉션(<)이 없고, 파이프가 있으면, 파이프에서 읽는다
-		: if 아웃리다이렉션이 있으면, my_shell->fd_out을 표준출력으로 바꾼다
+		: if 아웃     리다이렉션이 있으면, my_shell->fd_out을 표준출력으로 바꾼다
 		: else if 아웃리다이렉션이 없고, 파이프가 있으면, 파이프에 쓴다
 		: 나머지는 표준출력으로 출력한다 (ls 같은 경우 등)
 	
@@ -63,22 +66,22 @@ void	execute(t_shell *my_shell, char **env)
 	t_pipes	*head;
 	pid_t	pid;
 	pid_t	exited_pid;
-	int		heredoc_used;
 	int		status;
 	int		i;
 
 	i = 0;
 	status = 0;
-	heredoc_used = 0;
 	head = my_shell->head;
 	init_fd(my_shell);
+	handle_heredocs(my_shell); // Handle here-docs and replace them with regular input redirections
 	while (head)
 	{
+		my_shell->fd_in = 0;
+		my_shell->fd_out = 1;
 		if (head->next == NULL)
 			my_shell->last_cmd_flag = 1;
 		i++;
-		handle_heredocs(my_shell, &heredoc_used); // Handle here-docs and replace them with regular input redirections
-		handle_redirections(my_shell);
+		handle_redirections(my_shell, head);
 		if (!head->next && is_builtin(head->simple_cmd->word[0]))
 			builtin(my_shell);
 		else
@@ -95,13 +98,16 @@ void	execute(t_shell *my_shell, char **env)
 				exit(EXIT_FAILURE);
 			}
 			else if (pid == 0)
+			{
 				child_process(my_shell, head, env, i);
+			}
 			else
 				parent_process(my_shell, i);
 		}
+		my_shell->heredoc_used = 0;
 		head = head->next;
 	}
-	if (heredoc_used)
+	if (my_shell->heredoc_used == 1)
 		cleanup_heredocs();
 	while (i--)
 	{
@@ -116,7 +122,7 @@ void	execute(t_shell *my_shell, char **env)
 	}
 }
 
-void	handle_heredocs(t_shell *my_shell, int *heredoc_used)
+void	handle_heredocs(t_shell *my_shell)
 {
 	t_pipes	*head;
 	int		i;
@@ -147,8 +153,8 @@ void	handle_heredocs(t_shell *my_shell, int *heredoc_used)
 		{
 			if (ft_strcmp(head->simple_cmd->redirection[i], "<<") == 0)
 			{
-				*heredoc_used = 1;
-				fd = open("temp.txt", O_CREAT | O_RDWR | O_TRUNC, 0644);
+				my_shell->heredoc_used = 1;
+				fd = open(head->simple_cmd->redir_value[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 				while (1)
 				{
 					line = readline("> ");
@@ -162,8 +168,8 @@ void	handle_heredocs(t_shell *my_shell, int *heredoc_used)
 				}
 				free(head->simple_cmd->redirection[i]);
 				head->simple_cmd->redirection[i] = ft_strdup("<");
-				free(head->simple_cmd->redir_value[i]);
-				head->simple_cmd->redir_value[i] = ft_strdup("temp.txt");
+				// free(head->simple_cmd->redir_value[i]);
+				// head->simple_cmd->redir_value[i] = ft_strdup("temp.txt");
 				close(fd);
 			}
 			i++;
@@ -172,11 +178,11 @@ void	handle_heredocs(t_shell *my_shell, int *heredoc_used)
 	}
 }
 
-void	handle_redirections(t_shell *my_shell)
+void	handle_redirections(t_shell *my_shell, t_pipes	*head)
 {
 	int		i;
 	int		fd;
-	t_pipes	*head;
+	//t_pipes	*head;
 	t_cmd	*cmd;
 /*
 	함수는 구조체 my_shell에서 head를 얻어와 각 head의 simple_cmd에 있는 redirection을 확인합니다. 각 redirection에 대해서 다음과 같이 처리합니다.
@@ -194,9 +200,8 @@ void	handle_redirections(t_shell *my_shell)
 
 	이 함수는 입력/출력 리디렉션을 성공적으로 설정하면 반환하며, 설정에 실패하면 프로그램을 종료합니다.
 */
-	head = my_shell->head;
-	while (head)
-	{
+	// while (head)
+	// {
 		cmd = head->simple_cmd;
 		i = 0;
 		while (cmd->redirection[i])
@@ -206,8 +211,8 @@ void	handle_redirections(t_shell *my_shell)
 				fd = open(cmd->redir_value[i], O_RDONLY);
 				if (fd < 0)
 				{
-					ft_putstr_fd("Error opening file for reading\n", 2);
-					exit(EXIT_FAILURE);
+					ft_putstr_fd("No such file or directory\n", 2);
+					// exit(EXIT_FAILURE);
 				}
 				my_shell->fd_in = fd;
 			}
@@ -216,15 +221,15 @@ void	handle_redirections(t_shell *my_shell)
 				fd = open(cmd->redir_value[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 				if (fd < 0)
 				{
-					ft_putstr_fd("Error opening file for writing\n", 2);
-					exit(EXIT_FAILURE);
+					ft_putstr_fd("No such file or directory\n", 2);
+					// exit(EXIT_FAILURE);
 				}
 				my_shell->fd_out = fd;
 			}
 			i++;
 		}
 		head = head->next;
-	}
+	//}
 	return ;
 }
 
@@ -311,13 +316,11 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 		}
 		else if (my_shell->pipe_fd[0] != 0 && i != 1) // If there is a pipe and no input redirection
 		{
-			if (dup2(my_shell->prev_pipe_fd_0, 0) == -1)//if (dup2(my_shell->pipe_fd[0], 0) == -1)
+			if (dup2(my_shell->prev_pipe_fd_0, 0) == -1)
 			{
-				
 				perror("dup2");
 				exit(EXIT_FAILURE);
 			}
-			//close(my_shell->pipe_fd[0]); // 항상 닫아야 하므로 밖으로 뺌
 		}
 		if (my_shell->fd_out != 1) // Output redirection handling
 		{
@@ -332,7 +335,6 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 		{
 			if (dup2(my_shell->pipe_fd[1], 1) == -1)
 			{
-				ft_putendl_fd("hello", 2);
 				perror("dup2");
 				exit(EXIT_FAILURE);
 			}
@@ -340,7 +342,9 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 		}
 		if (my_shell->pipe_fd[0] != 0)
 			close(my_shell->pipe_fd[0]);
-		if (execve(full_path, head->simple_cmd->word, env) == -1)
+		// head->simple_cmd->word[0] != NULL
+		//if (my_shell->heredoc_used != 1 && execve(full_path, head->simple_cmd->word, env) == -1)
+		if (head->simple_cmd->word[0] != NULL && execve(full_path, head->simple_cmd->word, env) == -1)
 		{
 			perror("execve");
 			exit(EXIT_FAILURE);
@@ -353,6 +357,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 		ft_putendl_fd(my_shell->head->simple_cmd->word[0], 2);
 		exit(EXIT_FAILURE);
 	}
+	exit(1);
 }
 
 char *get_path(char **env)
@@ -406,38 +411,4 @@ void	parent_process(t_shell *my_shell, int i)
 	if (i != 1) // 첫 심플 커맨드인 경우 실행 안함
 		close(my_shell->prev_pipe_fd_0); // 전 커맨드에서 안 닫고 살려둔 pipe_fd[0]을 닫아줌
 	my_shell->prev_pipe_fd_0 = my_shell->pipe_fd[0]; // 파이프 리드 사이드 다음 루프 위해 저장
-
-	/*
-	ls -l | wc -l | cat 했다고 가정
-	
-	<ls -l 실행>
-	다음에 파이프(| wc -l)가 있으므로, pipe() 함수 실행되어 pipe_fd[0],[1]이 3, 4로 바뀜
-	그리고 나서 fork 하면 부모/자식 각각 3,4/3,4가 열려있는 꼴이 됨
-	
-	자식은 써주는 일을 하므로 3번 리드 사이드는 읽어올 필요가 없어 닫아줌 (close(my_shell->pipe_fd[0]);)
-	자식에서 4번 라이트 사이드는 dup2 후 execve 하면 자동으로 닫힘
-
-	부모에서 라이트 사이드 4번은 부모에서 써줄 일이 없으므로 닫아줌 (close(my_shell->pipe_fd[1]);)
-	부모에서 리드 사이드인 3은 이후 다음 세대 자식에서 읽어올 때 필요하므로 부모에서 닫지 않고 변수 만들어 저장
-	(-> 그 다음 루프에서 닫아야 함)
-	=> 부모: 3 / 자식: 다 닫힘 
-	
-	<wc -l 실행>
-	3은 부모에서 닫지 않아 열려있음
-	다음에 파이프(| cat)가 있으므로, pipe() 함수 실행되어 pipe_fd[0],[1]이 5, 6으로 바뀜
-	fork 하면 부모는 (3) 5,6 / 자식 (3) 5, 6 (괄호 안 숫자는 열린 상태 의미)
-	자식에서 첫 simple_cmd 아니면 dup2로 3에서 인풋 받아옴. 5는 닫음
-	dup2 execve로 6에 쓰고 자동으로 닫힌다.
-
-	부모는 라이트 사이드 6을 닫아준다.
-	5번은 다음을 위해서 남긴다.
-	부모에서 3번은 두번째 루프부터 무조건 닫는다.
-	=> 부모: 5 / 자식: 다 닫힘.
-	
-	<cat 실행>
-	자식은 5에서 dup2로 받아옴. execve 하면 기본이 stdout으로 출력
-	부모는 5를 닫아줌
-	
-	
-	*/
 }
