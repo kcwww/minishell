@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:25:39 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/20 15:25:43 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/26 20:54:34 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ typedef struct s_cmd
 	char	**word; 		// "cat"
 	char	**redirection;	// "<<", ">"
 	char	**redir_value;	// "a", "1"
-	int		fd_in; // 0
-	int		fd_out; // 1
-	int		pipe_fd[2]; // pipe_fd[0] = 0; pipe_fd[1] = 1
-	int		dup_in_fd; // 0
-	int		dup_out_fd; // 1
 }	t_cmd;
 
 typedef struct s_pipes
