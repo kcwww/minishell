@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/24 21:53:32 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/26 17:03:38 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	init_fd(t_shell *my_shell)
 	my_shell->pipe_fd[1] = 1;
 	my_shell->prev_pipe_fd_0 = 0;
 	my_shell->last_cmd_flag = 0;
+	my_shell->heredoc_used = 0;
 }
 
 void	execute(t_shell *my_shell, char **env)
@@ -104,11 +105,11 @@ void	execute(t_shell *my_shell, char **env)
 			else
 				parent_process(my_shell, i);
 		}
-		my_shell->heredoc_used = 0;
+		//my_shell->heredoc_used = 0;
 		head = head->next;
 	}
 	if (my_shell->heredoc_used == 1)
-		cleanup_heredocs();
+		cleanup_heredocs(my_shell);
 	while (i--)
 	{
 		exited_pid = waitpid(-1, &status, 0);
@@ -154,7 +155,9 @@ void	handle_heredocs(t_shell *my_shell)
 			if (ft_strcmp(head->simple_cmd->redirection[i], "<<") == 0)
 			{
 				my_shell->heredoc_used = 1;
-				fd = open(head->simple_cmd->redir_value[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
+				char *temp_file = ft_strjoin("/tmp/", head->simple_cmd->redir_value[i]);
+				fd = open(temp_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+				//fd = open(head->simple_cmd->redir_value[i], O_CREAT | O_RDWR | O_TRUNC, 0644);
 				while (1)
 				{
 					line = readline("> ");
@@ -168,8 +171,8 @@ void	handle_heredocs(t_shell *my_shell)
 				}
 				free(head->simple_cmd->redirection[i]);
 				head->simple_cmd->redirection[i] = ft_strdup("<");
-				// free(head->simple_cmd->redir_value[i]);
-				// head->simple_cmd->redir_value[i] = ft_strdup("temp.txt");
+				free(head->simple_cmd->redir_value[i]);
+				head->simple_cmd->redir_value[i] = ft_strdup(temp_file);
 				close(fd);
 			}
 			i++;
@@ -280,12 +283,24 @@ void	builtin(t_shell *my_shell)
 	}
 }
 
-void	cleanup_heredocs(void)
+void	cleanup_heredocs(t_shell *my_shell)
 {
-	if (unlink("temp.txt") == -1)
+
+// loop thru my_shell->head
+// if file name starts with /tmp/, unlink it
+	int i;
+
+	i = 0;
+	while (my_shell->head)
 	{
-		perror("Failed to remove temporary file");
+		if (my_shell->head->simple_cmd->redir_value[i])
+		{
+			if (ft_strncmp(my_shell->head->simple_cmd->redir_value[i], "/tmp/", 5) == 0)
+				unlink(my_shell->head->simple_cmd->redir_value[i]);
+		}
+		my_shell->head = my_shell->head->next;
 	}
+// strjoin 다른 부분에서 확인
 }
 
 /*
@@ -374,7 +389,7 @@ char *get_path(char **env)
 	return (NULL);  // PATH 환경 변수가 발견되지 않았을 경우 NULL을 반환합니다.
 }
 
-char *check_access(char *path_var, char *cmd) 
+char *check_access(char *path_var, char *cmd)
 {
 	char	**paths;
 	char	*full_path;
@@ -395,6 +410,7 @@ char *check_access(char *path_var, char *cmd)
 		i++;
 	}
 	free(paths);
+	free(path_with_slash);
 	return (full_path);
 }
 

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:25:39 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/23 21:48:24 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/26 16:20:45 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	handle_heredocs(t_shell *my_shell);
 void	handle_redirections(t_shell *my_shell, t_pipes	*head);
 int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell);
-void	cleanup_heredocs(void);
+void	cleanup_heredocs(t_shell *my_shell);
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i);
 char	*get_path(char **env);
 char	*check_access(char *path_var, char *cmd);
