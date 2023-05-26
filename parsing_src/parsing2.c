@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/20 12:33:38 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/21 21:15:16 by dkham            ###   ########.fr       */
+/*   Created: 2023/05/26 20:59:56 by dkham             #+#    #+#             */
+/*   Updated: 2023/05/26 20:59:58 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	pipe->simple_cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (pipe->simple_cmd == NULL)
 		return ;
-	ft_memset(pipe->simple_cmd, 0, sizeof(t_cmd));
+	ft_memset(cmd, 0, sizeof(t_cmd));
+
 
 	while (pipes > 0)
 	{
@@ -63,7 +64,7 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		pipe->simple_cmd = (t_cmd *)malloc(sizeof(t_cmd));
 		if (pipe->simple_cmd == NULL)
 			return ;
-		ft_memset(pipe->simple_cmd, 0, sizeof(t_cmd));
+		ft_memset(cmd, 0, sizeof(t_cmd));
 		pipes--;
 	}
 	pipe->next = NULL;
