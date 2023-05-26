@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 15:27:10 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/24 19:43:23 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/26 20:53:55 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	main(int argc, char **argv, char **env)
 		if (get_line == NULL)
 		{
 			printf("exit\n");
-			ft_putendl_fd("hihi", 2);
 			free_env(my_shell.env);
 			return (0);
 		}

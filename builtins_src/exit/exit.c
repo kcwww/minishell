@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/20 17:54:52 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/26 19:13:28 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	cmd_exit(t_shell *my_shell)
 		ft_putstr_fd("minishell: exit: ", my_shell->fd_out);
 		ft_putstr_fd(error_message, my_shell->fd_out);
 		ft_putstr_fd("\n", my_shell->fd_out);
+		if (exit_code == 2)
+			exit(2);
 	}
 	else
 		exit(exit_code);
@@ -36,22 +38,22 @@ char	*validate_exit_word(t_shell *my_shell, int *exit_code)
 
 	word = my_shell->head->simple_cmd->word;
 	i = 0;
-	if (word[1])
+	if (word[1]) // if there is an argument
 	{
 		while (word[1][i])
 		{
 			if (ft_isdigit(word[1][i]) == 0)
 			{
-				*exit_code = 255;
+				*exit_code = 2;
 				return ("numeric argument required");
 			}
 			i++;
 		}
 		if (word[2])
 		{
-			*exit_code = 1;
+			*exit_code = 127;
 			return ("too many arguments");
-		}
+		}	
 		else
 			*exit_code = ft_atoi(word[1]);
 	}
