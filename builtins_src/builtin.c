@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/26 20:41:14 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/26 22:21:49 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,7 +360,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 	}
 	else
 	{
-		path_var = get_path(env);
+		path_var = find_value("PATH", my_shell); //path_var = get_path(env);
 		full_path = check_access(path_var, head->simple_cmd->word[0]);
 		if (full_path != NULL)
 		{
