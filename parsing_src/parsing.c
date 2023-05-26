@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:00 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/20 14:06:37 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/26 20:44:09 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,15 +138,15 @@ void    tokenizer(char *str, t_shell *ms)
 		token->next = NULL;
 	}
 
-	//printf("tokenizer end\n\n\n");
-	// token = start;
-	// while (token)
-	// {
-	// 	printf("token.value: %s\n", token->value);
-	// 	token = token->next;
-	// }
-	// printf("tokenizer end\n\n\n");
-	// usleep(1000000);
+
+	token = start;
+	while (token)
+	{
+		printf("token.value: %s\n", token->value);
+		token = token->next;
+	}
+	printf("tokenizer end\n\n\n");
+	usleep(1000000);
 
 	make_simple_command(start, ms);
 
@@ -166,15 +166,15 @@ void	check_pipes(t_shell *ms)
 	pipe = ms->head;
 	while (pipe)
 	{
-		if (pipe->simple_cmd->word[0] == NULL && pipe->simple_cmd->redirection[0] == NULL)
+		if (pipe->simple_cmd->word[0] == NULL)
 		{
-			printf("bash: syntax error near unexpected token `|'\n");
+			printf("bash: syntax error\n");
 			ms->error = 1;
 			return ;
 		}
 		if (pipe->simple_cmd->redirection[0] != NULL && pipe->simple_cmd->redir_value[0] == NULL)
 		{
-			printf("bash: syntax error near unexpected token `newline'\n");
+			printf("bash: syntax error\n");
 			ms->error = 1;
 			return ;
 		}
@@ -182,13 +182,8 @@ void	check_pipes(t_shell *ms)
 	}
 }
 
-void    parsing_start(char *str, t_shell *ms)
+void	parsing_start(char *str, t_shell *ms)
 {
-	// if (str[0] == '|')
-	// {
-	// 	printf("hee\n");
-	// 	return ; // error message
-	// }
 	ms->error = 0;
 	tokenizer(str, ms);
 	check_pipes(ms);

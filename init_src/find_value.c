@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:35:30 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/20 12:35:31 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/26 20:11:13 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,5 @@ char	*find_value(char *key, t_shell *ms)
 			return (lst->value);
 		lst = lst->next;
 	}
-	return ("None");
+	return ("");
 }
