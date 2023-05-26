@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/26 17:03:38 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/26 18:45:21 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	execute(t_shell *my_shell, char **env)
 			my_shell->last_cmd_flag = 1;
 		i++;
 		handle_redirections(my_shell, head);
-		if (!head->next && is_builtin(head->simple_cmd->word[0]))
+		if (!head->next && is_builtin(head->simple_cmd->word[0])) // 파이프가 없고, 빌트인이면
 			builtin(my_shell);
 		else
 		{
@@ -357,8 +357,6 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 		}
 		if (my_shell->pipe_fd[0] != 0)
 			close(my_shell->pipe_fd[0]);
-		// head->simple_cmd->word[0] != NULL
-		//if (my_shell->heredoc_used != 1 && execve(full_path, head->simple_cmd->word, env) == -1)
 		if (head->simple_cmd->word[0] != NULL && execve(full_path, head->simple_cmd->word, env) == -1)
 		{
 			perror("execve");
@@ -396,6 +394,14 @@ char *check_access(char *path_var, char *cmd)
 	int		i;
 	char	*path_with_slash;
 
+	// If cmd starts with '/', it is an absolute path
+	if (cmd[0] == '/')
+	{
+		if (access(cmd, F_OK) == 0)  // If file exists at this path
+			return (ft_strdup(cmd));  // Return a copy of cmd as the full path
+		else
+			return (NULL);  // If file does not exist, return NULL
+	}
 	paths = ft_split(path_var, ':');
 	full_path = NULL;
 	i = 0;
@@ -403,6 +409,7 @@ char *check_access(char *path_var, char *cmd)
 	{
 		path_with_slash = ft_strjoin(paths[i], "/");
 		full_path = ft_strjoin(path_with_slash, cmd);
+		free(path_with_slash);
 		if (access(full_path, F_OK) == 0)
 			break ;
 		free(full_path);
@@ -410,9 +417,9 @@ char *check_access(char *path_var, char *cmd)
 		i++;
 	}
 	free(paths);
-	free(path_with_slash);
 	return (full_path);
 }
+
 
 void	parent_process(t_shell *my_shell, int i)
 {
