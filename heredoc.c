@@ -6,11 +6,11 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:46:08 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 14:49:57 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 16:22:16 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 void	handle_heredocs(t_shell *my_shell)
 {
