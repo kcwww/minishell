@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:54 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/26 20:24:48 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/27 13:29:20 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,21 @@ void	init_signal()
 
 void	init_env(t_env *my_env, char **env)
 {
-	int i;
+	int 	i;
+	char	**str;
 
 	my_env->next = NULL;
 	i = 0;
 	while (env[i])
 	{
-		my_env->var = ft_envsplit(env[i]);
-		my_env->key = my_env->var[0];
-		my_env->value = my_env->var[1];
+		str = ft_envsplit(env[i]);
+		my_env->key = str[0];
+		my_env->value = str[1];
 		i++;
 		if (env[i])
 			my_env->next = (t_env *)malloc(sizeof(t_env)); // NULL GUARD
 		my_env = my_env->next;
+		free(str);
 	}
 }
 

@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:40 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/26 20:59:44 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 13:32:59 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	check_leaks(void)
-// {
-// 	system("leaks minishell");
-// }
+void	check_leaks(void)
+{
+	system("leaks minishell");
+}
 
 int	main(int argc, char **argv, char **env)
 {
 	char	*get_line;
 	t_shell	my_shell;
 
-	//atexit(check_leaks);
+	atexit(check_leaks);
 	if (argc != 1)
 		return (0);
 	(void)argv;
@@ -45,6 +45,8 @@ int	main(int argc, char **argv, char **env)
 				printf("no execute\n");
 			else
 				execute(&my_shell, env);
+			if (ft_strcmp("", find_value(get_line, &my_shell)) != 0)
+				printf("%s\n", find_value(get_line, &my_shell));
 			free_all(&my_shell);
 		}
 		add_history(get_line);
