@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 15:22:08 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 16:15:21 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ char	*get_path(char **env);
 char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell, int i);
 void	wait_for_children(int i, pid_t pid);
+pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i);
 
 void	free_env(t_env *env);
 

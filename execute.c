@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 15:22:49 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 16:16:47 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,43 +26,51 @@ void	init_fd(t_shell *my_shell)
 void	execute(t_shell *my_shell, char **env)
 {
 	t_pipes	*head;
-	pid_t	pid;
-	//pid_t	exited_pid;
-	int		status;
 	int		i;
+	pid_t	pid;
 
 	i = 0;
-	status = 0;
 	head = my_shell->head;
 	init_fd(my_shell);
 	handle_heredocs(my_shell);
 	while (head)
 	{
-		my_shell->fd_in = 0;
-		my_shell->fd_out = 1;
-		if (head->next == NULL)
-			my_shell->last_cmd_flag = 1;
-		i++;
-		handle_redirections(my_shell, head);
-		if (!head->next && is_builtin(head->simple_cmd->word[0]))
-			builtin(my_shell);
-		else
-		{
-			if (head->next && pipe(my_shell->pipe_fd) == -1)
-				exit(EXIT_FAILURE);
-			pid = fork();
-			if (pid < 0)
-				exit(EXIT_FAILURE);
-			else if (pid == 0)
-				child_process(my_shell, head, env, i);
-			else
-				parent_process(my_shell, i);
-		}
+		pid = handle_proc(my_shell, head, env, i);
 		head = head->next;
+		i++;
 	}
 	if (my_shell->heredoc_used == 1)
 		cleanup_heredocs(my_shell);
 	wait_for_children(i, pid);
+}
+
+pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
+{
+	pid_t	pid;
+
+	my_shell->fd_in = 0;
+	my_shell->fd_out = 1;
+	if (head->next == NULL)
+		my_shell->last_cmd_flag = 1;
+	handle_redirections(my_shell, head);
+	if (!head->next && is_builtin(head->simple_cmd->word[0]))
+	{
+		builtin(my_shell);
+		return (-1);
+	}
+	else
+	{
+		if (head->next && pipe(my_shell->pipe_fd) == -1)
+			exit(EXIT_FAILURE);
+		pid = fork();
+		if (pid < 0)
+			exit(EXIT_FAILURE);
+		else if (pid == 0)
+			child_process(my_shell, head, env, ++i);
+		else
+			parent_process(my_shell, ++i);
+		return (pid);
+	}
 }
 
 void	wait_for_children(int i, pid_t pid)
