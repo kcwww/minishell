@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/26 22:21:49 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 11:24:17 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,7 +300,6 @@ void	cleanup_heredocs(t_shell *my_shell)
 		}
 		my_shell->head = my_shell->head->next;
 	}
-// strjoin 다른 부분에서 확인
 }
 
 /*
@@ -360,7 +359,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 	}
 	else
 	{
-		path_var = find_value("PATH", my_shell); //path_var = get_path(env);
+		path_var = find_value("PATH", my_shell);
 		full_path = check_access(path_var, head->simple_cmd->word[0]);
 		if (full_path != NULL)
 		{
@@ -397,36 +396,35 @@ char *get_path(char **env)
 
 char *check_access(char *path_var, char *cmd)
 {
-	char	**paths;
-	char	*full_path;
-	int		i;
-	char	*path_with_slash;
+    char **paths;
+    char *full_path;
+    int i;
+    char *path_with_slash;
 
-	if (cmd[0] == '/')
-	{
-		if (access(cmd, F_OK) == 0)  // If file exists at this path
-			return (ft_strdup(cmd));  // Return a copy of cmd as the full path
-		else
-			return (NULL);  // If file does not exist, return NULL
-	}
-	paths = ft_split(path_var, ':');
-	full_path = NULL;
-	i = 0;
-	while (paths[i])
-	{
-		path_with_slash = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(path_with_slash, cmd);
-		free(path_with_slash);
-		if (access(full_path, F_OK) == 0)
-			break ;
-		free(full_path);
-		full_path = NULL;
-		i++;
-	}
-	free(paths);
-	return (full_path);
+    if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/')) // 수정된 부분
+    {
+        if (access(cmd, F_OK) == 0)  // If file exists at this path
+            return (ft_strdup(cmd));  // Return a copy of cmd as the full path
+        else
+            return (NULL);  // If file does not exist, return NULL
+    }
+    paths = ft_split(path_var, ':');
+    full_path = NULL;
+    i = 0;
+    while (paths[i])
+    {
+        path_with_slash = ft_strjoin(paths[i], "/");
+        full_path = ft_strjoin(path_with_slash, cmd);
+        free(path_with_slash);
+        if (access(full_path, F_OK) == 0)
+            break ;
+        free(full_path);
+        full_path = NULL;
+        i++;
+    }
+    free(paths);
+    return (full_path);
 }
-
 
 void	parent_process(t_shell *my_shell, int i)
 {

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:40 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/26 20:59:44 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 12:43:07 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int	main(int argc, char **argv, char **env)
 			free_env(my_shell.env);
 			return (0);
 		}
-
-
 		if (check_quotation(get_line))
 		{
 			parsing_start(get_line, &my_shell);
