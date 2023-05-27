@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 12:59:07 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 13:40:47 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,17 +122,6 @@ t_env	*create_new_env_node(char *key_value_pair)
 		new_node->key = ft_strdup(key_value_pair);
 		new_node->value = ft_strdup("");
 	}
-	new_node->var = malloc(sizeof(char*) * 3);
-	if (!new_node->var)
-	{
-		free(new_node->key);
-		free(new_node->value);
-		free(new_node);
-		return (NULL);
-	}
-	new_node->var[0] = new_node->key;
-	new_node->var[1] = new_node->value;
-	new_node->var[2] = NULL;
 	new_node->next = NULL;
 	return (new_node);
 }

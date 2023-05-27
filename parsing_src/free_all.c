@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:03:31 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/27 12:33:13 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 13:39:06 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	free_env(t_env *env)
 	{
 		free(env->key);
 		free(env->value);
-		free(env->var);
+		//free(env->var);
 		tmp = env;
 		env = env->next;
 		free(tmp);

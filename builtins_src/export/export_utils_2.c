@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 12:51:38 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 12:06:19 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 13:42:23 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,8 @@ void	free_env_node(t_env *node)
 {
 	if (node)
 	{
-		if (node->var) 
-		{
-			free(node->var[0]);
-			free(node->var[1]);
-			free(node->var);
-		}
+		free(node->key);
+		free(node->value);
 		free(node);
 	}
 }
-// void	free_env_node(t_env *node)
-// {
-// 	if (node)
-// 	{
-// 		free(node->key);
-// 		free(node->value);
-// 		free(node);
-// 	}
-// }
