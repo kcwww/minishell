@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/26 20:57:31 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 13:29:56 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void	remove_env_node(char *key, t_env **env);
 void	init_fd(t_shell *my_shell);
 void	execute(t_shell *my_shell, char **env);
 void	handle_heredocs(t_shell *my_shell);
+void	make_hd(t_shell *my_shell, char *filename, char *end_str);
 void	handle_redirections(t_shell *my_shell, t_pipes	*head);
 int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell);
