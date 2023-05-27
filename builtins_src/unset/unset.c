@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:33:13 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 12:01:27 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 12:52:57 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	remove_env_node(char *key, t_env **env)
 	tmp = *env;
 	prev = NULL;
 	key_len = ft_strlen(key);
-	while (tmp) // find the node to remove
+	while (tmp)
 	{
 		if (ft_strncmp(tmp->key, key, key_len) == 0
 			&& tmp->key[key_len] == '\0')
