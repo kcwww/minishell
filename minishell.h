@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 13:47:43 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 15:22:08 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ typedef struct s_cmd
 	char	**word; 		// "cat"
 	char	**redirection;	// "<<", ">"
 	char	**redir_value;	// "a", "1"
-	// int		fd_in;
-	// int		fd_out;
-	// int		pipe_fd[2];
-	// int		dup_in_fd; // 0
-	// int		dup_out_fd; // 1
 }	t_cmd;
 
 typedef struct s_pipes
@@ -47,9 +42,8 @@ typedef struct s_pipes
 
 typedef struct s_env
 {
-	//char			**var; // 환경변수 리스트
-	char			*key; // key
-	char			*value; // value
+	char			*key;
+	char			*value;
 	struct s_env	*next;
 }	t_env;
 
@@ -62,8 +56,8 @@ typedef struct s_shell
 	int				last_cmd_flag;
 	int				heredoc_used;
 	int				error;
-	struct s_pipes	*head; //
-	struct s_env	*env; // 환경변수
+	struct s_pipes	*head;
+	struct s_env	*env;
 }	t_shell;
 
 typedef struct s_token
@@ -128,6 +122,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i);
 char	*get_path(char **env);
 char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell, int i);
+void	wait_for_children(int i, pid_t pid);
 
 void	free_env(t_env *env);
 

@@ -6,26 +6,12 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:03:31 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/27 13:56:15 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 14:06:45 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// void	free_env(t_env *env)
-// {
-// 	t_env	*tmp;
-
-// 	while (env)
-// 	{
-// 		free(env->var);
-// 		free(env->key);
-// 		free(env->value);
-// 		tmp = env;
-// 		env = env->next;
-// 		free(tmp);
-// 	}
-// }
 void	free_env(t_env *env)
 {
 	t_env	*tmp;
