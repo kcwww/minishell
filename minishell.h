@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 16:15:21 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 12:02:55 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,11 @@ int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell);
 void	cleanup_heredocs(t_shell *my_shell);
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i);
-char	*get_path(char **env);
+void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env);
+void	handle_io_redirection(t_shell *my_shell, int i);
+
+
+
 char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell, int i);
 void	wait_for_children(int i, pid_t pid);

@@ -6,17 +6,14 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 16:18:33 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 16:19:22 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 12:07:46 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
+void	handle_io_redirection(t_shell *my_shell, int i)
 {
-	char	*path_var;
-	char	*full_path;
-
 	if (my_shell->fd_in != 0)
 	{
 		if (dup2(my_shell->fd_in, 0) == -1)
@@ -42,32 +39,43 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 	}
 	if (my_shell->pipe_fd[0] != 0)
 		close(my_shell->pipe_fd[0]);
-	if (is_builtin(head->simple_cmd->word[0]))
+}
+
+void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env)
+{
+	char	*path_var;
+	char	*full_path;
+
+	path_var = find_value("PATH", my_shell);
+	full_path = check_access(path_var, head->simple_cmd->word[0]);
+	if (full_path != NULL)
 	{
-		builtin(my_shell);
-		exit(0); // Assuming success
+		if (head->simple_cmd->word[0] != NULL && \
+		execve(full_path, head->simple_cmd->word, env) == -1)
+		{
+			perror("execve");
+			exit(EXIT_FAILURE);
+		}
+		free(full_path);
 	}
 	else
 	{
-		path_var = find_value("PATH", my_shell);
-		full_path = check_access(path_var, head->simple_cmd->word[0]);
-		if (full_path != NULL)
-		{
-			if (head->simple_cmd->word[0] != NULL && \
-			execve(full_path, head->simple_cmd->word, env) == -1)
-			{
-				perror("execve");
-				exit(EXIT_FAILURE);
-			}
-			free(full_path);
-		}
-		else
-		{
-			ft_putstr_fd("minishell: command not found: ", 2);
-			ft_putendl_fd(my_shell->head->simple_cmd->word[0], 2);
-			exit(EXIT_FAILURE);
-		}
+		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putendl_fd(my_shell->head->simple_cmd->word[0], 2);
+		exit(EXIT_FAILURE);
 	}
+}
+
+void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
+{
+	handle_io_redirection(my_shell, i);
+	if (is_builtin(head->simple_cmd->word[0]))
+	{
+		builtin(my_shell);
+		exit(0);
+	}
+	else
+		handle_external_command(my_shell, head, env);
 	exit(1);
 }
 
