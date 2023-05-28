@@ -6,7 +6,7 @@
 #    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/28 16:51:14 by chanwoki          #+#    #+#              #
-#    Updated: 2023/05/28 16:51:16 by chanwoki         ###   ########.fr        #
+#    Updated: 2023/05/28 17:24:38 by chanwoki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ RM=rm -f
 
 ############################################################################
 PARSING_PATH=parsing_src/
-PARSING_FILES=check_quotation.c parsing.c parsing2.c free_all.c parsing3.c
+PARSING_FILES=check_quotation.c parsing.c parsing2.c free_all.c parsing3.c delete_single_quote.c
 PARSING_SRC=$(addprefix $(PARSING_PATH), $(PARSING_FILES))
 
 BUILTINS_PATH=builtins_src/
@@ -47,7 +47,7 @@ INIT_SRC=$(addprefix $(INIT_PATH), $(INIT_FILES))
 ############################################################################
 
 
-SRC_FILES=minishell.c execute.c heredoc_redir.c process.c process_utils.c\
+SRC_FILES=minishell.c execute.c heredoc_redir.c process.c process_utils.c \
 $(PARSING_SRC) \
 $(BUILTINS_SRC) \
 $(REDIRECTIONS_SRC) \

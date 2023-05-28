@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:51:06 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/28 16:51:07 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/28 17:27:09 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,6 @@ void	builtin(t_shell *my_shell);
 
 void	free_env(t_env *env);
 void	check_env(t_token *token, t_shell *ms);
+void	delete_single_quote(t_token *token);
 
 #endif

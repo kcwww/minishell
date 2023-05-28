@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 14:14:29 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/12 16:06:29 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/28 17:52:17 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 char	**ft_split(char const *s, char c);
-char	*ft_substr(char *s, unsigned int start, size_t len);
+char	*ft_substr(char *s, int start, int len);
 char	*ft_strtrim(char *s1, char *set);
 char	*ft_strmapi(char *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
