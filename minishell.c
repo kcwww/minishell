@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:57:40 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 15:45:59 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/05/28 15:47:41 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/28 15:47:43 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -48,6 +49,8 @@ int	main(int argc, char **argv, char **env)
 				printf("no execute\n");
 			else
 				execute(&my_shell, env);
+			if (ft_strcmp("", find_value(get_line, &my_shell)) != 0)
+				printf("%s\n", find_value(get_line, &my_shell));
 			free_all(&my_shell);
 		}
 		add_history(get_line);

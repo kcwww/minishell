@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:00 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/26 21:05:29 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 13:24:21 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void	check_pipes(t_shell *ms)
 	pipe = ms->head;
 	while (pipe)
 	{
-		if (pipe->simple_cmd->word[0] == NULL)
+		if (pipe->simple_cmd->word[0] == NULL && pipe->simple_cmd->redirection[0] == NULL)
 		{
 			printf("bash: syntax error\n");
 			ms->error = 1;

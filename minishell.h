@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/26 20:57:31 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/27 13:29:35 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_pipes
 
 typedef struct s_env
 {
-	char			**var; // 환경변수 리스트
+	//char			**var; // 환경변수 리스트
 	char			*key; // key
 	char			*value; // value
 	struct s_env	*next;
