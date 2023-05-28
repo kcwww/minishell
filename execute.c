@@ -6,22 +6,11 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 16:19:36 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 12:29:01 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	init_fd(t_shell *my_shell)
-{
-	my_shell->fd_in = 0;
-	my_shell->fd_out = 1;
-	my_shell->pipe_fd[0] = 0;
-	my_shell->pipe_fd[1] = 1;
-	my_shell->prev_pipe_fd_0 = 0;
-	my_shell->last_cmd_flag = 0;
-	my_shell->heredoc_used = 0;
-}
 
 void	execute(t_shell *my_shell, char **env)
 {
@@ -42,6 +31,17 @@ void	execute(t_shell *my_shell, char **env)
 	if (my_shell->heredoc_used == 1)
 		cleanup_heredocs(my_shell);
 	wait_for_children(i, pid);
+}
+
+void	init_fd(t_shell *my_shell)
+{
+	my_shell->fd_in = 0;
+	my_shell->fd_out = 1;
+	my_shell->pipe_fd[0] = 0;
+	my_shell->pipe_fd[1] = 1;
+	my_shell->prev_pipe_fd_0 = 0;
+	my_shell->last_cmd_flag = 0;
+	my_shell->heredoc_used = 0;
 }
 
 pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
