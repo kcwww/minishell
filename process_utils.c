@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 13:13:58 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 16:33:52 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ char	*check_access(char *path_var, char *cmd)
 	char	*full_path;
 
 	full_path = NULL;
+	if (cmd == NULL || path_var == NULL)
+		return (NULL);
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
 		if (access(cmd, F_OK) == 0)

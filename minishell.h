@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 13:10:42 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 14:17:12 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_shell
 	int				last_cmd_flag;
 	int				heredoc_used;
 	int				error;
+	char			*line;
 	struct s_pipes	*head;
 	struct s_env	*env;
 }	t_shell;

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 12:54:02 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 16:33:11 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	execute(t_shell *my_shell, char **env)
 	i = 0;
 	head = my_shell->head;
 	init_fd(my_shell);
-	handle_heredocs(my_shell);
+	handle_heredocs(my_shell); // 자식프로세스 확인
 	while (head)
 	{
-		pid = handle_proc(my_shell, head, env, i);
+		pid = handle_proc(my_shell, head, env, i); // 히어독 후 exit 등으로 빠져나갔을 때 free 못해 leak 발생
 		head = head->next;
 		i++;
 	}
@@ -53,6 +53,8 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 	if (head->next == NULL)
 		my_shell->last_cmd_flag = 1;
 	handle_redirections(my_shell, head);
+	if (head->simple_cmd->word[0] == NULL) // heredoc인 경우 word 가 없음 / 자식으로 들어가지 않고, 바로 리턴 (새로 추가)
+		return (-1);
 	if (!head->next && is_builtin(head->simple_cmd->word[0]))
 	{
 		builtin(my_shell);
