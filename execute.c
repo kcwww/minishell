@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 16:33:11 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 16:37:18 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 	if (head->next == NULL)
 		my_shell->last_cmd_flag = 1;
 	handle_redirections(my_shell, head);
-	if (head->simple_cmd->word[0] == NULL) // heredoc인 경우 word 가 없음 / 자식으로 들어가지 않고, 바로 리턴 (새로 추가)
+	if (head->simple_cmd->word[0] == NULL && my_shell->heredoc_used == 1) // 커맨드 없는 heredoc인 경우 / 자식으로 들어가지 않고, 바로 리턴 (새로 추가)
 		return (-1);
 	if (!head->next && is_builtin(head->simple_cmd->word[0]))
 	{
