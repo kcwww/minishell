@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/26 19:13:28 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 14:59:45 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,19 @@ void	cmd_exit(t_shell *my_shell)
 		ft_putstr_fd("minishell: exit: ", my_shell->fd_out);
 		ft_putstr_fd(error_message, my_shell->fd_out);
 		ft_putstr_fd("\n", my_shell->fd_out);
+		free_env(my_shell->env);
+		free_all(my_shell);
+		free(my_shell->line);
 		if (exit_code == 2)
 			exit(2);
 	}
 	else
+	{
+		free_env(my_shell->env);
+		free_all(my_shell);
+		free(my_shell->line);
 		exit(exit_code);
+	}
 }
 
 char	*validate_exit_word(t_shell *my_shell, int *exit_code)

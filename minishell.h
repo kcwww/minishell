@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:57:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 16:34:25 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/05/28 16:51:06 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/05/28 16:51:07 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ typedef struct s_cmd
 	char	**word; 		// "cat"
 	char	**redirection;	// "<<", ">"
 	char	**redir_value;	// "a", "1"
-	// int		fd_in;
-	// int		fd_out;
-	// int		pipe_fd[2];
-	// int		dup_in_fd; // 0
-	// int		dup_out_fd; // 1
 }	t_cmd;
 
 typedef struct s_pipes
@@ -47,9 +42,8 @@ typedef struct s_pipes
 
 typedef struct s_env
 {
-	//char			**var; // 환경변수 리스트
-	char			*key; // key
-	char			*value; // value
+	char			*key;
+	char			*value;
 	struct s_env	*next;
 }	t_env;
 
@@ -63,8 +57,8 @@ typedef struct s_shell
 	int				heredoc_used;
 	int				error;
 	char			*line;
-	struct s_pipes	*head; //
-	struct s_env	*env; // 환경변수
+	struct s_pipes	*head;
+	struct s_env	*env;
 }	t_shell;
 
 typedef struct s_token
@@ -119,15 +113,26 @@ void	remove_env_node(char *key, t_env **env);
 
 void	init_fd(t_shell *my_shell);
 void	execute(t_shell *my_shell, char **env);
+pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i);
+void	wait_for_children(int i, pid_t pid);
+
 void	handle_heredocs(t_shell *my_shell);
-void	handle_redirections(t_shell *my_shell, t_pipes	*head);
-int		is_builtin(char *cmd);
-void	builtin(t_shell *my_shell);
+void	make_hd(t_shell *my_shell, char *filename, char *end_str);
 void	cleanup_heredocs(t_shell *my_shell);
+void	handle_redirections(t_shell *my_shell, t_pipes	*head);
+void	print_error_message(char *value);
+
+void	handle_io_redirection(t_shell *my_shell, int i);
+void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env);
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i);
-char	*get_path(char **env);
+char	*validate_and_construct_path(char **paths, char *cmd);
 char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell, int i);
+
+int		is_builtin(char *cmd);
+void	builtin(t_shell *my_shell);
+
+
 
 void	free_env(t_env *env);
 void	check_env(t_token *token, t_shell *ms);

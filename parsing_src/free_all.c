@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:03:31 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/27 13:29:49 by kcw              ###   ########.fr       */
+/*   Updated: 2023/05/27 14:06:45 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	free_env(t_env *env)
 	{
 		free(env->key);
 		free(env->value);
-		//free(env->var);
 		tmp = env;
 		env = env->next;
 		free(tmp);

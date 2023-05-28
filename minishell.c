@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/28 15:47:41 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/28 16:18:47 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/05/28 16:45:05 by dkham             #+#    #+#             */
+/*   Updated: 2023/05/28 16:47:43 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -46,10 +45,8 @@ int	main(int argc, char **argv, char **env)
 			parsing_start(my_shell.line, &my_shell);
 			if (my_shell.error == 1)
 				printf("no execute\n");
-			// else
-			// 	execute(&my_shell, env);
-			if (ft_strcmp("", find_value(my_shell.line, &my_shell)) != 0)
-				printf("%s\n", find_value(my_shell.line, &my_shell));
+			else
+				execute(&my_shell, env);
 			free_all(&my_shell);
 		}
 		add_history(my_shell.line);
