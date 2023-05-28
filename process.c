@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 16:18:33 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 12:07:46 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 12:09:18 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,12 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 	exit(1);
 }
 
-char	*check_access(char *path_var, char *cmd)
+char	*validate_and_construct_path(char **paths, char *cmd)
 {
-	char	**paths;
 	char	*full_path;
-	int		i;
 	char	*path_with_slash;
+	int		i;
 
-	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
-	{
-		if (access(cmd, F_OK) == 0)
-			return (ft_strdup(cmd));
-		else
-			return (NULL);
-	}
-	paths = ft_split(path_var, ':');
 	full_path = NULL;
 	i = 0;
 	while (paths[i])
@@ -107,7 +98,26 @@ char	*check_access(char *path_var, char *cmd)
 		full_path = NULL;
 		i++;
 	}
-	free(paths);
+	return (full_path);
+}
+
+char	*check_access(char *path_var, char *cmd)
+{
+	char	**paths;
+	char	*full_path;
+
+	full_path = NULL;
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
+	{
+		if (access(cmd, F_OK) == 0)
+			full_path = ft_strdup(cmd);
+	}
+	else
+	{
+		paths = ft_split(path_var, ':');
+		full_path = validate_and_construct_path(paths, cmd);
+		free(paths);
+	}
 	return (full_path);
 }
 
