@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:46:16 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 16:46:18 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 19:10:41 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ char	*get_env_var_value(t_shell *execute, char *str);
 void	env(t_shell *execute);
 
 void	cmd_exit(t_shell *execute);
+int		is_numeric(char *arg, int *g_exit_status);
+int		is_too_many_args(char **word, int *g_exit_status);
 char	*validate_exit_word(t_shell *execute, int *exit_code);
 
 void	export(t_shell *execute);

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:45:05 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 16:47:43 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 17:18:32 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_shell	my_shell;
 
-	atexit(check_leaks);
+	//atexit(check_leaks);
 	if (argc != 1)
 		return (0);
 	(void)argv;
