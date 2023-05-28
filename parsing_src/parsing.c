@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:00 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/27 13:24:21 by kcw              ###   ########.fr       */
+/*   Updated: 2023/05/28 16:33:53 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,15 +139,7 @@ void    tokenizer(char *str, t_shell *ms)
 	}
 
 
-	// token = start;
-	// while (token)
-	// {
-	// 	printf("token.value: %s\n", token->value);
-	// 	token = token->next;
-	// }
-	// printf("tokenizer end\n\n\n");
-	// usleep(1000000);
-
+	check_env(start, ms);
 	make_simple_command(start, ms);
 
 	while (start)

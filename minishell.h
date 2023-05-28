@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:57:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 15:54:15 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/28 16:34:25 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,5 +130,6 @@ char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell, int i);
 
 void	free_env(t_env *env);
+void	check_env(t_token *token, t_shell *ms);
 
 #endif
