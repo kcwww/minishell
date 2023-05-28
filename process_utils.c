@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 12:20:28 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 13:13:58 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,9 @@ void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env)
 	}
 	else
 	{
-		ft_putstr_fd("minishell: command not found: ", 2);
-		ft_putendl_fd(my_shell->head->simple_cmd->word[0], 2);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(my_shell->head->simple_cmd->word[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		exit(EXIT_FAILURE);
 	}
 }
