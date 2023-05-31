@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 13:40:47 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/31 20:10:59 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	cd(t_shell *my_shell)
 	cur_pwd = getcwd(NULL, 0);
 	if (cur_pwd == NULL)
 	{
-		ft_putendl_fd("cd: error retrieving current directory: getcwd: \
-		cannot access parent directories: No such file or directory", my_shell->fd_out);
+		ft_putendl_fd("cd: error retrieving current directory: getcwd: cannot access \
+parent directories: No such file or directory", my_shell->fd_out);
 		return ;
 	}
 	if (word[1] == NULL)
@@ -34,6 +34,7 @@ void	cd(t_shell *my_shell)
 void	handle_cd_no_word(t_shell *my_shell, char *cur_pwd)
 {
 	t_env	*home_env;
+	char	*new_cwd;
 
 	home_env = find_env_node(my_shell->env, "HOME");
 	if (home_env == NULL || home_env->value == NULL || \
@@ -52,13 +53,17 @@ void	handle_cd_no_word(t_shell *my_shell, char *cur_pwd)
 	else
 	{
 		update_env_var(my_shell->env, "OLDPWD", cur_pwd);
-		update_env_var(my_shell->env, "PWD", getcwd(NULL, 0));
+		new_cwd = getcwd(NULL, 0);
+		update_env_var(my_shell->env, "PWD", new_cwd);
+		free(new_cwd);
 	}
 	free(cur_pwd);
 }
 
 void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd)
 {
+	char	*new_cwd;
+
 	if (chdir(path) < 0)
 	{
 		ft_putstr_fd("minishell: cd: ", my_shell->fd_out);
@@ -68,7 +73,9 @@ void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd)
 		return ;
 	}
 	update_env_var(my_shell->env, "OLDPWD", cur_pwd);
-	update_env_var(my_shell->env, "PWD", getcwd(NULL, 0));
+	new_cwd = getcwd(NULL, 0);
+	update_env_var(my_shell->env, "PWD", new_cwd);
+	free(new_cwd);
 	free(cur_pwd);
 }
 
