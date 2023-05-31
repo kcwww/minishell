@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/31 20:10:59 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/31 21:21:42 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd)
 {
 	char	*new_cwd;
 
+	if (ft_strcmp(path, "-") == 0)
+	{
+		handle_cd_dash(my_shell, cur_pwd);
+		return ;
+	}
 	if (chdir(path) < 0)
 	{
 		ft_putstr_fd("minishell: cd: ", my_shell->fd_out);
@@ -76,6 +81,35 @@ void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd)
 	new_cwd = getcwd(NULL, 0);
 	update_env_var(my_shell->env, "PWD", new_cwd);
 	free(new_cwd);
+	free(cur_pwd);
+}
+
+void	handle_cd_dash(t_shell *my_shell, char *cur_pwd)
+{
+	t_env	*old_env;
+	char	*new_cwd;
+
+	old_env = find_env_node(my_shell->env, "OLDPWD");
+	if (old_env == NULL || old_env->value == NULL || old_env->value[0] == '\0')
+	{
+		ft_putendl_fd("minishell: cd: OLDPWD not set", my_shell->fd_out);
+		free(cur_pwd);
+		return ;
+	}
+	if (chdir(old_env->value) < 0)
+	{
+		ft_putstr_fd("minishell: cd: ", my_shell->fd_out);
+		ft_putstr_fd(old_env->value, my_shell->fd_out);
+		ft_putendl_fd(": No such file or directory", my_shell->fd_out);
+	}
+	else
+	{
+		update_env_var(my_shell->env, "OLDPWD", cur_pwd);
+		new_cwd = getcwd(NULL, 0);
+		update_env_var(my_shell->env, "PWD", new_cwd);
+		ft_putendl_fd(new_cwd, my_shell->fd_out);
+		free(new_cwd);
+	}
 	free(cur_pwd);
 }
 
