@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:54 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/27 13:29:20 by kcw              ###   ########.fr       */
+/*   Updated: 2023/06/03 13:06:16 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	init_env(t_env *my_env, char **env)
 
 void	init_shell(t_shell *my_shell, char **env)
 {
+	g_exit_status = 0;
 	my_shell->env = (t_env *)malloc(sizeof(t_env)); // NULL GUARD
 	ft_memset(my_shell->env, 0, sizeof(t_env));
 	init_env(my_shell->env, env);

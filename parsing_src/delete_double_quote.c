@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   delete_single_quote.c                              :+:      :+:    :+:   */
+/*   delete_double_quote.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/28 17:23:09 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/03 13:52:58 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/06/03 13:57:04 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/06/03 17:48:05 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	delete_single_quote(t_token *token)
+int delete_double_quote(t_token *token, t_shell *ms)
 {
 	int		i;
 	int		start;
@@ -25,11 +25,10 @@ int	delete_single_quote(t_token *token)
 	start = 0;
 	while (token->value[i])
 	{
-		if (token->value[i] == '\'')
+		if (token->value[i] == '\"')
 		{
 			start = i;
 			i++;
-			tmp = ft_substr(token->value, 0, start);
 			break ;
 		}
 		i++;
@@ -37,8 +36,14 @@ int	delete_single_quote(t_token *token)
 
 	while (token->value[i])
 	{
-		if (token->value[i] == '\'')
+		if (token->value[i] == '$')
 		{
+			i += replace_env_quote(token, ms, i);
+
+		}
+		if (token->value[i] == '\"')
+		{
+			tmp = ft_substr(token->value, 0, start);
 			tmp3  = ft_substr(token->value, start + 1, i - start - 1);
 			tmp2 = ft_strjoin(tmp, tmp3);
 			free(tmp);

@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:51:06 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/28 17:27:09 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:30:00 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define REDIRECTION 123
 # define WORD 234
 # define PIPE 456
+# define HEREDOC 789
 
 typedef struct s_cmd
 { // cat << a > 1
@@ -132,10 +133,12 @@ void	parent_process(t_shell *my_shell, int i);
 int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell);
 
-
-
 void	free_env(t_env *env);
-void	check_env(t_token *token, t_shell *ms);
-void	delete_single_quote(t_token *token);
+void	check_token(t_token *token, t_shell *ms);
+int		delete_single_quote(t_token *token);
+void	delete_double_quote_heredoc(t_token *token);
+int		replace_env(t_token *token, t_shell *ms);
+int		delete_double_quote(t_token *token, t_shell *ms);
+int		replace_env_quote(t_token *token, t_shell *ms, int idx);
 
 #endif
