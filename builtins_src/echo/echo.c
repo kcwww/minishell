@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:09:50 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/20 17:54:29 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 16:30:20 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,16 @@ int	only_n_after_dash(const char *str)
 
 void	print_word(t_shell *my_shell, int i, int n_flag)
 {
-	char	*env_var_val;
+	//char	*env_var_val;
 	char	**word;
 
 	word = my_shell->head->simple_cmd->word;
 	while (word[i])
 	{
-		env_var_val = get_env_var_value(my_shell, word[i]);
-		if (env_var_val)
-			ft_putstr_fd(env_var_val, my_shell->fd_out);
-		else
+		//env_var_val = get_env_var_value(my_shell, word[i]);
+		//if (env_var_val)
+		//	ft_putstr_fd(env_var_val, my_shell->fd_out);
+		//else
 			ft_putstr_fd(word[i], my_shell->fd_out);
 		if (word[i + 1])
 			ft_putstr_fd(" ", my_shell->fd_out);
@@ -79,22 +79,22 @@ void	print_word(t_shell *my_shell, int i, int n_flag)
 		ft_putstr_fd("\n", my_shell->fd_out);
 }
 
-char	*get_env_var_value(t_shell *my_shell, char *str)
-{
-	char	*value;
-	char	*key;
-	t_env	*found_env;
+// char	*get_env_var_value(t_shell *my_shell, char *str)
+// {
+// 	char	*value;
+// 	char	*key;
+// 	t_env	*found_env;
 
-	if (str[0] == '$')
-	{
-		key = ft_strdup(str + 1);
-		found_env = find_env_node(my_shell->env, key);
-		free(key);
-		if (found_env && found_env->value)
-			value = found_env->value;
-		else
-			value = NULL;
-		return (value);
-	}
-	return (NULL);
-}
+// 	if (str[0] == '$')
+// 	{
+// 		key = ft_strdup(str + 1);
+// 		found_env = find_env_node(my_shell->env, key);
+// 		free(key);
+// 		if (found_env && found_env->value)
+// 			value = found_env->value;
+// 		else
+// 			value = NULL;
+// 		return (value);
+// 	}
+// 	return (NULL);
+// }
