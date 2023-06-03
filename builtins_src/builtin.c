@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 19:14:31 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 19:28:36 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	builtin(t_shell *my_shell, t_pipes *head)
 	if (ft_strcmp(cmd, "cd") == 0)
 		cd(my_shell);
 	else if (ft_strcmp(cmd, "echo") == 0)
-		echo(my_shell);
+		echo(my_shell, head);
 	else if (ft_strcmp(cmd, "env") == 0)
 		env(my_shell);
 	else if (ft_strcmp(cmd, "exit") == 0)

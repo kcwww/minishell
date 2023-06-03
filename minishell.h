@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:46:16 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 17:41:23 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 19:30:06 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd);
 void	update_env_var(t_env *env, char *key, char *value);
 void	handle_cd_dash(t_shell *my_shell, char *cur_pwd);
 
-void	echo(t_shell *execute);
+void	echo(t_shell *my_shell, t_pipes *head);
 int		handle_n_flag(char **word, int *i);
 int		only_n_after_dash(const char *str);
-void	print_word(t_shell *execute, int i, int n_flag);
+void	print_word(t_shell *my_shell, t_pipes *head, int i, int n_flag);
 char	*get_env_var_value(t_shell *execute, char *str);
 
 void	env(t_shell *execute);
