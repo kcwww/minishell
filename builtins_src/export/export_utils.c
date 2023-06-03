@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 12:47:25 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/06 12:48:16 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 14:44:33 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,3 @@ void	swap_env_nodes(t_env *tmp1, t_env *tmp2)
 	tmp2->key = tmp_key;
 	tmp2->value = tmp_value;
 }
-

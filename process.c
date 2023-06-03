@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 16:18:33 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 16:08:43 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 14:47:20 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 {
-	handle_io_redirection(my_shell, i);
+	// handle_io_redirection(my_shell, i);
+	handle_input_redirection(my_shell, i);
+	handle_output_redirection(my_shell);
 	if (is_builtin(head->simple_cmd->word[0]))
 	{
 		builtin(my_shell);

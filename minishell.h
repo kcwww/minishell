@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:46:16 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 12:48:54 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 14:47:57 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,9 @@ void	cleanup_heredocs(t_shell *my_shell);
 void	handle_redirections(t_shell *my_shell, t_pipes	*head);
 void	print_error_message(char *value);
 
-void	handle_io_redirection(t_shell *my_shell, int i);
+//void	handle_io_redirection(t_shell *my_shell, int i);
+void	handle_input_redirection(t_shell *my_shell, int i);
+void	handle_output_redirection(t_shell *my_shell);
 void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env);
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i);
 char	*validate_and_construct_path(char **paths, char *cmd);
