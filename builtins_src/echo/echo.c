@@ -6,13 +6,11 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:09:50 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 16:30:20 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 19:25:18 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-// echo $a option 구현해야 함
 
 void	echo(t_shell *my_shell)
 {

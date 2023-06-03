@@ -6,13 +6,13 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 17:19:32 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 18:50:13 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_input_redirection(t_shell *my_shell, int i)
+void	handle_input_redirection(t_shell *my_shell, int i) // 인풋으로 null이 전달된다.
 {
 	if (my_shell->fd_in != 0)
 	{

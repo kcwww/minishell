@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 17:42:02 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 19:20:11 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	init_fd(t_shell *my_shell)
 	my_shell->fd_out = 1;
 	my_shell->pipe_fd[0] = 0;
 	my_shell->pipe_fd[1] = 1;
-	my_shell->prev_pipe_fd_0 = 0;
+	my_shell->prev_pipe_fd_0 = -1;
 	my_shell->last_cmd_flag = 0;
 	my_shell->heredoc_used = 0;
 }
@@ -54,7 +54,6 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 		return (-1);
 	if (!head->next && is_builtin(head->simple_cmd->word[0]) && i == 0)
 	{
-		ft_putstr_fd("hihi\n", 2);
 		ft_putendl_fd(head->simple_cmd->word[0], 2);
 		builtin(my_shell, head); //builtin(my_shell);
 		return (-1);
