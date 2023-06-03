@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:46:16 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 14:47:57 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 17:41:23 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,8 @@ char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell, int i);
 
 int		is_builtin(char *cmd);
-void	builtin(t_shell *my_shell);
-
+//void	builtin(t_shell *my_shell);
+void	builtin(t_shell *my_shell, t_pipes *head);
 
 
 void	free_env(t_env *env);

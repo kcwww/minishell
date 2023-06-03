@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 14:15:28 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 17:42:02 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 	handle_redirections(my_shell, head);
 	if (head->simple_cmd->word[0] == NULL && my_shell->heredoc_used == 1)
 		return (-1);
-	if (!head->next && is_builtin(head->simple_cmd->word[0]))
+	if (!head->next && is_builtin(head->simple_cmd->word[0]) && i == 0)
 	{
-		builtin(my_shell);
+		ft_putstr_fd("hihi\n", 2);
+		ft_putendl_fd(head->simple_cmd->word[0], 2);
+		builtin(my_shell, head); //builtin(my_shell);
 		return (-1);
 	}
 	else

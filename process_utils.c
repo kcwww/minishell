@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 15:10:21 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 17:19:32 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	handle_input_redirection(t_shell *my_shell, int i)
 			exit(EXIT_FAILURE);
 		close(my_shell->prev_pipe_fd_0); // 새로 추가함
 	}
-	if (my_shell->pipe_fd[0] != 0)
-		close(my_shell->pipe_fd[0]);
+	// if (my_shell->pipe_fd[0] != 0)
+	// 	close(my_shell->pipe_fd[0]);
 }
 
 void	handle_output_redirection(t_shell *my_shell)
@@ -44,6 +44,8 @@ void	handle_output_redirection(t_shell *my_shell)
 			exit(EXIT_FAILURE);
 		close(my_shell->pipe_fd[1]);
 	}
+	if (my_shell->pipe_fd[0] != 0)
+		close(my_shell->pipe_fd[0]);
 }
 
 void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env)
