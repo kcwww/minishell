@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:46:16 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/31 21:16:38 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 12:48:54 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void	remove_env_node(char *key, t_env **env);
 void	init_fd(t_shell *my_shell);
 void	execute(t_shell *my_shell, char **env);
 pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i);
+void	prepare_fd(t_shell *my_shell, t_pipes *head);
 void	wait_for_children(int i, pid_t pid);
 
 void	handle_heredocs(t_shell *my_shell);

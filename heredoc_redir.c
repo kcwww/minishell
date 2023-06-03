@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:46:08 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 17:10:33 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 12:30:29 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	handle_heredocs(t_shell *my_shell)
 		while (head->simple_cmd->redirection && \
 		head->simple_cmd->redirection[i])
 		{
-			if (ft_strcmp(head->simple_cmd->redirection[i], "<<") == 0) // << d
+			if (ft_strcmp(head->simple_cmd->redirection[i], "<<") == 0)
 			{
 				tmpfile = ft_strjoin("/tmp/", head->simple_cmd->redir_value[i]);
 				make_hd(my_shell, tmpfile, head->simple_cmd->redir_value[i]);
