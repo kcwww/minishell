@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 12:48:39 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 14:15:28 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,45 +44,6 @@ void	init_fd(t_shell *my_shell)
 	my_shell->heredoc_used = 0;
 }
 
-// pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
-// {
-// 	pid_t	pid;
-
-// 	my_shell->fd_in = 0;
-// 	my_shell->fd_out = 1;
-// 	if (head->next == NULL)
-// 		my_shell->last_cmd_flag = 1;
-// 	handle_redirections(my_shell, head);
-// 	if (head->simple_cmd->word[0] == NULL && my_shell->heredoc_used == 1)
-// 		return (-1);
-// 	if (!head->next && is_builtin(head->simple_cmd->word[0]))
-// 	{
-// 		builtin(my_shell);
-// 		return (-1);
-// 	}
-// 	else
-// 	{
-// 		if (head->next && pipe(my_shell->pipe_fd) == -1)
-// 			exit(EXIT_FAILURE);
-// 		pid = fork();
-// 		if (pid < 0)
-// 			exit(EXIT_FAILURE);
-// 		else if (pid == 0)
-// 			child_process(my_shell, head, env, ++i);
-// 		else
-// 			parent_process(my_shell, ++i);
-// 		return (pid);
-// 	}
-// }
-
-void	prepare_fd(t_shell *my_shell, t_pipes *head)
-{
-	my_shell->fd_in = 0;
-	my_shell->fd_out = 1;
-	if (head->next == NULL)
-		my_shell->last_cmd_flag = 1;
-}
-
 pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 {
 	pid_t	pid;
@@ -109,6 +70,14 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 			parent_process(my_shell, ++i);
 		return (pid);
 	}
+}
+
+void	prepare_fd(t_shell *my_shell, t_pipes *head)
+{
+	my_shell->fd_in = 0;
+	my_shell->fd_out = 1;
+	if (head->next == NULL)
+		my_shell->last_cmd_flag = 1;
 }
 
 void	wait_for_children(int i, pid_t pid)

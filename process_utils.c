@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 16:33:52 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 14:39:51 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	handle_io_redirection(t_shell *my_shell, int i)
 	{
 		if (dup2(my_shell->prev_pipe_fd_0, 0) == -1)
 			exit(EXIT_FAILURE);
+		close(my_shell->prev_pipe_fd_0); // 새로 추가함
 	}
 	if (my_shell->fd_out != 1)
 	{
