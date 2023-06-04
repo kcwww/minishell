@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 13:36:11 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/04 13:41:46 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	wait_for_children(int i, pid_t pid)
 				g_exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
-				g_exit_status = WTERMSIG(status);
+				g_exit_status = WTERMSIG(status); // cat 종료시 시그널 종료일 경우 출력
 				check_signum(g_exit_status);
 			}
 		}
