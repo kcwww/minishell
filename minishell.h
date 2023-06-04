@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 16:42:13 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/04 22:45:22 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	free_env(t_env *env);
 void	check_token(t_token *token, t_shell *ms);
 int		delete_single_quote(t_token *token);
 void	delete_double_quote_heredoc(t_token *token);
-int		replace_env(t_token *token, t_shell *ms);
+int		replace_env(t_token *token, t_shell *ms, int idx);
 int		delete_double_quote(t_token *token, t_shell *ms);
 int		replace_env_quote(t_token *token, t_shell *ms, int idx);
 
