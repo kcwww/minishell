@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:54 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/03 13:06:16 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/04 13:36:38 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,50 @@ void	sigint_handler(int signo)
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
+		g_exit_status = 130;
+	}
+}
+
+void	sig_herdoc_handler(int signo)
+{
+	(void)signo;
+	printf("\n");
+	exit (1);
+}
+
+void	check_signum(int signo)
+{
+	if (signo == SIGINT)
+	{
+		printf("\n");
+	}
+	else if (signo == SIGQUIT)
+	{
+		printf("Quit: 3\n");
 	}
 }
 
 void	init_signal()
 {
 	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	set_parent_signal()
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	set_signal_child(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
+void	set_heredoc_signal()
+{
+	signal(SIGINT, sig_herdoc_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
 

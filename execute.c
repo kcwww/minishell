@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 13:12:46 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/04 15:23:21 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/04 15:24:40 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,11 @@ void	wait_for_children(int i, pid_t pid)
 			if (WIFEXITED(status))
 				g_exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				g_exit_status = WTERMSIG(status);
+			{
+				g_exit_status = WTERMSIG(status); // cat 종료시 시그널 종료일 경우 출력
+				check_signum(g_exit_status);
+			}
 		}
 	}
+	init_signal();
 }
