@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 12:07:08 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 12:42:12 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	handle_input_redirection(t_shell *my_shell, int i) // 인풋으로 null이 
 	if (my_shell->fd_in != 0)
 	{
 		if (dup2(my_shell->fd_in, 0) == -1)
-			exit(EXIT_FAILURE);
+			exit(1);
 		close(my_shell->fd_in);
 	}
 	else if (my_shell->pipe_fd[0] != 0 && i != 1)
 	{
 		if (dup2(my_shell->prev_pipe_fd_0, 0) == -1)
-			exit(EXIT_FAILURE);
+			exit(1);
 		close(my_shell->prev_pipe_fd_0); // 새로 추가함
 	}
 	// if (my_shell->pipe_fd[0] != 0)
@@ -35,13 +35,13 @@ void	handle_output_redirection(t_shell *my_shell)
 	if (my_shell->fd_out != 1)
 	{
 		if (dup2(my_shell->fd_out, 1) == -1)
-			exit(EXIT_FAILURE);
+			exit(1);
 		close(my_shell->fd_out);
 	}
 	else if (my_shell->pipe_fd[1] != 1 && my_shell->last_cmd_flag != 1)
 	{
 		if (dup2(my_shell->pipe_fd[1], 1) == -1)
-			exit(EXIT_FAILURE);
+			exit(1);
 		close(my_shell->pipe_fd[1]);
 	}
 	if (my_shell->pipe_fd[0] != 0)
@@ -61,16 +61,16 @@ void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env)
 		execve(full_path, head->simple_cmd->word, env) == -1)
 		{
 			perror("execve");
-			exit(EXIT_FAILURE);
+			exit(1);
 		}
 		free(full_path);
 	}
-	else if (head->simple_cmd->word[0] != NULL)
+	else
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(my_shell->head->simple_cmd->word[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 }
 
@@ -102,7 +102,7 @@ char	*check_access(char *path_var, char *cmd)
 	char	*full_path;
 
 	full_path = NULL;
-	if (cmd == NULL || path_var == NULL)
+	if (cmd == NULL) //|| path_var == NULL)
 		return (NULL);
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
@@ -111,6 +111,8 @@ char	*check_access(char *path_var, char *cmd)
 	}
 	else
 	{
+		if (path_var == NULL)
+			return (NULL);
 		paths = ft_split(path_var, ':');
 		full_path = validate_and_construct_path(paths, cmd);
 		free(paths);

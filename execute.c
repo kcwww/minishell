@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 19:42:21 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 13:12:46 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,16 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 		return (-1);
 	if (!head->next && is_builtin(head->simple_cmd->word[0]) && i == 0)
 	{
-		//ft_putendl_fd(head->simple_cmd->word[0], 2);
 		builtin(my_shell, head); //builtin(my_shell);
 		return (-1);
 	}
 	else
 	{
 		if (head->next && pipe(my_shell->pipe_fd) == -1)
-			exit(EXIT_FAILURE);
+			exit(1);
 		pid = fork();
 		if (pid < 0)
-			exit(EXIT_FAILURE);
+			exit(1);
 		else if (pid == 0)
 			child_process(my_shell, head, env, ++i);
 		else
