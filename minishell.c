@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/28 16:45:05 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 15:03:55 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/06/04 11:40:07 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/04 11:40:09 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (my_shell.line == NULL)
 		{
-			printf("exit\n");
+			printf("line is null\n");
 			free_env(my_shell.env);
 			return (0);
 		}

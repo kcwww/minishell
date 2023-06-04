@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:46:08 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 16:28:08 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/03 19:20:34 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	handle_heredocs(t_shell *my_shell)
 				head->simple_cmd->redirection[i] = ft_strdup("<");
 				free(head->simple_cmd->redir_value[i]);
 				head->simple_cmd->redir_value[i] = ft_strdup(tmpfile);
+				free(tmpfile);
 			}
 			i++;
 		}
@@ -63,10 +64,12 @@ void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 
 void	cleanup_heredocs(t_shell *my_shell)
 {
-	int	i;
+	int		i;
+	t_pipes	*head;
 
 	i = 0;
-	while (my_shell->head)
+	head = my_shell->head;
+	while (head)
 	{
 		if (my_shell->head->simple_cmd->redir_value[i])
 		{
@@ -74,7 +77,7 @@ void	cleanup_heredocs(t_shell *my_shell)
 			"/tmp/", 5) == 0)
 				unlink(my_shell->head->simple_cmd->redir_value[i]);
 		}
-		my_shell->head = my_shell->head->next;
+		head = head->next;
 	}
 }
 
