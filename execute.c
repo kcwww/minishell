@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 15:23:21 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 15:24:40 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 17:53:04 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 		return (-1);
 	if (!head->next && is_builtin(head->simple_cmd->word[0]) && i == 0)
 	{
-		builtin(my_shell, head); //builtin(my_shell);
+		builtin(my_shell, head);
 		return (-1);
 	}
 	else
@@ -94,10 +94,19 @@ void	wait_for_children(int i, pid_t pid)
 				g_exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
-				g_exit_status = WTERMSIG(status); // cat 종료시 시그널 종료일 경우 출력
+				/*
+				현재 export "'hello'"=100 후 echo $? 하면 g_exit_status가 1이 아니라,
+				이상한 값이 나온다.
+				시그널이 없었음에도 else if문 안으로 들어오는 문제가 있는데 고쳐야 함.
+				*/
+				g_exit_status = WTERMSIG(status); 
 				check_signum(g_exit_status);
 			}
 		}
 	}
 	init_signal();
 }
+
+// dup으로 stdin stdout 저장
+// 히어독 중 ctrl c 할 경우 input을 닫아버림
+// 이후 null 로 빠지는 부분에서 다시 복구함.

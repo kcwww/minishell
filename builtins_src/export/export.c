@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/20 17:56:20 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 16:24:32 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,10 @@ void	process_argument(char *arg, t_shell *my_shell)
 	}
 	else
 	{
-		ft_putstr_fd("minishell: export: '", my_shell->fd_out);
+		ft_putstr_fd("minishell: export: `", my_shell->fd_out);
 		ft_putstr_fd(arg, my_shell->fd_out);
-		ft_putendl_fd("' is not a valid identifier", my_shell->fd_out);
+		ft_putendl_fd("' not a valid identifier", my_shell->fd_out);
+		g_exit_status = 1;
 	}
 }
 
@@ -81,7 +82,7 @@ int	is_valid_identifier(char *arg)
 	int	i;
 
 	i = 0;
-	if (arg[i] == '_' || ft_isalpha(arg[i]))
+	if (arg[i] == '_' || ft_isalpha(arg[i])) // if 
 	{
 		i++;
 		while (arg[i] != '\0' && arg[i] != '=')
