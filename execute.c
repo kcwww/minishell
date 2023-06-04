@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 13:41:46 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:03:51 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	execute(t_shell *my_shell, char **env)
 	}
 	if (my_shell->heredoc_used == 1)
 		cleanup_heredocs(my_shell);
-	wait_for_children(i, pid);
+	wait_for_children(i, pid, my_shell);
 }
 
 void	init_fd(t_shell *my_shell)
@@ -62,7 +62,7 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 	{
 		if (head->next && pipe(my_shell->pipe_fd) == -1)
 			exit(EXIT_FAILURE);
-		pid = fork(); ///////// 분기점
+		pid = fork();
 		if (pid < 0)
 			exit(EXIT_FAILURE);
 		else if (pid == 0)
@@ -81,7 +81,7 @@ void	prepare_fd(t_shell *my_shell, t_pipes *head)
 		my_shell->last_cmd_flag = 1;
 }
 
-void	wait_for_children(int i, pid_t pid)
+void	wait_for_children(int i, pid_t pid, t_shell *my_shell)
 {
 	pid_t	exited_pid;
 	int		status;
@@ -100,5 +100,5 @@ void	wait_for_children(int i, pid_t pid)
 			}
 		}
 	}
-	init_signal();
+	init_signal(my_shell);
 }

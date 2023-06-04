@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 11:39:33 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 16:42:13 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ typedef struct s_shell
 	int				heredoc_used;
 	int				error;
 	char			*line;
+	struct	sigaction sa_sigint;
+	struct	sigaction sa_sigquit;
 	struct s_pipes	*head;
 	struct s_env	*env;
 }	t_shell;
@@ -121,7 +123,7 @@ void	init_fd(t_shell *my_shell);
 void	execute(t_shell *my_shell, char **env);
 pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i);
 void	prepare_fd(t_shell *my_shell, t_pipes *head);
-void	wait_for_children(int i, pid_t pid);
+void	wait_for_children(int i, pid_t pid, t_shell *my_shell);
 
 void	handle_heredocs(t_shell *my_shell);
 void	make_hd(t_shell *my_shell, char *filename, char *end_str);
@@ -147,5 +149,10 @@ void	delete_double_quote_heredoc(t_token *token);
 int		replace_env(t_token *token, t_shell *ms);
 int		delete_double_quote(t_token *token, t_shell *ms);
 int		replace_env_quote(t_token *token, t_shell *ms, int idx);
+
+void	init_signal(t_shell *my_shell);
+void	set_parent_signal(t_shell *my_shell);
+void	set_signal_child(t_shell *my_shell);
+void	set_heredoc_signal(t_shell *my_shell);
 
 #endif
