@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:59:56 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 18:05:13 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/04 12:07:31 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,4 +157,28 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		}
 		tmp = tmp->next;
 	}
+	// pipe = ms->head;
+	// while (pipe)
+	// {
+	// 	int j = 0;
+	// 	while (pipe->simple_cmd->word[j])
+	// 	{
+	// 		printf("word: %s\n", pipe->simple_cmd->word[j]);
+	// 		j++;
+	// 	}
+	// 	j = 0;
+	// 	while (pipe->simple_cmd->redirection[j])
+	// 	{
+	// 		printf("redirection: %s\n", pipe->simple_cmd->redirection[j]);
+	// 		j++;
+	// 	}
+	// 	j = 0;
+	// 	while (pipe->simple_cmd->redir_value[j])
+	// 	{
+	// 		printf("redir_value: %s\n", pipe->simple_cmd->redir_value[j]);
+	// 		j++;
+	// 	}
+	// 	pipe = pipe->next;
+	// 	printf("next\n");
+	// }
 }

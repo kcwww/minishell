@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 18:50:13 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 12:07:08 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env)
 		}
 		free(full_path);
 	}
-	else
+	else if (head->simple_cmd->word[0] != NULL)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(my_shell->head->simple_cmd->word[0], 2);
