@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 19:42:21 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 13:36:11 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 	{
 		if (head->next && pipe(my_shell->pipe_fd) == -1)
 			exit(EXIT_FAILURE);
-		pid = fork();
+		pid = fork(); ///////// 분기점
 		if (pid < 0)
 			exit(EXIT_FAILURE);
 		else if (pid == 0)
@@ -94,7 +94,11 @@ void	wait_for_children(int i, pid_t pid)
 			if (WIFEXITED(status))
 				g_exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
+			{
 				g_exit_status = WTERMSIG(status);
+				check_signum(g_exit_status);
+			}
 		}
 	}
+	init_signal();
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 16:18:33 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 19:21:34 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 13:33:47 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 {
+	set_signal_child();
 	handle_input_redirection(my_shell, i);
 	handle_output_redirection(my_shell);
 	if (is_builtin(head->simple_cmd->word[0]))
@@ -28,6 +29,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 
 void	parent_process(t_shell *my_shell, int i)
 {
+	set_parent_signal();
 	if (my_shell->fd_in != 0)
 		close(my_shell->fd_in);
 	if (my_shell->fd_out != 1)
