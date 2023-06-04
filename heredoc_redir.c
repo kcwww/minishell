@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:46:08 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 16:28:08 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/04 16:45:56 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	handle_heredocs(t_shell *my_shell)
 				head->simple_cmd->redirection[i] = ft_strdup("<");
 				free(head->simple_cmd->redir_value[i]);
 				head->simple_cmd->redir_value[i] = ft_strdup(tmpfile);
+				free(tmpfile);
 			}
 			i++;
 		}
@@ -40,18 +41,29 @@ void	handle_heredocs(t_shell *my_shell)
 	}
 }
 
+
 void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 {
 	int		fd;
+	int		save_stdin;
 	char	*line;
 
 	my_shell->heredoc_used = 1;
 	fd = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	set_heredoc_signal(my_shell);
+	save_stdin = dup(0);
 	while (1)
 	{
 		line = readline("> ");
 		if (ft_strcmp(line, end_str) == 0)
 		{
+			free(line);
+			break ;
+		}
+		else if (line == NULL)
+		{
+			dup2(save_stdin, 0);
+			init_signal(my_shell);
 			free(line);
 			break ;
 		}
@@ -63,10 +75,12 @@ void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 
 void	cleanup_heredocs(t_shell *my_shell)
 {
-	int	i;
+	int		i;
+	t_pipes	*head;
 
 	i = 0;
-	while (my_shell->head)
+	head = my_shell->head;
+	while (head)
 	{
 		if (my_shell->head->simple_cmd->redir_value[i])
 		{
@@ -74,7 +88,7 @@ void	cleanup_heredocs(t_shell *my_shell)
 			"/tmp/", 5) == 0)
 				unlink(my_shell->head->simple_cmd->redir_value[i]);
 		}
-		my_shell->head = my_shell->head->next;
+		head = head->next;
 	}
 }
 

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/26 20:59:56 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/01 16:01:26 by kcw              ###   ########.fr       */
+/*   Created: 2023/06/04 22:10:45 by kcw               #+#    #+#             */
+/*   Updated: 2023/06/04 22:10:47 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,11 @@ void	make_simple_command(t_token *token, t_shell *ms)
 	pipes = 0;
 	while (tmp)
 	{
-		// if (i == 0 && tmp->type == PIPE)
-		// {
-		// 	printf("pipe error\n"); //delete
-		// 	return ;
-		// }
 		if (tmp->type == PIPE)
 			pipes++;
 		tmp = tmp->next;
 	}
-	tmp = token;
-	while (tmp->next)
-		tmp = tmp->next;
-	// if (tmp->type == PIPE)
-	// 	return ;
+
 
 
 
@@ -93,10 +84,6 @@ void	make_simple_command(t_token *token, t_shell *ms)
 			if (pipe->simple_cmd->redir_value == NULL)
 				return ;
 			pipe->simple_cmd->redir_value[re_word] = NULL;
-			// pipe->simple_cmd->fd_in = 0;
-			// pipe->simple_cmd->fd_out = 1;
-			// pipe->simple_cmd->pipe_fd[0] = 0;
-			// pipe->simple_cmd->pipe_fd[1] = 1;
 			pipe = pipe->next;
 			re_flag = 0;
 			re_num = 0;
@@ -148,7 +135,7 @@ void	make_simple_command(t_token *token, t_shell *ms)
 			re_word = 0;
 			word_num = 0;
 		}
-		else if (tmp->type == WORD)
+		else if (tmp->type == WORD || tmp->type == HEREDOC)
 		{
 			if (re_flag == 1)
 			{
@@ -169,32 +156,5 @@ void	make_simple_command(t_token *token, t_shell *ms)
 			re_flag = 1;
 		}
 		tmp = tmp->next;
-	}
-
-
-
-	pipe = ms->head;
-	while (pipe)
-	{
-		int j = 0;
-		while (pipe->simple_cmd->word[j])
-		{
-			printf("word: %s\n", pipe->simple_cmd->word[j]);
-			j++;
-		}
-		j = 0;
-		while (pipe->simple_cmd->redirection[j])
-		{
-			printf("redirection: %s\n", pipe->simple_cmd->redirection[j]);
-			j++;
-		}
-		j = 0;
-		while (pipe->simple_cmd->redir_value[j])
-		{
-			printf("redir_value: %s\n", pipe->simple_cmd->redir_value[j]);
-			j++;
-		}
-		pipe = pipe->next;
-		printf("next\n");
 	}
 }

@@ -6,7 +6,7 @@
 #    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/28 16:51:14 by chanwoki          #+#    #+#              #
-#    Updated: 2023/05/28 17:24:38 by chanwoki         ###   ########.fr        #
+#    Updated: 2023/06/03 17:12:40 by chanwoki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ RM=rm -f
 
 ############################################################################
 PARSING_PATH=parsing_src/
-PARSING_FILES=check_quotation.c parsing.c parsing2.c free_all.c parsing3.c delete_single_quote.c
+PARSING_FILES=check_quotation.c parsing.c parsing2.c free_all.c parsing3.c delete_single_quote.c delete_double_quote_heredoc.c \
+replace_env.c delete_double_quote.c replace_env_quote.c
 PARSING_SRC=$(addprefix $(PARSING_PATH), $(PARSING_FILES))
 
 BUILTINS_PATH=builtins_src/

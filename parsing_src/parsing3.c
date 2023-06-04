@@ -6,13 +6,34 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:32:23 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/28 18:05:15 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/03 18:05:30 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	check_env(t_token *token, t_shell *ms)
+void	check_heredoc_value(t_token *token)
+{
+	int	i;
+
+	if (token == NULL)
+		return ;
+	if (token->type != WORD)
+		return ;
+	i = 0;
+	while (token->value[i])
+	{
+		if (token->value[i] == '\'')
+			delete_single_quote(token);
+		else if (token->value[i] == '\"')
+			delete_double_quote_heredoc(token);
+		i++;
+	}
+	token->type = HEREDOC;
+}
+
+
+void	check_token(t_token *token, t_shell *ms)
 {
 	t_token	*start;
 	int		i;
@@ -20,16 +41,10 @@ void	check_env(t_token *token, t_shell *ms)
 	start = token;
 	while (start)
 	{
-		printf("token.type: %d value %s\n", start->type, start->value);
+		if (token->type == REDIRECTION && ft_strcmp("<<", token->value) == 0)
+			check_heredoc_value(start->next);
 		start = start->next;
 	}
-	printf("tokenizer end\n\n\n");
-	usleep(100000);
-	(void)ms;
-
-	// 환경변수 -> 따옴표
-	// 따옴표 -> 환경변수
-	// 이렇게 모두 검사해야함
 
 	start = token;
 	while (start)
@@ -39,17 +54,26 @@ void	check_env(t_token *token, t_shell *ms)
 		{
 			if (start->value[i] == '\'')
 			{
-				delete_single_quote(start);
-				break;
+				i += delete_single_quote(start);
+				continue ;
 			}
 			else if (start->value[i] == '\"')
 			{
-				break ;
+				i += delete_double_quote(start, ms);
+				continue ;
 			}
-			else if (start->value[i] == '$')
+			else if (start->value[i] == '$' && start->type != HEREDOC)
 			{
-				printf("%s\n",start->value);
-				break ;
+				i += replace_env(start, ms);
+				if (start->type == -1 && ft_strcmp(start->value, "") == 0)
+				{
+					free(start->value);
+					start->value = NULL;
+					break;
+				}
+				if (start->type == -1)
+					start->type = WORD;
+				continue ;
 			}
 			i++;
 		}

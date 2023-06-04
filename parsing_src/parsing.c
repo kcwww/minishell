@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:00 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/28 16:33:53 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/03 12:37:19 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void    tokenizer(char *str, t_shell *ms)
 	}
 
 
-	check_env(start, ms);
+	check_token(start, ms);
 	make_simple_command(start, ms);
 
 	while (start)

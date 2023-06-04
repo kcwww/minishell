@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 14:59:45 by dkham            ###   ########.fr       */
+/*   Updated: 2023/05/28 19:10:10 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,58 +14,67 @@
 
 void	cmd_exit(t_shell *my_shell)
 {
-	int		exit_code;
 	char	*error_message;
 
-	error_message = validate_exit_word(my_shell, &exit_code);
+	error_message = validate_exit_word(my_shell, &g_exit_status);
 	if (error_message)
 	{
 		ft_putstr_fd("exit\n", my_shell->fd_out);
 		ft_putstr_fd("minishell: exit: ", my_shell->fd_out);
-		ft_putstr_fd(error_message, my_shell->fd_out);
-		ft_putstr_fd("\n", my_shell->fd_out);
-		free_env(my_shell->env);
-		free_all(my_shell);
-		free(my_shell->line);
-		if (exit_code == 2)
-			exit(2);
+		if (g_exit_status != 1)
+		{
+			ft_putstr_fd(my_shell->head->simple_cmd->word[1], my_shell->fd_out);
+			ft_putstr_fd(": ", my_shell->fd_out);
+		}
+		ft_putendl_fd(error_message, my_shell->fd_out);
 	}
-	else
-	{
-		free_env(my_shell->env);
-		free_all(my_shell);
-		free(my_shell->line);
-		exit(exit_code);
-	}
+	free_env(my_shell->env);
+	free_all(my_shell);
+	free(my_shell->line);
+	exit(g_exit_status);
 }
 
-char	*validate_exit_word(t_shell *my_shell, int *exit_code)
+int	is_numeric(char *arg, int *g_exit_status)
 {
-	int		i;
+	int	i;
+
+	i = 0;
+	while (arg[i])
+	{
+		if (ft_isdigit(arg[i]) == 0)
+		{
+			*g_exit_status = 2;
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	is_too_many_args(char **word, int *g_exit_status)
+{
+	if (word[2])
+	{
+		*g_exit_status = 1;
+		return (1);
+	}
+	return (0);
+}
+
+char	*validate_exit_word(t_shell *my_shell, int *g_exit_status)
+{
 	char	**word;
 
 	word = my_shell->head->simple_cmd->word;
-	i = 0;
-	if (word[1]) // if there is an argument
+	if (word[1])
 	{
-		while (word[1][i])
-		{
-			if (ft_isdigit(word[1][i]) == 0)
-			{
-				*exit_code = 2;
-				return ("numeric argument required");
-			}
-			i++;
-		}
-		if (word[2])
-		{
-			*exit_code = 127;
+		if (!is_numeric(word[1], g_exit_status))
+			return ("numeric argument required");
+		if (is_too_many_args(word, g_exit_status))
 			return ("too many arguments");
-		}	
-		else
-			*exit_code = ft_atoi(word[1]);
+		*g_exit_status = ft_atoi(word[1]);
 	}
 	else
-		*exit_code = 0;
+		*g_exit_status = 0;
 	return (NULL);
 }
