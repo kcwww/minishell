@@ -6,17 +6,18 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 14:39:40 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/06 14:11:47 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/05/28 18:00:50 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
-char	*ft_substr(char *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, int start, int len)
 {
 	char	*str;
-	size_t	mem_len;
-	size_t	src_len;
+	int		mem_len;
+	int		src_len;
 
 	src_len = ft_strlen(s);
 	if (start >= src_len)

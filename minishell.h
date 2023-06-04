@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/28 16:46:16 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 19:30:06 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/04 11:39:33 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define REDIRECTION 123
 # define WORD 234
 # define PIPE 456
+# define HEREDOC 789
 
 typedef struct s_cmd
 { // cat << a > 1
@@ -138,10 +139,13 @@ char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell, int i);
 
 int		is_builtin(char *cmd);
-//void	builtin(t_shell *my_shell);
 void	builtin(t_shell *my_shell, t_pipes *head);
-
-
 void	free_env(t_env *env);
+void	check_token(t_token *token, t_shell *ms);
+int		delete_single_quote(t_token *token);
+void	delete_double_quote_heredoc(t_token *token);
+int		replace_env(t_token *token, t_shell *ms);
+int		delete_double_quote(t_token *token, t_shell *ms);
+int		replace_env_quote(t_token *token, t_shell *ms, int idx);
 
 #endif
