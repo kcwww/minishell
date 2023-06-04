@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:32:23 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/03 18:05:30 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/04 22:58:01 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	check_token(t_token *token, t_shell *ms)
 			}
 			else if (start->value[i] == '$' && start->type != HEREDOC)
 			{
-				i += replace_env(start, ms);
+				i += replace_env(start, ms, i);
 				if (start->type == -1 && ft_strcmp(start->value, "") == 0)
 				{
 					free(start->value);
