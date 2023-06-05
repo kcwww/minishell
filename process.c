@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 15:24:53 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 15:24:54 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/05 19:47:13 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/05 19:47:14 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 {
-	set_signal_child();
+	set_signal_child(my_shell);
 	handle_input_redirection(my_shell, i);
 	handle_output_redirection(my_shell);
 	if (is_builtin(head->simple_cmd->word[0]))
@@ -29,7 +29,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 
 void	parent_process(t_shell *my_shell, int i)
 {
-	set_parent_signal();
+	set_parent_signal(my_shell);
 	if (my_shell->fd_in != 0)
 		close(my_shell->fd_in);
 	if (my_shell->fd_out != 1)

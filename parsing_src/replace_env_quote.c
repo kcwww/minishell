@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env_quote.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 16:45:32 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/03 17:59:08 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/04 22:39:07 by kcw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,13 @@ int	replace_env_quote(t_token *token, t_shell *ms, int idx)
 		token->value = tmp2;
 		return (len);
 	}
+	else if (!(ft_isalpha(token->value[i]) || token->value[i] == '_' || token->value[i] == '*'))
+		return (1);
 	while (token->value[i] && token->value[i] != ' ' && token->value[i] != '\'' && \
-		token->value[i] != '\"' && token->value[i] != '$')
-		i++;
+			token->value[i] != '\"' && token->value[i] != '$' && token->value[i] != '?' && \
+			token->value[i] != '~' && token-> value[i] != '.' && \
+			token->value[i] != '|')
+			i++;
 	if (idx + 1 == i) //"$"
 		return (1);
 	env = (char *)malloc(sizeof(char) * (i - idx)); // NULL GUARD

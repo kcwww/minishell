@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 15:23:21 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/05 19:37:33 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/05 19:43:56 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/05 19:46:40 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	execute(t_shell *my_shell, char **env)
 	if (my_shell->heredoc_used == 1)
 		cleanup_heredocs(my_shell);
 	if (!my_shell->head->next && is_builtin(my_shell->head->simple_cmd->word[0]) && i != 1) // g_exit 제대로 맞추기 위해 추가 (확인필요)
-		wait_for_children(i, pid);
+		wait_for_children(i, pid, my_shell);
 }
 
 void	init_fd(t_shell *my_shell)
@@ -81,7 +81,7 @@ void	prepare_fd(t_shell *my_shell, t_pipes *head)
 		my_shell->last_cmd_flag = 1;
 }
 
-void	wait_for_children(int i, pid_t pid)
+void	wait_for_children(int i, pid_t pid, t_shell *my_shell)
 {
 	pid_t	exited_pid;
 	int		status;
@@ -100,5 +100,5 @@ void	wait_for_children(int i, pid_t pid)
 			}
 		}
 	}
-	init_signal();
+	init_signal(my_shell);
 }
