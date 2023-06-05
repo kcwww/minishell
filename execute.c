@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:43:56 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/05 19:46:40 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/05 20:16:18 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	execute(t_shell *my_shell, char **env)
 	}
 	if (my_shell->heredoc_used == 1)
 		cleanup_heredocs(my_shell);
-	if (!my_shell->head->next && is_builtin(my_shell->head->simple_cmd->word[0]) && i != 1) // g_exit 제대로 맞추기 위해 추가 (확인필요)
+	if (!(i == 1 && is_builtin(my_shell->head->simple_cmd->word[0]) \
+	&& !my_shell->head->next))
 		wait_for_children(i, pid, my_shell);
 }
 
