@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 15:23:21 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 17:53:04 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/05 19:37:33 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	execute(t_shell *my_shell, char **env)
 	}
 	if (my_shell->heredoc_used == 1)
 		cleanup_heredocs(my_shell);
-	wait_for_children(i, pid);
+	if (!my_shell->head->next && is_builtin(my_shell->head->simple_cmd->word[0]) && i != 1) // g_exit 제대로 맞추기 위해 추가 (확인필요)
+		wait_for_children(i, pid);
 }
 
 void	init_fd(t_shell *my_shell)
@@ -94,19 +95,10 @@ void	wait_for_children(int i, pid_t pid)
 				g_exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
-				/*
-				현재 export "'hello'"=100 후 echo $? 하면 g_exit_status가 1이 아니라,
-				이상한 값이 나온다.
-				시그널이 없었음에도 else if문 안으로 들어오는 문제가 있는데 고쳐야 함.
-				*/
-				g_exit_status = WTERMSIG(status); 
+				g_exit_status = 128 + WTERMSIG(status); 
 				check_signum(g_exit_status);
 			}
 		}
 	}
 	init_signal();
 }
-
-// dup으로 stdin stdout 저장
-// 히어독 중 ctrl c 할 경우 input을 닫아버림
-// 이후 null 로 빠지는 부분에서 다시 복구함.
