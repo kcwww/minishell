@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:46:57 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/05 19:46:58 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/07 20:10:00 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	handle_heredocs(t_shell *my_shell)
 		head = head->next;
 	}
 }
-
 
 void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 {
