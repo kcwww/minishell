@@ -6,13 +6,13 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 18:05:17 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/07 20:19:04 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_input_redirection(t_shell *my_shell, int i) // 인풋으로 null이 전달된다.
+void	handle_input_redirection(t_shell *my_shell, int i)
 {
 	if (my_shell->fd_in != 0)
 	{
@@ -24,10 +24,8 @@ void	handle_input_redirection(t_shell *my_shell, int i) // 인풋으로 null이 
 	{
 		if (dup2(my_shell->prev_pipe_fd_0, 0) == -1)
 			exit(1);
-		close(my_shell->prev_pipe_fd_0); // 새로 추가함
+		close(my_shell->prev_pipe_fd_0);
 	}
-	// if (my_shell->pipe_fd[0] != 0)
-	// 	close(my_shell->pipe_fd[0]);
 }
 
 void	handle_output_redirection(t_shell *my_shell)
@@ -102,7 +100,7 @@ char	*check_access(char *path_var, char *cmd)
 	char	*full_path;
 
 	full_path = NULL;
-	if (cmd == NULL) //|| path_var == NULL)
+	if (cmd == NULL)
 		return (NULL);
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{

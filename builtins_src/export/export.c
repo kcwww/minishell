@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 16:24:32 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/07 20:19:36 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	is_valid_identifier(char *arg)
 	int	i;
 
 	i = 0;
-	if (arg[i] == '_' || ft_isalpha(arg[i])) // if 
+	if (arg[i] == '_' || ft_isalpha(arg[i]))
 	{
 		i++;
 		while (arg[i] != '\0' && arg[i] != '=')

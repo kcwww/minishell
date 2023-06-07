@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:09:50 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 11:31:51 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/07 20:19:25 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,17 @@ int	handle_n_flag(char **word, int *i)
 	n_flag = 0;
 	while (word[*i] && ft_strncmp(word[*i], "-n", 2) == 0)
 	{
-		// if the word starts with "-n" then we can increment i to move to the next word
-		// and set the n_flag to 1 to indicate that we've seen an n_flag
 		if (only_n_after_dash(word[*i]))
 		{
 			n_flag = 1;
 			(*i)++;
 		}
-		else // if the word starts with "-n" but it's not "-n" followed by only "n"s, then we stop incrementing i
+		else
 			break ;
 	}
 	return (n_flag);
 }
 
-// this function checks if the word starts with "-n" followed by only "n"s
 int	only_n_after_dash(const char *str)
 {
 	int	j;
