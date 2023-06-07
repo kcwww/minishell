@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:43:56 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/07 20:15:13 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/07 20:25:29 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	execute(t_shell *my_shell, char **env)
 	head = my_shell->head;
 	init_fd(my_shell);
 	handle_heredocs(my_shell);
+	g_exit_status = 0;
 	while (head)
 	{
 		pid = handle_proc(my_shell, head, env, i);
