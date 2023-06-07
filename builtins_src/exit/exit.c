@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 19:10:10 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/07 20:47:46 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ int	is_numeric(char *arg, int *g_exit_status)
 	int	i;
 
 	i = 0;
+	if (arg[i] == '\0')
+	{
+		*g_exit_status = 2;
+		return (0);
+	}
 	while (arg[i])
 	{
 		if (ft_isdigit(arg[i]) == 0)
