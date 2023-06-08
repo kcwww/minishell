@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 13:42:11 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/04 22:54:01 by kcw              ###   ########.fr       */
+/*   Updated: 2023/06/08 14:50:51 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,7 @@ int	replace_env(t_token *token, t_shell *ms, int idx)
 			else if (!(ft_isalpha(token->value[i]) || token->value[i] == '_' || token->value[i] == '*'))
 				return (1);
 			start = i;
-			while (token->value[i] && token->value[i] != ' ' && token->value[i] != '\'' && \
-				token->value[i] != '\"' && token->value[i] != '$' && token->value[i] != '?' && \
-				token->value[i] != '~' && token-> value[i] != '.' && \
-				token->value[i] != '|')
+			while (token->value[i] && is_env(token->value[i]))
 					i++;
 
 			if (start == i)
