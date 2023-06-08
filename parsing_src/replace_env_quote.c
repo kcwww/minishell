@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env_quote.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 16:45:32 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/04 22:39:07 by kcw              ###   ########.fr       */
+/*   Updated: 2023/06/08 14:58:28 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ int	replace_env_quote(t_token *token, t_shell *ms, int idx)
 	}
 	else if (!(ft_isalpha(token->value[i]) || token->value[i] == '_' || token->value[i] == '*'))
 		return (1);
-	while (token->value[i] && token->value[i] != ' ' && token->value[i] != '\'' && \
-			token->value[i] != '\"' && token->value[i] != '$' && token->value[i] != '?' && \
-			token->value[i] != '~' && token-> value[i] != '.' && \
-			token->value[i] != '|')
+	while (token->value[i] && is_env(token->value[i]))
 			i++;
 	if (idx + 1 == i) //"$"
 		return (1);
