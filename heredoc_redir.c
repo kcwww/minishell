@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/27 14:46:08 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 16:45:56 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:39:49 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,14 @@ void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 		else if (line == NULL)
 		{
 			dup2(save_stdin, 0);
-			init_signal(my_shell);
+			g_exit_status = 130;
 			free(line);
 			break ;
 		}
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
+	init_signal(my_shell);
 	close(fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:54 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/04 16:52:02 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:19:59 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,15 @@ void	sig_herdoc_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-    	close(0);
 		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 1);
-		//rl_redisplay();
+    	close(0);
 	}
 }
 
 void	check_signum(int signo)
 {
 	if (signo == SIGINT)
-		printf("ddd\n");
+		printf("\n");
 	else if (signo == SIGQUIT)
 		printf("Quit: 3\n");
 }
