@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 20:59:56 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/07 20:30:07 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:34:51 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,28 +157,28 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		}
 		tmp = tmp->next;
 	}
-	pipe = ms->head;
-	while (pipe)
-	{
-		int j = 0;
-		while (pipe->simple_cmd->word[j])
-		{
-			printf("word: %s\n", pipe->simple_cmd->word[j]);
-			j++;
-		}
-		j = 0;
-		while (pipe->simple_cmd->redirection[j])
-		{
-			printf("redirection: %s\n", pipe->simple_cmd->redirection[j]);
-			j++;
-		}
-		j = 0;
-		while (pipe->simple_cmd->redir_value[j])
-		{
-			printf("redir_value: %s\n", pipe->simple_cmd->redir_value[j]);
-			j++;
-		}
-		pipe = pipe->next;
-		printf("next\n");
-	}
+	// pipe = ms->head;
+	// while (pipe)
+	// {
+	// 	int j = 0;
+	// 	while (pipe->simple_cmd->word[j])
+	// 	{
+	// 		printf("word: %s\n", pipe->simple_cmd->word[j]);
+	// 		j++;
+	// 	}
+	// 	j = 0;
+	// 	while (pipe->simple_cmd->redirection[j])
+	// 	{
+	// 		printf("redirection: %s\n", pipe->simple_cmd->redirection[j]);
+	// 		j++;
+	// 	}
+	// 	j = 0;
+	// 	while (pipe->simple_cmd->redir_value[j])
+	// 	{
+	// 		printf("redir_value: %s\n", pipe->simple_cmd->redir_value[j]);
+	// 		j++;
+	// 	}
+	// 	pipe = pipe->next;
+	// 	printf("next\n");
+	// }
 }

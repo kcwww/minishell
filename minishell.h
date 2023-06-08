@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 22:45:22 by kcw              ###   ########.fr       */
+/*   Updated: 2023/06/08 17:29:24 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,10 @@ char	*get_env_var_value(t_shell *execute, char *str);
 
 void	env(t_shell *execute);
 
-void	cmd_exit(t_shell *execute);
+void	cmd_exit(t_shell *my_shell, t_pipes *head);
 int		is_numeric(char *arg, int *g_exit_status);
 int		is_too_many_args(char **word, int *g_exit_status);
-char	*validate_exit_word(t_shell *execute, int *exit_code);
+char	*validate_exit_word(t_pipes *head, int *g_exit_status);
 
 void	export(t_shell *execute);
 void	print_env_list(t_env *env, t_shell *my_shell);
