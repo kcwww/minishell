@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 22:13:10 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 22:18:21 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ void	print_error_message(char *value);
 void	handle_input_redirection(t_shell *my_shell, int i);
 void	handle_output_redirection(t_shell *my_shell);
 void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env);
+void	exec_command(char *full_path, char **word, char **env);
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i);
 char	*validate_and_construct_path(char **paths, char *cmd);
 char	*check_access(char *path_var, char *cmd);

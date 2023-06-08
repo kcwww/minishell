@@ -6,44 +6,19 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:19:37 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 22:02:07 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 22:17:53 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_input_redirection(t_shell *my_shell, int i)
+void	exec_command(char *full_path, char **word, char **env)
 {
-	if (my_shell->fd_in != 0)
+	if (word[0] != NULL && execve(full_path, word, env) == -1)
 	{
-		if (dup2(my_shell->fd_in, 0) == -1)
-			exit(1);
-		close(my_shell->fd_in);
+		perror("execve");
+		exit(1);
 	}
-	else if (my_shell->pipe_fd[0] != 0 && i != 1)
-	{
-		if (dup2(my_shell->prev_pipe_fd_0, 0) == -1)
-			exit(1);
-		close(my_shell->prev_pipe_fd_0);
-	}
-}
-
-void	handle_output_redirection(t_shell *my_shell)
-{
-	if (my_shell->fd_out != 1)
-	{
-		if (dup2(my_shell->fd_out, 1) == -1)
-			exit(1);
-		close(my_shell->fd_out);
-	}
-	else if (my_shell->pipe_fd[1] != 1 && my_shell->last_cmd_flag != 1)
-	{
-		if (dup2(my_shell->pipe_fd[1], 1) == -1)
-			exit(1);
-		close(my_shell->pipe_fd[1]);
-	}
-	if (my_shell->pipe_fd[0] != 0)
-		close(my_shell->pipe_fd[0]);
 }
 
 void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env)
@@ -62,12 +37,7 @@ void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env)
 	full_path = check_access(path_var, head->simple_cmd->word[0]);
 	if (full_path != NULL)
 	{
-		if (head->simple_cmd->word[0] != NULL && \
-		execve(full_path, head->simple_cmd->word, env) == -1)
-		{
-			perror("execve");
-			exit(1);
-		}
+		exec_command(full_path, head->simple_cmd->word, env);
 		free(full_path);
 	}
 	else if (head->simple_cmd->word[0] != NULL)

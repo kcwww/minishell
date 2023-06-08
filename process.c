@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:47:13 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/05 19:47:14 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 22:17:34 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,40 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 	else
 		handle_external_command(my_shell, head, env);
 	exit(1);
+}
+
+void	handle_input_redirection(t_shell *my_shell, int i)
+{
+	if (my_shell->fd_in != 0)
+	{
+		if (dup2(my_shell->fd_in, 0) == -1)
+			exit(1);
+		close(my_shell->fd_in);
+	}
+	else if (my_shell->pipe_fd[0] != 0 && i != 1)
+	{
+		if (dup2(my_shell->prev_pipe_fd_0, 0) == -1)
+			exit(1);
+		close(my_shell->prev_pipe_fd_0);
+	}
+}
+
+void	handle_output_redirection(t_shell *my_shell)
+{
+	if (my_shell->fd_out != 1)
+	{
+		if (dup2(my_shell->fd_out, 1) == -1)
+			exit(1);
+		close(my_shell->fd_out);
+	}
+	else if (my_shell->pipe_fd[1] != 1 && my_shell->last_cmd_flag != 1)
+	{
+		if (dup2(my_shell->pipe_fd[1], 1) == -1)
+			exit(1);
+		close(my_shell->pipe_fd[1]);
+	}
+	if (my_shell->pipe_fd[0] != 0)
+		close(my_shell->pipe_fd[0]);
 }
 
 void	parent_process(t_shell *my_shell, int i)
