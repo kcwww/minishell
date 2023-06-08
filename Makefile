@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+         #
+#    By: dkham <dkham@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/28 16:51:14 by chanwoki          #+#    #+#              #
-#    Updated: 2023/06/08 14:55:12 by chanwoki         ###   ########.fr        #
+#    Updated: 2023/06/08 22:06:55 by dkham            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ replace_env.c delete_double_quote.c replace_env_quote.c is_env.c
 PARSING_SRC=$(addprefix $(PARSING_PATH), $(PARSING_FILES))
 
 BUILTINS_PATH=builtins_src/
-BUILTINS_FILES= builtin.c pwd/pwd.c echo/echo.c cd/cd.c env/env.c exit/exit.c export/export.c  export/export_utils.c export/export_utils_2.c unset/unset.c
+BUILTINS_FILES= builtin.c pwd/pwd.c echo/echo.c cd/cd.c cd/cd_utils.c env/env.c exit/exit.c export/export.c  export/export_utils.c export/export_utils_2.c unset/unset.c
 BUILTINS_SRC=$(addprefix $(BUILTINS_PATH), $(BUILTINS_FILES))
 
 REDIRECTIONS_PATH=redirections_src/

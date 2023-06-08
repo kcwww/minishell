@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:44:39 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 22:13:10 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ t_env	*create_new_env_node(char *key_value_pair);
 
 void	cd(t_shell *my_shell, t_pipes *head);
 void	handle_cd_no_word(t_shell *my_shell, char *cur_pwd);
+void	change_and_update_dir(t_shell *my_shell, t_env *home_env, char *cur_pwd);
 void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd);
 void	update_env_var(t_env *env, char *key, char *value);
 void	handle_cd_dash(t_shell *my_shell, char *cur_pwd);
