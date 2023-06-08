@@ -6,18 +6,18 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/03 14:46:43 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:44:28 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	cd(t_shell *my_shell)
+void	cd(t_shell *my_shell, t_pipes *head)
 {
 	char	*cur_pwd;
 	char	**word;
 
-	word = my_shell->head->simple_cmd->word;
+	word = head->simple_cmd->word;
 	cur_pwd = getcwd(NULL, 0);
 	if (cur_pwd == NULL)
 	{

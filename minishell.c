@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 11:40:07 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:55:37 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/06/08 17:56:35 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/06/08 17:56:37 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_shell	my_shell;
 
-	atexit(check_leaks);
+	//atexit(check_leaks);
 	if (argc != 1)
 		return (0);
 	(void)argv;

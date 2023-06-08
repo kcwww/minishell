@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/27 16:18:33 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 16:08:21 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/06/05 19:47:13 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/05 19:47:14 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i)
 	handle_output_redirection(my_shell);
 	if (is_builtin(head->simple_cmd->word[0]))
 	{
-		builtin(my_shell, head);//builtin(my_shell);
+		builtin(my_shell, head);
 		exit(0);
 	}
 	else

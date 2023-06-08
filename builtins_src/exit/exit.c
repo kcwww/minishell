@@ -6,24 +6,24 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/28 19:10:10 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:35:19 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	cmd_exit(t_shell *my_shell)
+void	cmd_exit(t_shell *my_shell, t_pipes *head)
 {
 	char	*error_message;
 
-	error_message = validate_exit_word(my_shell, &g_exit_status);
+	error_message = validate_exit_word(head, &g_exit_status);
 	if (error_message)
 	{
 		ft_putstr_fd("exit\n", my_shell->fd_out);
 		ft_putstr_fd("minishell: exit: ", my_shell->fd_out);
 		if (g_exit_status != 1)
 		{
-			ft_putstr_fd(my_shell->head->simple_cmd->word[1], my_shell->fd_out);
+			ft_putstr_fd(head->simple_cmd->word[1], my_shell->fd_out);
 			ft_putstr_fd(": ", my_shell->fd_out);
 		}
 		ft_putendl_fd(error_message, my_shell->fd_out);
@@ -39,6 +39,11 @@ int	is_numeric(char *arg, int *g_exit_status)
 	int	i;
 
 	i = 0;
+	if (arg[i] == '\0')
+	{
+		*g_exit_status = 2;
+		return (0);
+	}
 	while (arg[i])
 	{
 		if (ft_isdigit(arg[i]) == 0)
@@ -61,11 +66,11 @@ int	is_too_many_args(char **word, int *g_exit_status)
 	return (0);
 }
 
-char	*validate_exit_word(t_shell *my_shell, int *g_exit_status)
+char	*validate_exit_word(t_pipes *head, int *g_exit_status)
 {
 	char	**word;
 
-	word = my_shell->head->simple_cmd->word;
+	word = head->simple_cmd->word;
 	if (word[1])
 	{
 		if (!is_numeric(word[1], g_exit_status))

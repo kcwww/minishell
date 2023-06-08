@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 22:45:22 by kcw              ###   ########.fr       */
+/*   Updated: 2023/06/08 17:44:39 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,8 @@ void	make_simple_command(t_token *token, t_shell *my_shell);
 void	free_all(t_shell *ms);
 t_env	*create_new_env_node(char *key_value_pair);
 
-void	cd(t_shell *execute);
-//void	handle_cd_no_word(t_shell *execute, char *oldpwd);
+void	cd(t_shell *my_shell, t_pipes *head);
 void	handle_cd_no_word(t_shell *my_shell, char *cur_pwd);
-//void	handle_cd_with_word(t_shell *execute, char *path, char *oldpwd);
 void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd);
 void	update_env_var(t_env *env, char *key, char *value);
 void	handle_cd_dash(t_shell *my_shell, char *cur_pwd);
@@ -96,12 +94,12 @@ char	*get_env_var_value(t_shell *execute, char *str);
 
 void	env(t_shell *execute);
 
-void	cmd_exit(t_shell *execute);
+void	cmd_exit(t_shell *my_shell, t_pipes *head);
 int		is_numeric(char *arg, int *g_exit_status);
 int		is_too_many_args(char **word, int *g_exit_status);
-char	*validate_exit_word(t_shell *execute, int *exit_code);
+char	*validate_exit_word(t_pipes *head, int *g_exit_status);
 
-void	export(t_shell *execute);
+void	export(t_shell *execute, t_pipes *head);
 void	print_env_list(t_env *env, t_shell *my_shell);
 void	process_argument(char *arg, t_shell *execute);
 int		is_valid_identifier(char *arg);
@@ -116,7 +114,7 @@ void	free_env_node(t_env *node);
 
 void	pwd(t_shell *my_shell);
 
-void	unset(t_shell *execute);
+void	unset(t_shell *execute, t_pipes *head);
 void	remove_env_node(char *key, t_env **env);
 
 void	init_fd(t_shell *my_shell);

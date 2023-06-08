@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/27 14:46:08 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 15:39:49 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/06/08 17:57:05 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/06/08 17:57:07 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	handle_heredocs(t_shell *my_shell)
 	}
 }
 
-
 void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 {
 	int		fd;
@@ -56,10 +55,7 @@ void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 	{
 		line = readline("> ");
 		if (ft_strcmp(line, end_str) == 0)
-		{
-			free(line);
 			break ;
-		}
 		else if (line == NULL)
 		{
 			dup2(save_stdin, 0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/27 14:39:01 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/04 16:03:51 by chanwoki         ###   ########.fr       */
+/*   Created: 2023/06/05 19:43:56 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/08 17:33:59 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	execute(t_shell *my_shell, char **env)
 	head = my_shell->head;
 	init_fd(my_shell);
 	handle_heredocs(my_shell);
+	g_exit_status = 0;
 	while (head)
 	{
 		pid = handle_proc(my_shell, head, env, i);
@@ -30,7 +31,9 @@ void	execute(t_shell *my_shell, char **env)
 	}
 	if (my_shell->heredoc_used == 1)
 		cleanup_heredocs(my_shell);
-	wait_for_children(i, pid, my_shell);
+	if (!(i == 1 && is_builtin(my_shell->head->simple_cmd->word[0]) \
+	&& !my_shell->head->next))
+		wait_for_children(i, pid, my_shell);
 }
 
 void	init_fd(t_shell *my_shell)
@@ -54,17 +57,16 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 		return (-1);
 	if (!head->next && is_builtin(head->simple_cmd->word[0]) && i == 0)
 	{
-		//ft_putendl_fd(head->simple_cmd->word[0], 2);
-		builtin(my_shell, head); //builtin(my_shell);
+		builtin(my_shell, head);
 		return (-1);
 	}
 	else
 	{
 		if (head->next && pipe(my_shell->pipe_fd) == -1)
-			exit(EXIT_FAILURE);
+			exit(1);
 		pid = fork();
 		if (pid < 0)
-			exit(EXIT_FAILURE);
+			exit(1);
 		else if (pid == 0)
 			child_process(my_shell, head, env, ++i);
 		else
@@ -95,8 +97,8 @@ void	wait_for_children(int i, pid_t pid, t_shell *my_shell)
 				g_exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
-				g_exit_status = WTERMSIG(status); // cat 종료시 시그널 종료일 경우 출력
-				check_signum(g_exit_status);
+				g_exit_status = 128 + WTERMSIG(status);
+				check_signum(g_exit_status - 128);
 			}
 		}
 	}
