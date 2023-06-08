@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:33:13 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:41:20 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 21:00:44 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,7 @@ void	unset(t_shell *my_shell, t_pipes *head)
 	i = 1;
 	while (word[i])
 	{
-		if (is_valid_identifier(word[i]))
-			remove_env_node(word[i], &my_shell->env);
-		else
-		{
-			ft_putstr_fd("minishell: unset: '", my_shell->fd_out);
-			ft_putstr_fd(word[i], my_shell->fd_out);
-			ft_putendl_fd("' is not a valid identifier", my_shell->fd_out);
-		}
+		remove_env_node(word[i], &my_shell->env);
 		i++;
 	}
 }

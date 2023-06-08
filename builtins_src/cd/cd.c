@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:09:28 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:44:28 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 20:44:24 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	handle_cd_no_word(t_shell *my_shell, char *cur_pwd)
 	{
 		ft_putendl_fd("minishell: cd: HOME not set", my_shell->fd_out);
 		free(cur_pwd);
+		g_exit_status = 1;
 		return ;
 	}
 	if (chdir(home_env->value) < 0)
@@ -49,6 +50,7 @@ void	handle_cd_no_word(t_shell *my_shell, char *cur_pwd)
 		ft_putstr_fd("minishell: cd: ", my_shell->fd_out);
 		ft_putstr_fd(home_env->value, my_shell->fd_out);
 		ft_putendl_fd(": No such file or directory", my_shell->fd_out);
+		g_exit_status = 1;
 	}
 	else
 	{
@@ -75,6 +77,7 @@ void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd)
 		ft_putstr_fd(path, my_shell->fd_out);
 		ft_putendl_fd(": No such file or directory", my_shell->fd_out);
 		free(cur_pwd);
+		g_exit_status = 1;
 		return ;
 	}
 	update_env_var(my_shell->env, "OLDPWD", cur_pwd);

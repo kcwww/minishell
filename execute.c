@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:43:56 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:33:59 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 20:46:59 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ void	wait_for_children(int i, pid_t pid, t_shell *my_shell)
 			else if (WIFSIGNALED(status))
 			{
 				g_exit_status = 128 + WTERMSIG(status);
-				check_signum(g_exit_status - 128);
 			}
+			check_signum(WTERMSIG(status));
 		}
 	}
 	init_signal(my_shell);

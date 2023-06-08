@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:54 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/04 16:52:02 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/08 20:04:46 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	sig_herdoc_handler(int signum)
 void	check_signum(int signo)
 {
 	if (signo == SIGINT)
-		printf("ddd\n");
+		printf("\n");
 	else if (signo == SIGQUIT)
 		printf("Quit: 3\n");
 }
