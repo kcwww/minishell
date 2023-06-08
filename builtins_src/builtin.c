@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:45:09 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 21:12:42 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	builtin(t_shell *my_shell, t_pipes *head)
 	else
 	{
 		ft_putstr_fd("Error: command not found\n", 2);
-		exit(1);
+		g_exit_status = 127;
+		exit(g_exit_status);
 	}
 }
