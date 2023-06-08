@@ -6,19 +6,19 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/07 20:19:36 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:43:09 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	export(t_shell *my_shell)
+void	export(t_shell *my_shell, t_pipes *head)
 {
 	int		i;
 	t_env	*sorted_env;
 	char	**word;
 
-	word = my_shell->head->simple_cmd->word;
+	word = head->simple_cmd->word;
 	i = 1;
 	if (word[1] == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:27:48 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:45:09 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	builtin(t_shell *my_shell, t_pipes *head)
 
 	cmd = head->simple_cmd->word[0];
 	if (ft_strcmp(cmd, "cd") == 0)
-		cd(my_shell);
+		cd(my_shell, head);
 	else if (ft_strcmp(cmd, "echo") == 0)
 		echo(my_shell, head);
 	else if (ft_strcmp(cmd, "env") == 0)
@@ -47,11 +47,11 @@ void	builtin(t_shell *my_shell, t_pipes *head)
 	else if (ft_strcmp(cmd, "exit") == 0)
 		cmd_exit(my_shell, head);
 	else if (ft_strcmp(cmd, "export") == 0)
-		export(my_shell);
+		export(my_shell, head);
 	else if (ft_strcmp(cmd, "pwd") == 0)
 		pwd(my_shell);
 	else if (ft_strcmp(cmd, "unset") == 0)
-		unset(my_shell);
+		unset(my_shell, head);
 	else
 	{
 		ft_putstr_fd("Error: command not found\n", 2);

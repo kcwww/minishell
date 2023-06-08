@@ -6,18 +6,18 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:33:13 by dkham             #+#    #+#             */
-/*   Updated: 2023/05/27 12:52:57 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:41:20 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	unset(t_shell *my_shell)
+void	unset(t_shell *my_shell, t_pipes *head)
 {
 	int		i;
 	char	**word;
 
-	word = my_shell->head->simple_cmd->word;
+	word = head->simple_cmd->word;
 	i = 1;
 	while (word[i])
 	{
