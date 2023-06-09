@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:35:19 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 16:00:16 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	cmd_exit(t_shell *my_shell, t_pipes *head)
 		}
 		ft_putendl_fd(error_message, my_shell->fd_out);
 	}
+	ft_putstr_fd("exit\n", my_shell->fd_out);
 	free_env(my_shell->env);
 	free_all(my_shell);
 	free(my_shell->line);
