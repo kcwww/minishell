@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:46:57 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 15:44:53 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 21:40:12 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
+	free(line);
 	close(fd);
 }
 
