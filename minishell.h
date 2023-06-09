@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 22:18:21 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 13:18:37 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,13 @@
 # define PIPE 456
 # define HEREDOC 789
 
+int	g_exit_status;
+
 typedef struct s_cmd
-{ // cat << a > 1
-	char	**word; 		// "cat"
-	char	**redirection;	// "<<", ">"
-	char	**redir_value;	// "a", "1"
+{
+	char	**word;
+	char	**redirection;
+	char	**redir_value;
 }	t_cmd;
 
 typedef struct s_pipes
@@ -50,18 +52,18 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	int				fd_in;
-	int				fd_out;
-	int				pipe_fd[2];
-	int				prev_pipe_fd_0;
-	int				last_cmd_flag;
-	int				heredoc_used;
-	int				error;
-	char			*line;
-	struct	sigaction sa_sigint;
-	struct	sigaction sa_sigquit;
-	struct s_pipes	*head;
-	struct s_env	*env;
+	int					fd_in;
+	int					fd_out;
+	int					pipe_fd[2];
+	int					prev_pipe_fd_0;
+	int					last_cmd_flag;
+	int					heredoc_used;
+	int					error;
+	char				*line;
+	struct sigaction	sa_sigint;
+	struct sigaction	sa_sigquit;
+	struct s_pipes		*head;
+	struct s_env		*env;
 }	t_shell;
 
 typedef struct s_token
@@ -70,8 +72,6 @@ typedef struct s_token
 	char			*value;
 	struct s_token	*next;
 }	t_token;
-
-int		g_exit_status;
 
 void	init_shell(t_shell *my_shell, char **env);
 char	*find_value(char *key, t_shell *ms);
@@ -82,7 +82,8 @@ t_env	*create_new_env_node(char *key_value_pair);
 
 void	cd(t_shell *my_shell, t_pipes *head);
 void	handle_cd_no_word(t_shell *my_shell, char *cur_pwd);
-void	change_and_update_dir(t_shell *my_shell, t_env *home_env, char *cur_pwd);
+void	change_and_update_dir(t_shell *my_shell, t_env *home_env, \
+char *cur_pwd);
 void	handle_cd_with_word(t_shell *my_shell, char *path, char *cur_pwd);
 void	update_env_var(t_env *env, char *key, char *value);
 void	handle_cd_dash(t_shell *my_shell, char *cur_pwd);
@@ -130,11 +131,11 @@ void	cleanup_heredocs(t_shell *my_shell);
 void	handle_redirections(t_shell *my_shell, t_pipes	*head);
 void	print_error_message(char *value);
 
-//void	handle_io_redirection(t_shell *my_shell, int i);
 void	handle_input_redirection(t_shell *my_shell, int i);
 void	handle_output_redirection(t_shell *my_shell);
 void	handle_external_command(t_shell *my_shell, t_pipes *head, char **env);
 void	exec_command(char *full_path, char **word, char **env);
+void	handle_error_and_exit(char **word);
 void	child_process(t_shell *my_shell, t_pipes *head, char **env, int i);
 char	*validate_and_construct_path(char **paths, char *cmd);
 char	*check_access(char *path_var, char *cmd);
