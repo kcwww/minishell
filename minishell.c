@@ -5,23 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 11:40:07 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 17:29:41 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/09 23:29:54 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/09 23:30:30 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_leaks(void)
+void	parse_and_exe(t_shell *my_shell, char **env)
 {
-	system("leaks minishell");
+	if (check_quotation(my_shell->line) && check_whitespace(my_shell->line))
+	{
+		parsing_start(my_shell->line, my_shell);
+		if (my_shell->error == 1)
+			printf("no execute\n");
+		else
+			execute(my_shell, env);
+		free_all(my_shell);
+	}
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	my_shell;
 
-	atexit(check_leaks);
 	if (argc != 1)
 		return (0);
 	(void)argv;
@@ -36,19 +43,11 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (my_shell.line == NULL)
 		{
-			printf("exit\n"); //printf("line is null\n"); 메시지 수정
+			printf("exit\n");
 			free_env(my_shell.env);
 			return (0);
 		}
-		if (check_quotation(my_shell.line) && check_whitespace(my_shell.line))
-		{
-			parsing_start(my_shell.line, &my_shell);
-			if (my_shell.error == 1)
-				printf("no execute\n");
-			else
-				execute(&my_shell, env);
-			free_all(&my_shell);
-		}
+		parse_and_exe(&my_shell, env);
 		add_history(my_shell.line);
 		free(my_shell.line);
 	}

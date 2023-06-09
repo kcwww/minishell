@@ -6,42 +6,38 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 12:51:23 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/03 12:52:05 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 21:45:03 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	delete_double_quote_heredoc(t_token *token)
+void	free_three(char *tmp, char *tmp2, char *tmp3)
+{
+	if (tmp != NULL)
+		free(tmp);
+	if (tmp2 != NULL)
+		free(tmp2);
+	if (tmp3 != NULL)
+		free(tmp3);
+}
+
+void	delete_double_quote_heredoc(t_token *token, int idx)
 {
 	int		i;
 	int		start;
-	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
+	t_tmp	str;
 
-	i = 0;
-	start = 0;
+	i = idx + 1;
+	start = idx;
+	str.tmp = ft_substr(token->value, 0, start);
 	while (token->value[i])
 	{
 		if (token->value[i] == '\"')
 		{
-			start = i;
-			i++;
-			tmp = ft_substr(token->value, 0, start);
-			break ;
-		}
-		i++;
-	}
-
-	while (token->value[i])
-	{
-		if (token->value[i] == '\"')
-		{
-			tmp3  = ft_substr(token->value, start + 1, i - start - 1);
-			tmp2 = ft_strjoin(tmp, tmp3);
-			free(tmp);
-			free(tmp3);
+			str.tmp3 = ft_substr(token->value, start + 1, i - start - 1);
+			str.tmp2 = ft_strjoin(str.tmp, str.tmp3);
+			free_three(str.tmp3, str.tmp, NULL);
 			start = i + 1;
 			break ;
 		}
@@ -49,10 +45,8 @@ void	delete_double_quote_heredoc(t_token *token)
 	}
 	while (token->value[i])
 		i++;
-	tmp3 = ft_substr(token->value, start, i);
-	tmp = ft_strjoin(tmp2, tmp3);
-	free(token->value);
-	free(tmp3);
-	free(tmp2);
-	token->value = tmp;
+	str.tmp3 = ft_substr(token->value, start, i);
+	str.tmp = ft_strjoin(str.tmp2, str.tmp3);
+	free_three(str.tmp3, str.tmp2, token->value);
+	token->value = str.tmp;
 }

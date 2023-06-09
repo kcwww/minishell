@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 12:03:31 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/05/28 17:12:04 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 20:42:46 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,38 +26,58 @@ void	free_env(t_env *env)
 	}
 }
 
+void	free_word(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->word[i])
+	{
+		free(cmd->word[i]);
+		i++;
+	}
+	free(cmd->word);
+}
+
+void	free_redirection(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->redirection[i])
+	{
+		free(cmd->redirection[i]);
+		i++;
+	}
+	free(cmd->redirection);
+}
+
+void	free_redir_value(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->redir_value[i])
+	{
+		free(cmd->redir_value[i]);
+		i++;
+	}
+	free(cmd->redir_value);
+}
+
 void	free_all(t_shell *ms)
 {
 	t_pipes	*pipe;
 	t_pipes	*tmp;
 	t_cmd	*cmd;
-	int		i;
 
 	pipe = ms->head;
 	while (pipe)
 	{
 		cmd = pipe->simple_cmd;
-		i = 0;
-		while (cmd->word[i])
-		{
-			free(cmd->word[i]);
-			i++;
-		}
-		free(cmd->word);
-		i = 0;
-		while (cmd->redirection[i])
-		{
-			free(cmd->redirection[i]);
-			i++;
-		}
-		free(cmd->redirection);
-		i = 0;
-		while (cmd->redir_value[i])
-		{
-			free(cmd->redir_value[i]);
-			i++;
-		}
-		free(cmd->redir_value);
+		free_word(cmd);
+		free_redirection(cmd);
+		free_redir_value(cmd);
 		free(cmd);
 		tmp = pipe;
 		pipe = pipe->next;

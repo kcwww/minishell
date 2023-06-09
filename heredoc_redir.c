@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/05 19:46:57 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 21:40:12 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/09 23:31:20 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/09 23:38:21 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ void	handle_heredocs(t_shell *my_shell)
 	}
 }
 
+int	save_stdin_and_set_signal(t_shell *my_shell)
+{
+	set_heredoc_signal(my_shell);
+	return (dup(0));
+}
+
 void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 {
 	int		fd;
@@ -49,8 +55,7 @@ void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 
 	my_shell->heredoc_used = 1;
 	fd = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	set_heredoc_signal(my_shell);
-	save_stdin = dup(0);
+	save_stdin = save_stdin_and_set_signal(my_shell);
 	while (1)
 	{
 		line = readline("> ");
@@ -59,13 +64,15 @@ void	make_hd(t_shell *my_shell, char *filename, char *end_str)
 		else if (line == NULL)
 		{
 			dup2(save_stdin, 0);
-			init_signal(my_shell);
+			g_exit_status = 130;
+			free(line);
 			break ;
 		}
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
 	free(line);
+	init_signal(my_shell);
 	close(fd);
 }
 
@@ -112,20 +119,4 @@ void	handle_redirections(t_shell *my_shell, t_pipes	*head)
 	}
 	head = head->next;
 	return ;
-}
-
-void	output_redir(t_shell *my_shell, t_pipes *head, int i, int append)
-{
-	int	fd;
-
-	if (append)
-		fd = open(head->simple_cmd->redir_value[i], O_WRONLY | O_CREAT | \
-		O_APPEND, 0644);
-	else
-		fd = open(head->simple_cmd->redir_value[i], O_WRONLY | O_CREAT | \
-		O_TRUNC, 0644);
-	if (fd < 0)
-		print_error_message(head->simple_cmd->redir_value[i]);
-	else
-		my_shell->fd_out = fd;
 }

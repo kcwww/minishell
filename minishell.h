@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 17:13:36 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/09 23:29:19 by dkham             #+#    #+#             */
+/*   Updated: 2023/06/09 23:29:37 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ char	*get_env_var_value(t_shell *execute, char *str);
 void	env(t_shell *execute);
 
 void	cmd_exit(t_shell *my_shell, t_pipes *head, int i);
-int		is_numeric(char *arg);//, int *g_exit_status);
-int		is_too_many_args(char **word);//, int *g_exit_status);
-char	*validate_exit_word(t_pipes *head);//, int *g_exit_status);
+int		is_numeric(char *arg);
+int		is_too_many_args(char **word);
+char	*validate_exit_word(t_pipes *head);
 
 void	export(t_shell *execute, t_pipes *head);
 void	print_env_list(t_env *env, t_shell *my_shell);
@@ -146,10 +146,10 @@ int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell, t_pipes *head, int i);
 void	free_env(t_env *env);
 void	check_token(t_token *token, t_shell *ms);
-int		delete_single_quote(t_token *token);
-void	delete_double_quote_heredoc(t_token *token);
+int		delete_single_quote(t_token *token, int idx);
+void	delete_double_quote_heredoc(t_token *token, int idx);
 int		replace_env(t_token *token, t_shell *ms, int idx);
-int		delete_double_quote(t_token *token, t_shell *ms);
+int		delete_double_quote(t_token *token, t_shell *ms, int idx);
 int		replace_env_quote(t_token *token, t_shell *ms, int idx);
 
 void	init_signal(t_shell *my_shell);
@@ -157,4 +157,26 @@ void	set_parent_signal(t_shell *my_shell);
 void	set_signal_child(t_shell *my_shell);
 void	set_heredoc_signal(t_shell *my_shell);
 
+int		add_word_pipe(t_token *token, char *str);
+int		add_word_greater(t_token *token, char *str, int i);
+int		add_word_less(t_token *token, char *str, int i);
+int		add_word(t_token *token, char *str);
+
+int		process_special_char(t_token *token, char ch, int size);
+int		process_string(t_token *token, char *str);
+t_token	*create_token(void);
+int		process_new_string(t_token *token, char *str, int i);
+t_token	*add_new_token(t_token *token);
+
+int		count_pipes(t_token *token);
+t_pipes	*create_pipes(void);
+void	make_pipes(t_token *token, t_shell *ms);
+
+void	delete_env_and_quote(t_tmp *str, t_token *token, int idx, int i);
+int		question_env(t_tmp *str, t_token *token, int idx);
+char	*check_env(char *env, t_token *token);
+t_token	*create_word_token(char *tmp);
+void	free_str(char **tmp);
+
+void	delete_envwild(t_tmp *str, t_token *token, int idx, int i);
 #endif

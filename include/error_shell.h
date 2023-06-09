@@ -6,13 +6,13 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 11:37:57 by kcw               #+#    #+#             */
-/*   Updated: 2023/04/28 14:08:36 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 23:16:31 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_SHELL_H
 # define ERROR_SHELL_H
 
-void    error_str();
+void	error_str(void);
 
 #endif
