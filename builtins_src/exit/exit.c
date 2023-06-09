@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 10:42:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 17:16:26 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 17:31:43 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,13 @@ void	cmd_exit(t_shell *my_shell, t_pipes *head, int i)
 	}
 	else if (head->next == NULL && i == 0)
 		ft_putstr_fd("exit\n", my_shell->fd_out);
-	free_env(my_shell->env);
-	free_all(my_shell);
-	free(my_shell->line);
-	exit(g_exit_status);
+	if (ft_strcmp(error_message, "too many arguments") != 0)
+	{
+		free_env(my_shell->env);
+		free_all(my_shell);
+		free(my_shell->line);
+		exit(g_exit_status);
+	}
 }
 
 char	*validate_exit_word(t_pipes *head)
@@ -76,11 +79,11 @@ int	is_numeric(char *arg)
 	return (1);
 }
 
-int	is_too_many_args(char **word)//, int *g_exit_status)
+int	is_too_many_args(char **word)
 {
 	if (word[2])
 	{
-		g_exit_status = 1;//*g_exit_status = 1;
+		g_exit_status = 1;
 		return (1);
 	}
 	return (0);
