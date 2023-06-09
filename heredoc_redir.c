@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:46:57 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 13:58:33 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 15:44:53 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void	cleanup_heredocs(t_shell *my_shell)
 
 void	handle_redirections(t_shell *my_shell, t_pipes	*head)
 {
-	int		i;
-	int		fd;
+	int	i;
+	int	fd;
 
 	i = 0;
 	while (head->simple_cmd->redirection[i])
@@ -100,33 +100,31 @@ void	handle_redirections(t_shell *my_shell, t_pipes	*head)
 			fd = open(head->simple_cmd->redir_value[i], O_RDONLY);
 			if (fd < 0)
 				print_error_message(head->simple_cmd->redir_value[i]);
-			my_shell->fd_in = fd;
+			else
+				my_shell->fd_in = fd;
 		}
 		else if (ft_strcmp(head->simple_cmd->redirection[i], ">") == 0)
-		{
-			fd = open(head->simple_cmd->redir_value[i], \
-			O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd < 0)
-				print_error_message(head->simple_cmd->redir_value[i]);
-			my_shell->fd_out = fd;
-		}
+			output_redir(my_shell, head, i, 0);
 		else if (ft_strcmp(head->simple_cmd->redirection[i], ">>") == 0)
-		{
-			fd = open(head->simple_cmd->redir_value[i], \
-			O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd < 0)
-				print_error_message(head->simple_cmd->redir_value[i]);
-			my_shell->fd_out = fd;
-		}
+			output_redir(my_shell, head, i, 1);
 		i++;
 	}
 	head = head->next;
 	return ;
 }
 
-void	print_error_message(char *value)
+void	output_redir(t_shell *my_shell, t_pipes *head, int i, int append)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(value, 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
+	int	fd;
+
+	if (append)
+		fd = open(head->simple_cmd->redir_value[i], O_WRONLY | O_CREAT | \
+		O_APPEND, 0644);
+	else
+		fd = open(head->simple_cmd->redir_value[i], O_WRONLY | O_CREAT | \
+		O_TRUNC, 0644);
+	if (fd < 0)
+		print_error_message(head->simple_cmd->redir_value[i]);
+	else
+		my_shell->fd_out = fd;
 }

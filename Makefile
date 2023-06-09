@@ -6,7 +6,7 @@
 #    By: dkham <dkham@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/28 16:51:14 by chanwoki          #+#    #+#              #
-#    Updated: 2023/06/08 22:06:55 by dkham            ###   ########.fr        #
+#    Updated: 2023/06/09 14:31:59 by dkham            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ INIT_SRC=$(addprefix $(INIT_PATH), $(INIT_FILES))
 ############################################################################
 
 
-SRC_FILES=minishell.c execute.c heredoc_redir.c process.c process_utils.c \
+SRC_FILES=minishell.c execute.c heredoc_redir.c heredoc_redir_utils.c process.c process_utils.c \
 $(PARSING_SRC) \
 $(BUILTINS_SRC) \
 $(REDIRECTIONS_SRC) \

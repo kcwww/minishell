@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 13:18:37 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 15:44:33 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void	handle_heredocs(t_shell *my_shell);
 void	make_hd(t_shell *my_shell, char *filename, char *end_str);
 void	cleanup_heredocs(t_shell *my_shell);
 void	handle_redirections(t_shell *my_shell, t_pipes	*head);
+void	output_redir(t_shell *my_shell, t_pipes *head, int i, int append);
 void	print_error_message(char *value);
 
 void	handle_input_redirection(t_shell *my_shell, int i);
