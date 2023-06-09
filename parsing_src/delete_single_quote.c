@@ -6,47 +6,48 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 17:23:09 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/09 16:42:20 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 20:38:54 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	create_without_single_quote(t_tmp *str, t_token *token, int *start, int i)
+{
+	int	len;
+
+	str->tmp3 = ft_substr(token->value, (*start) + 1, i - (*start) - 1);
+	str->tmp2 = ft_strjoin(str->tmp, str->tmp3);
+	free_three(str->tmp, str->tmp3, NULL);
+	len = i - (*start) - 1;
+	*start = i + 1;
+	return (len);
+}
 
 int	delete_single_quote(t_token *token, int idx)
 {
 	int		i;
 	int		start;
 	int		len;
-	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
+	t_tmp	str;
 
 	i = idx + 1;
 	start = idx;
-	tmp = ft_substr(token->value, 0, start);
-
+	str.tmp = ft_substr(token->value, 0, start);
 	while (token->value[i])
 	{
 		if (token->value[i] == '\'')
 		{
-			tmp3  = ft_substr(token->value, start + 1, i - start - 1);
-			tmp2 = ft_strjoin(tmp, tmp3);
-			free(tmp);
-			free(tmp3);
-			len = i - start - 1;
-			start = i + 1;
+			len = create_without_single_quote(&str, token, &start, i);
 			break ;
 		}
 		i++;
 	}
-
 	while (token->value[i])
 		i++;
-	tmp3 = ft_substr(token->value, start, i - start);
-	tmp = ft_strjoin(tmp2, tmp3);
-	free(token->value);
-	free(tmp3);
-	free(tmp2);
-	token->value = tmp;
+	str.tmp3 = ft_substr(token->value, start, i - start);
+	str.tmp = ft_strjoin(str.tmp2, str.tmp3);
+	free_three(str.tmp2, str.tmp3, token->value);
+	token->value = str.tmp;
 	return (len);
 }

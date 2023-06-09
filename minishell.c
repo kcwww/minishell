@@ -6,22 +6,29 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 18:00:37 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/09 18:00:38 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 23:15:13 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_leaks(void)
+void	parse_and_exe(t_shell *my_shell, char **env)
 {
-	system("leaks minishell");
+	if (check_quotation(my_shell->line) && check_whitespace(my_shell->line))
+	{
+		parsing_start(my_shell->line, my_shell);
+		if (my_shell->error == 1)
+			printf("no execute\n");
+		else
+			execute(my_shell, env);
+		free_all(my_shell);
+	}
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	my_shell;
 
-	//atexit(check_leaks);
 	if (argc != 1)
 		return (0);
 	(void)argv;
@@ -40,15 +47,7 @@ int	main(int argc, char **argv, char **env)
 			free_env(my_shell.env);
 			return (0);
 		}
-		if (check_quotation(my_shell.line) && check_whitespace(my_shell.line))
-		{
-			parsing_start(my_shell.line, &my_shell);
-			if (my_shell.error == 1)
-				printf("no execute\n");
-			else
-				execute(&my_shell, env);
-			free_all(&my_shell);
-		}
+		parse_and_exe(&my_shell, env);
 		add_history(my_shell.line);
 		free(my_shell.line);
 	}

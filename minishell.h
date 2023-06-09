@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 18:00:46 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/09 18:00:47 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 22:53:04 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@
 # define HEREDOC 789
 
 typedef struct s_cmd
-{ // cat << a > 1
-	char	**word; 		// "cat"
-	char	**redirection;	// "<<", ">"
-	char	**redir_value;	// "a", "1"
+{
+	char	**word;
+	char	**redirection;
+	char	**redir_value;
 }	t_cmd;
 
 typedef struct s_pipes
@@ -50,18 +50,18 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	int				fd_in;
-	int				fd_out;
-	int				pipe_fd[2];
-	int				prev_pipe_fd_0;
-	int				last_cmd_flag;
-	int				heredoc_used;
-	int				error;
-	char			*line;
-	struct	sigaction sa_sigint;
-	struct	sigaction sa_sigquit;
-	struct s_pipes	*head;
-	struct s_env	*env;
+	int					fd_in;
+	int					fd_out;
+	int					pipe_fd[2];
+	int					prev_pipe_fd_0;
+	int					last_cmd_flag;
+	int					heredoc_used;
+	int					error;
+	char				*line;
+	struct sigaction	sa_sigint;
+	struct sigaction	sa_sigquit;
+	struct s_pipes		*head;
+	struct s_env		*env;
 }	t_shell;
 
 typedef struct s_token
@@ -153,4 +153,26 @@ void	set_parent_signal(t_shell *my_shell);
 void	set_signal_child(t_shell *my_shell);
 void	set_heredoc_signal(t_shell *my_shell);
 
+int		add_word_pipe(t_token *token, char *str);
+int		add_word_greater(t_token *token, char *str, int i);
+int		add_word_less(t_token *token, char *str, int i);
+int		add_word(t_token *token, char *str);
+
+int		process_special_char(t_token *token, char ch, int size);
+int		process_string(t_token *token, char *str);
+t_token	*create_token(void);
+int		process_new_string(t_token *token, char *str, int i);
+t_token	*add_new_token(t_token *token);
+
+int		count_pipes(t_token *token);
+t_pipes	*create_pipes(void);
+void	make_pipes(t_token *token, t_shell *ms);
+
+void	delete_env_and_quote(t_tmp *str, t_token *token, int idx, int i);
+int		question_env(t_tmp *str, t_token *token, int idx);
+char	*check_env(char *env, t_token *token);
+t_token	*create_word_token(char *tmp);
+void	free_str(char **tmp);
+
+void	delete_envwild(t_tmp *str, t_token *token, int idx, int i);
 #endif
