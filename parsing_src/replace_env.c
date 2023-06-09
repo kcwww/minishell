@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 13:42:11 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/08 14:50:51 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 17:56:09 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,56 +62,59 @@ int	replace_env(t_token *token, t_shell *ms, int idx)
 	i = idx;
 	len = 0;
 	start = 0;
-	while (token->value[i])
-	{
-		if (token->value[i] == '$')
-		{
-			i++;
-			if (token->value[i] == '?')
-			{
-				tmp = ft_substr(token->value, 0, idx);
-				tmp2 = ft_itoa(g_exit_status);
-				len = ft_strlen(tmp2);
-				tmp3 = ft_strjoin(tmp, tmp2);
-				free(tmp);
-				free(tmp2);
-				tmp = ft_substr(token->value, i + 1, ft_strlen(token->value) -i - 1);
-				tmp2 = ft_strjoin(tmp3, tmp);
-				free(tmp3);
-				free(tmp);
-				free(token->value);
-				token->value = tmp2;
-				return (len);
-			}
-			else if (token->value[i] == '\'' || token->value[i] == '\"')
-			{
-				tmp = ft_substr(token->value, 0, idx);
-				tmp2 = ft_substr(token->value, i, ft_strlen(token->value) - i);
-				tmp3 = ft_strjoin(tmp, tmp2);
-				free(tmp);
-				free(tmp2);
-				free(token->value);
-				token->value = tmp3;
-				return (0);
-			}
-			else if (!(ft_isalpha(token->value[i]) || token->value[i] == '_' || token->value[i] == '*'))
-				return (1);
-			start = i;
-			while (token->value[i] && is_env(token->value[i]))
-					i++;
 
-			if (start == i)
-				return (1);
-			tmp = ft_substr(token->value, 0, start - 1);
-			tmp3 = ft_substr(token->value, i, ft_strlen(token->value) - i);
-			len = i - start;
-			break ;
-		}
-		i++;
+	i++;
+	if (token->value[i] == '?')
+	{
+		tmp = ft_substr(token->value, 0, idx);
+		tmp2 = ft_itoa(g_exit_status);
+		len = ft_strlen(tmp2);
+		tmp3 = ft_strjoin(tmp, tmp2);
+		free(tmp);
+		free(tmp2);
+		tmp = ft_substr(token->value, i + 1, ft_strlen(token->value) -i - 1);
+		tmp2 = ft_strjoin(tmp3, tmp);
+		free(tmp3);
+		free(tmp);
+		free(token->value);
+		token->value = tmp2;
+		return (len);
 	}
-	env = (char *)malloc(sizeof(char) * (len + 1)); // NULL GUARD
-	env[start] = 0;
-	ft_strlcpy(env, token->value + start, len + 1);
+	else if (token->value[i] == '\'' || token->value[i] == '\"')
+	{
+		tmp = ft_substr(token->value, 0, idx);
+		tmp2 = ft_substr(token->value, i, ft_strlen(token->value) - i);
+		tmp3 = ft_strjoin(tmp, tmp2);
+		free(tmp);
+		free(tmp2);
+		free(token->value);
+		token->value = tmp3;
+			return (0);
+	}
+	else if (token->value[i] == '*')
+	{
+		tmp = ft_substr(token->value, 0, idx);
+		tmp2 = ft_substr(token->value, i + 1, ft_strlen(token->value) - i - 1);
+		tmp3 = ft_strjoin(tmp, tmp2);
+		free(tmp);
+		free(tmp2);
+		free(token->value);
+		token->value = tmp3;
+		return (0);
+	}
+	else if (!(ft_isalpha(token->value[i]) || token->value[i] == '_'))
+		return (1);
+	start = idx + 1;
+	while (token->value[i] && is_env(token->value[i]))
+		i++;
+	if (start == i)
+		return (1);
+	tmp = ft_substr(token->value, 0, start - 1);
+	tmp3 = ft_substr(token->value, i, ft_strlen(token->value) - i);
+	len = i - start;
+
+	env = (char *)malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(env, token->value + idx + 1, len + 1);
 	f_env = find_value(env, ms);
 	free(token->value);
 	if (f_env == NULL || ft_strcmp(f_env, "") == 0)

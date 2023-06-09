@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 22:10:45 by kcw               #+#    #+#             */
-/*   Updated: 2023/06/04 22:10:47 by kcw              ###   ########.fr       */
+/*   Updated: 2023/06/09 17:56:39 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	make_simple_command(t_token *token, t_shell *ms)
 			re_word = 0;
 			word_num = 0;
 		}
-		else if (tmp->type == WORD)
+		else if (tmp->type == WORD || tmp->type == HEREDOC)
 		{
 			if (re_flag == 1)
 				re_word++;

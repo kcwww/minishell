@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 16:45:32 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/08 14:58:28 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 17:19:15 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,21 @@ int	replace_env_quote(t_token *token, t_shell *ms, int idx)
 		token->value = tmp2;
 		return (len);
 	}
-	else if (!(ft_isalpha(token->value[i]) || token->value[i] == '_' || token->value[i] == '*'))
+	else if (token->value[i] == '*')
+	{
+		tmp = ft_substr(token->value, 0, idx);
+		tmp2 = ft_substr(token->value, i + 1, ft_strlen(token->value) - i - 1);
+		tmp3 = ft_strjoin(tmp, tmp2);
+		free(tmp);
+		free(tmp2);
+		free(token->value);
+		token->value = tmp3;
+		return (0);
+	}
+	else if (!(ft_isalpha(token->value[i]) || token->value[i] == '_'))
 		return (1);
 	while (token->value[i] && is_env(token->value[i]))
-			i++;
+		i++;
 	if (idx + 1 == i) //"$"
 		return (1);
 	env = (char *)malloc(sizeof(char) * (i - idx)); // NULL GUARD
