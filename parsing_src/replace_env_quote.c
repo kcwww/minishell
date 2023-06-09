@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 16:45:32 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/09 17:19:15 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 18:04:30 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	replace_env_quote(t_token *token, t_shell *ms, int idx)
 		return (1);
 	while (token->value[i] && is_env(token->value[i]))
 		i++;
-	if (idx + 1 == i) //"$"
+	if (idx + 1 == i)
 		return (1);
 	env = (char *)malloc(sizeof(char) * (i - idx)); // NULL GUARD
 	ft_strlcpy(env, token->value + idx + 1, i - idx);
