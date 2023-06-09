@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 16:03:09 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 17:13:36 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,10 @@ char	*get_env_var_value(t_shell *execute, char *str);
 
 void	env(t_shell *execute);
 
-void	cmd_exit(t_shell *my_shell, t_pipes *head);
-int		is_numeric(char *arg, int *g_exit_status);
-int		is_too_many_args(char **word, int *g_exit_status);
-char	*validate_exit_word(t_pipes *head, int *g_exit_status);
+void	cmd_exit(t_shell *my_shell, t_pipes *head, int i);
+int		is_numeric(char *arg);//, int *g_exit_status);
+int		is_too_many_args(char **word);//, int *g_exit_status);
+char	*validate_exit_word(t_pipes *head);//, int *g_exit_status);
 
 void	export(t_shell *execute, t_pipes *head);
 void	print_env_list(t_env *env, t_shell *my_shell);
@@ -143,7 +143,7 @@ char	*check_access(char *path_var, char *cmd);
 void	parent_process(t_shell *my_shell, int i);
 
 int		is_builtin(char *cmd);
-void	builtin(t_shell *my_shell, t_pipes *head);
+void	builtin(t_shell *my_shell, t_pipes *head, int i);
 void	free_env(t_env *env);
 void	check_token(t_token *token, t_shell *ms);
 int		delete_single_quote(t_token *token);

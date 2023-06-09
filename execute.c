@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:43:56 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 15:44:23 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 17:11:50 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ pid_t	handle_proc(t_shell *my_shell, t_pipes *head, char **env, int i)
 		return (-1);
 	if (!head->next && is_builtin(head->simple_cmd->word[0]) && i == 0)
 	{
-		builtin(my_shell, head);
+		builtin(my_shell, head, i);
 		return (-1);
 	}
 	else

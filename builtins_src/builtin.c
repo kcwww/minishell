@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 20:55:14 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 21:12:42 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 17:13:11 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-void	builtin(t_shell *my_shell, t_pipes *head)
+void	builtin(t_shell *my_shell, t_pipes *head, int i)
 {
 	char	*cmd;
 
@@ -45,7 +45,7 @@ void	builtin(t_shell *my_shell, t_pipes *head)
 	else if (ft_strcmp(cmd, "env") == 0)
 		env(my_shell);
 	else if (ft_strcmp(cmd, "exit") == 0)
-		cmd_exit(my_shell, head);
+		cmd_exit(my_shell, head, i);
 	else if (ft_strcmp(cmd, "export") == 0)
 		export(my_shell, head);
 	else if (ft_strcmp(cmd, "pwd") == 0)
