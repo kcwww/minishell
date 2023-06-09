@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 11:38:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:44:39 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/09 18:00:46 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/06/09 18:00:47 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,10 @@ int		is_builtin(char *cmd);
 void	builtin(t_shell *my_shell, t_pipes *head);
 void	free_env(t_env *env);
 void	check_token(t_token *token, t_shell *ms);
-int		delete_single_quote(t_token *token);
-void	delete_double_quote_heredoc(t_token *token);
+int		delete_single_quote(t_token *token, int idx);
+void	delete_double_quote_heredoc(t_token *token, int idx);
 int		replace_env(t_token *token, t_shell *ms, int idx);
-int		delete_double_quote(t_token *token, t_shell *ms);
+int		delete_double_quote(t_token *token, t_shell *ms, int idx);
 int		replace_env_quote(t_token *token, t_shell *ms, int idx);
 
 void	init_signal(t_shell *my_shell);

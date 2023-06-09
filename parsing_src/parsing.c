@@ -6,7 +6,7 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 12:34:00 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/03 12:37:19 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:21:51 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,12 +162,14 @@ void	check_pipes(t_shell *ms)
 		{
 			printf("bash: syntax error\n");
 			ms->error = 1;
+			g_exit_status = 2;
 			return ;
 		}
 		if (pipe->simple_cmd->redirection[0] != NULL && pipe->simple_cmd->redir_value[0] == NULL)
 		{
 			printf("bash: syntax error\n");
 			ms->error = 1;
+			g_exit_status = 2;
 			return ;
 		}
 		pipe = pipe->next;

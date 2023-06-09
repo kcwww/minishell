@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/08 17:50:58 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:51:00 by dkham            ###   ########.fr       */
+/*   Created: 2023/06/09 18:00:15 by chanwoki          #+#    #+#             */
+/*   Updated: 2023/06/09 18:00:25 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	make_simple_command(t_token *token, t_shell *ms)
 			re_word = 0;
 			word_num = 0;
 		}
-		else if (tmp->type == WORD)
+		else if (tmp->type == WORD || tmp->type == HEREDOC)
 		{
 			if (re_flag == 1)
 				re_word++;
@@ -157,28 +157,4 @@ void	make_simple_command(t_token *token, t_shell *ms)
 		}
 		tmp = tmp->next;
 	}
-	// pipe = ms->head;
-	// while (pipe)
-	// {
-	// 	int j = 0;
-	// 	while (pipe->simple_cmd->word[j])
-	// 	{
-	// 		printf("word: %s\n", pipe->simple_cmd->word[j]);
-	// 		j++;
-	// 	}
-	// 	j = 0;
-	// 	while (pipe->simple_cmd->redirection[j])
-	// 	{
-	// 		printf("redirection: %s\n", pipe->simple_cmd->redirection[j]);
-	// 		j++;
-	// 	}
-	// 	j = 0;
-	// 	while (pipe->simple_cmd->redir_value[j])
-	// 	{
-	// 		printf("redir_value: %s\n", pipe->simple_cmd->redir_value[j]);
-	// 		j++;
-	// 	}
-	// 	pipe = pipe->next;
-	// 	printf("next\n");
-	// }
 }

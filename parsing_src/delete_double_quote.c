@@ -6,13 +6,13 @@
 /*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 13:57:04 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/03 17:48:05 by chanwoki         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:43:48 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int delete_double_quote(t_token *token, t_shell *ms)
+int delete_double_quote(t_token *token, t_shell *ms, int idx)
 {
 	int		i;
 	int		start;
@@ -21,18 +21,8 @@ int delete_double_quote(t_token *token, t_shell *ms)
 	char	*tmp2;
 	char	*tmp3;
 
-	i = 0;
-	start = 0;
-	while (token->value[i])
-	{
-		if (token->value[i] == '\"')
-		{
-			start = i;
-			i++;
-			break ;
-		}
-		i++;
-	}
+	i = idx + 1;
+	start = idx;
 
 	while (token->value[i])
 	{

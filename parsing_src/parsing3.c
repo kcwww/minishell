@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcw <kcw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:32:23 by chanwoki          #+#    #+#             */
-/*   Updated: 2023/06/04 22:58:01 by kcw              ###   ########.fr       */
+/*   Updated: 2023/06/09 17:57:12 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	check_heredoc_value(t_token *token)
 	while (token->value[i])
 	{
 		if (token->value[i] == '\'')
-			delete_single_quote(token);
+			delete_single_quote(token, i);
 		else if (token->value[i] == '\"')
-			delete_double_quote_heredoc(token);
+			delete_double_quote_heredoc(token, i);
 		i++;
 	}
 	token->type = HEREDOC;
@@ -54,12 +54,12 @@ void	check_token(t_token *token, t_shell *ms)
 		{
 			if (start->value[i] == '\'')
 			{
-				i += delete_single_quote(start);
+				i += delete_single_quote(start, i);
 				continue ;
 			}
 			else if (start->value[i] == '\"')
 			{
-				i += delete_double_quote(start, ms);
+				i += delete_double_quote(start, ms, i);
 				continue ;
 			}
 			else if (start->value[i] == '$' && start->type != HEREDOC)
