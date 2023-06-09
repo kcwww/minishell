@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:46:57 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/07 20:13:27 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/09 13:58:33 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,14 @@ void	handle_redirections(t_shell *my_shell, t_pipes	*head)
 		{
 			fd = open(head->simple_cmd->redir_value[i], \
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd < 0)
+				print_error_message(head->simple_cmd->redir_value[i]);
+			my_shell->fd_out = fd;
+		}
+		else if (ft_strcmp(head->simple_cmd->redirection[i], ">>") == 0)
+		{
+			fd = open(head->simple_cmd->redir_value[i], \
+			O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
 				print_error_message(head->simple_cmd->redir_value[i]);
 			my_shell->fd_out = fd;
