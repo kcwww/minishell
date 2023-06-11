@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 23:31:20 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 23:38:21 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/10 00:49:26 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,11 @@ void	handle_redirections(t_shell *my_shell, t_pipes	*head)
 			else
 				my_shell->fd_in = fd;
 		}
-		else if (ft_strcmp(head->simple_cmd->redirection[i], ">") == 0)
+		else if (ft_strcmp(head->simple_cmd->redirection[i], ">") == 0 && \
+		fd >= 0)
 			output_redir(my_shell, head, i, 0);
-		else if (ft_strcmp(head->simple_cmd->redirection[i], ">>") == 0)
+		else if (ft_strcmp(head->simple_cmd->redirection[i], ">>") == 0 && \
+		fd >= 0)
 			output_redir(my_shell, head, i, 1);
 		i++;
 	}

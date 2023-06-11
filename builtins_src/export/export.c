@@ -6,7 +6,7 @@
 /*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 12:34:00 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/08 17:43:09 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/10 00:25:28 by dkham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	process_argument(char *arg, t_shell *my_shell)
 	{
 		ft_putstr_fd("minishell: export: `", my_shell->fd_out);
 		ft_putstr_fd(arg, my_shell->fd_out);
-		ft_putendl_fd("' not a valid identifier", my_shell->fd_out);
+		ft_putendl_fd("': not a valid identifier", my_shell->fd_out);
 		g_exit_status = 1;
 	}
 }

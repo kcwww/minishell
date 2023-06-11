@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkham <dkham@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chanwoki <chanwoki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 23:29:54 by dkham             #+#    #+#             */
-/*   Updated: 2023/06/09 23:30:30 by dkham            ###   ########.fr       */
+/*   Updated: 2023/06/10 00:52:43 by chanwoki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,16 @@ void	parse_and_exe(t_shell *my_shell, char **env)
 	if (check_quotation(my_shell->line) && check_whitespace(my_shell->line))
 	{
 		parsing_start(my_shell->line, my_shell);
-		if (my_shell->error == 1)
-			printf("no execute\n");
-		else
+		if (my_shell->error != 1)
 			execute(my_shell, env);
 		free_all(my_shell);
 	}
+}
+
+static void	wrong_argc(void)
+{
+	printf("Wrong ARGCS Error\n");
+	exit(1);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -30,7 +34,7 @@ int	main(int argc, char **argv, char **env)
 	t_shell	my_shell;
 
 	if (argc != 1)
-		return (0);
+		wrong_argc();
 	(void)argv;
 	init_shell(&my_shell, env);
 	while (1)
